@@ -2,6 +2,7 @@ import { Providers } from "@/components/providers";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import { Toaster } from "sonner";
 
 const strawFord = localFont({
 	src: [
@@ -41,6 +42,7 @@ export default function RootLayout({
 		<html lang='en'>
 			<body className={`${strawFord.className} bg-white`}>
 				<Providers>{children}</Providers>
+				<Toaster position='top-right' richColors />
 			</body>
 		</html>
 	);

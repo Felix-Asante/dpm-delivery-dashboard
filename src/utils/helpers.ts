@@ -1,5 +1,6 @@
 import { Query, paths } from "@/types/url";
-
+import { type ClassValue, clsx } from "clsx";
+import { twMerge } from "tailwind-merge";
 export function parsePathname(pathname: string): paths[] {
 	// Remove leading slash if present
 	if (pathname.startsWith("/")) {
@@ -38,4 +39,8 @@ export function toQuery(queryObj: Query) {
 		}
 	});
 	return queries.length ? `?${queries.join("&")}` : "";
+}
+
+export function cn(...inputs: ClassValue[]) {
+	return twMerge(clsx(inputs));
 }

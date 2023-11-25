@@ -26,11 +26,12 @@ export const authOptions: NextAuthOptions = {
 					const results = await apiHandler<LoginUser>({
 						endpoint,
 						method: "POST",
-						body: { email: username, password },
+						body: { phone: username, password },
 					});
 					// Return the session object
 					return results;
 				} catch (error) {
+					console.log(error);
 					return null;
 				}
 			},
