@@ -16,7 +16,12 @@ export interface User {
 	adminFor?: any; // change to Place
 }
 
-interface Role {
+export interface Role {
 	name: string;
 	id: number;
+}
+
+export interface Session {
+	user: User;
+	idToken: string;
 }
