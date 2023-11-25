@@ -32,7 +32,18 @@ const config: Config = {
 		nextui({
 			defaultTheme: "light",
 			defaultExtendTheme: "light",
-			themes: {},
+			themes: {
+				light: {
+					colors: {
+						primary: {
+							DEFAULT: "#ff7043",
+						},
+						secondary: {
+							DEFAULT: "#2E66F6",
+						},
+					},
+				},
+			},
 		}),
 	],
 };
