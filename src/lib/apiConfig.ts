@@ -11,6 +11,7 @@ export const apiConfig = {
 		likes: (userId: string) => `users/likes/${userId}`,
 		bookings: (userId: string) => `users/likes/${userId}`,
 		delete: (userId: string) => `users/${userId}`,
+		count: () => `users/count`,
 	},
 	places: {
 		create: () => `places`,
@@ -20,6 +21,7 @@ export const apiConfig = {
 		get_by_slug: (slug: string) => `places/${slug}/slug`,
 		delete: (placeId: string) => `places/${placeId}`,
 		search: (query: Query) => `places/search${toQuery(query)}`,
+		count: () => `places/count`,
 	},
 	categories: {
 		create: () => `categories`,
@@ -35,6 +37,7 @@ export const apiConfig = {
 		update: (productId: string) => `products/${productId}`,
 		get_by_id: (productId: string) => `products/${productId}`,
 		delete: (productId: string) => `products/${productId}`,
+		count: () => `products/count`,
 	},
 	special_offers: {
 		create_offer_types: () => `offers/types`,
@@ -47,6 +50,7 @@ export const apiConfig = {
 		places: () => `place-offers`,
 		products: () => `product-offers`,
 		delete: (offerId: string) => `offers/${offerId}`,
+		count: () => `offers/count`,
 	},
 	bookings: {
 		list: () => `bookings`,
@@ -56,5 +60,6 @@ export const apiConfig = {
 		confirm: (bookingId: string) => `bookings/${bookingId}/confirm-booking`,
 		delivered: (bookingId: string) => `bookings/${bookingId}/deliver-booking`,
 		reject: (bookingId: string) => `bookings/${bookingId}/reject-booking`,
+		count: () => `bookings/count`,
 	},
 };
