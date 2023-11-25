@@ -10,10 +10,19 @@ const config: Config = {
 	],
 	theme: {
 		extend: {
-			backgroundImage: {
-				"gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
-				"gradient-conic":
-					"conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+			primary: {
+				DEFAULT: "#ff7043",
+			},
+			acsend: {
+				DEFAULT: "#2E66F6",
+			},
+			black: {
+				DEFAULT: "#263238",
+			},
+			grey: {
+				DEFAULT: "#78889B",
+				100: "#f8f9fb",
+				200: "#eaeef5",
 			},
 		},
 	},
