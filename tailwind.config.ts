@@ -10,19 +10,21 @@ const config: Config = {
 	],
 	theme: {
 		extend: {
-			primary: {
-				DEFAULT: "#ff7043",
-			},
-			acsend: {
-				DEFAULT: "#2E66F6",
-			},
-			black: {
-				DEFAULT: "#263238",
-			},
-			grey: {
-				DEFAULT: "#78889B",
-				100: "#f8f9fb",
-				200: "#eaeef5",
+			colors: {
+				primary: {
+					DEFAULT: "#ff7043",
+				},
+				acsend: {
+					DEFAULT: "#2E66F6",
+				},
+				black: {
+					DEFAULT: "#263238",
+				},
+				grey: {
+					DEFAULT: "#78889B",
+					100: "#f8f9fb",
+					200: "#eaeef5",
+				},
 			},
 		},
 	},
@@ -30,6 +32,7 @@ const config: Config = {
 		nextui({
 			defaultTheme: "light",
 			defaultExtendTheme: "light",
+			themes: {},
 		}),
 	],
 };
