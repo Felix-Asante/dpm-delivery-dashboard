@@ -29,7 +29,7 @@ const strawFord = localFont({
 	],
 });
 export const metadata: Metadata = {
-	title: "DPM DELIVERY DASHBOARD",
+	title: "DPM DELIVERY",
 	description: "DPM Delivery service",
 };
 
@@ -40,7 +40,7 @@ export default function RootLayout({
 }) {
 	return (
 		<html lang='en'>
-			<body className={`${strawFord.className} bg-white`}>
+			<body className={`${strawFord.className} bg-white font-medium`}>
 				<Providers>{children}</Providers>
 				<Toaster position='top-right' richColors />
 			</body>

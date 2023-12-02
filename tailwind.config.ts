@@ -6,6 +6,7 @@ const config: Config = {
 		"./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
 		"./src/components/**/*.{js,ts,jsx,tsx,mdx}",
 		"./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+		"./src/**/*.{js,ts,jsx,tsx,mdx}",
 		"./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}",
 	],
 	theme: {
@@ -14,13 +15,13 @@ const config: Config = {
 				primary: {
 					DEFAULT: "#ff7043",
 				},
-				acsend: {
+				success: {
 					DEFAULT: "#2E66F6",
 				},
-				black: {
+				secondary: {
 					DEFAULT: "#263238",
 				},
-				grey: {
+				warning: {
 					DEFAULT: "#78889B",
 					100: "#f8f9fb",
 					200: "#eaeef5",
@@ -28,23 +29,6 @@ const config: Config = {
 			},
 		},
 	},
-	plugins: [
-		nextui({
-			defaultTheme: "light",
-			defaultExtendTheme: "light",
-			themes: {
-				light: {
-					colors: {
-						primary: {
-							DEFAULT: "#ff7043",
-						},
-						secondary: {
-							DEFAULT: "#2E66F6",
-						},
-					},
-				},
-			},
-		}),
-	],
+	plugins: [nextui()],
 };
 export default config;
