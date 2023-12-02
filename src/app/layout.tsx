@@ -40,7 +40,7 @@ export default function RootLayout({
 }) {
 	return (
 		<html lang='en'>
-			<body className={`${strawFord.className} bg-white font-medium`}>
+			<body className={`${strawFord.className} bg-gray-50 font-medium`}>
 				<Providers>{children}</Providers>
 				<Toaster position='top-right' richColors />
 			</body>
