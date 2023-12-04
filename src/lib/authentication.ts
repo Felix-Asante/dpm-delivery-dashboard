@@ -22,16 +22,14 @@ export const authOptions: NextAuthOptions = {
 
 				try {
 					const endpoint = apiConfig.auth.login();
-
-					const results = await apiHandler<LoginUser>({
+					const results = await apiHandler<any>({
 						endpoint,
 						method: "POST",
 						body: { phone: username, password },
 					});
-					// Return the session object
+
 					return results;
 				} catch (error) {
-					console.log(error);
 					return null;
 				}
 			},
@@ -48,16 +46,15 @@ export const authOptions: NextAuthOptions = {
 		async signIn() {
 			return true;
 		},
-		async jwt({ token, loginResult }: any) {
-			if (loginResult && loginResult !== undefined) {
-				token.name = loginResult.user?.fullName;
-				token.value = loginResult.accessToken;
-				delete loginResult?.accessToken;
-				token.loginResult = loginResult;
-				token.email = loginResult?.user?.email;
+		async jwt({ token, user }: any) {
+			if (user && user !== undefined) {
+				token.name = user.user?.fullName;
+				token.value = user.accessToken;
+				delete user?.accessToken;
+				token.user = user?.user;
+				token.email = user?.user?.email;
 				return token;
 			}
-
 			return token;
 		},
 

@@ -12,6 +12,7 @@ import {
 	User,
 } from "@nextui-org/react";
 import { BellDotIcon, PlusIcon } from "lucide-react";
+import { signOut } from "next-auth/react";
 import Link from "next/link";
 
 export default function MainNavbar() {
@@ -75,7 +76,11 @@ function ProfileNavigation() {
 				>
 					Settings
 				</DropdownItem>
-				<DropdownItem key='logout' color='danger'>
+				<DropdownItem
+					key='logout'
+					color='danger'
+					onClick={async () => await signOut()}
+				>
 					Log Out
 				</DropdownItem>
 			</DropdownMenu>

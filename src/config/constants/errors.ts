@@ -16,4 +16,7 @@ export const ERRORS = {
 			invalid: "Phone is invalid",
 		},
 	},
+	MESSAGE: {
+		NETWORK: "Network Error",
+	},
 };

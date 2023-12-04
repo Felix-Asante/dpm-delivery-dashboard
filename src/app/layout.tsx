@@ -21,11 +21,11 @@ const strawFord = localFont({
 			weight: "500",
 			style: "medium",
 		},
-		{
-			path: "../../public/fonts/strawford-regular.ttf",
-			weight: "400",
-			style: "normal",
-		},
+		// {
+		// 	path: "../../public/fonts/strawford-regular.ttf",
+		// 	weight: "400",
+		// 	style: "normal",
+		// },
 	],
 });
 export const metadata: Metadata = {
@@ -40,7 +40,7 @@ export default function RootLayout({
 }) {
 	return (
 		<html lang='en'>
-			<body className={`${strawFord.className} bg-gray-50 font-medium`}>
+			<body className={`${strawFord.className} bg-gray-50`}>
 				<Providers>{children}</Providers>
 				<Toaster position='top-right' richColors />
 			</body>

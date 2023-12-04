@@ -15,7 +15,7 @@ export default function DashboardLayout({
 				<MainNavbar />
 
 				<DashboardSideBar />
-				<div className='ml-[3.2rem] sm:ml-[5.3rem] lg:ml-[11.3rem]'>
+				<div className='ml-[3.2rem] sm:ml-[5.3rem] lg:ml-[11.3rem] h-full'>
 					{children}
 				</div>
 			</main>

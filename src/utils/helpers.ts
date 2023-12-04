@@ -1,3 +1,4 @@
+import { ERRORS } from "@/config/constants/errors";
 import { Query, paths } from "@/types/url";
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
@@ -43,4 +44,17 @@ export function toQuery(queryObj: Query) {
 
 export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs));
+}
+
+export function getErrorMessage(error: any) {
+	if (!error?.response) {
+		return ERRORS.MESSAGE.NETWORK;
+	}
+	const { status, data } = error?.response;
+	if (status === 403) {
+		// logout
+		console.log("logout");
+	}
+
+	return data?.message;
 }
