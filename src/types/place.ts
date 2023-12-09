@@ -7,6 +7,7 @@ export interface Place extends placeBaseType {
 	productCategory: ProductCategory[];
 	id: string;
 	logo: string;
+	slug: string;
 	createdAt: string;
 	updatedAt: string;
 	category: Category;

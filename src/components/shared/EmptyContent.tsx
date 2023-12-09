@@ -1,5 +1,7 @@
 import Image from "next/image";
-import illustration_empty_content from "../../../public/svg/illustrations/illustration_empty_content.svg";
+
+const illustration_empty_content =
+	"/svg/illustrations/illustration_empty_content.svg";
 
 interface EmptyContentProps {
 	title: string;

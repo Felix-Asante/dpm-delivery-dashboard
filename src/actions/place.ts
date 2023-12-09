@@ -2,16 +2,25 @@
 
 import { apiConfig } from "@/lib/apiConfig";
 import { apiHandler } from "@/lib/apiHandler";
+import { ResponseMeta } from "@/types";
 import { Place } from "@/types/place";
+import { Query } from "@/types/url";
 import { getErrorMessage } from "@/utils/helpers";
 
-export async function getPlaces(): Promise<Place[]> {
+interface PlacesResponse {
+	items: Place[];
+	meta: ResponseMeta;
+}
+
+export async function getPlaces(query: Query): Promise<PlacesResponse> {
 	try {
-		const endpoint = apiConfig.places.list();
-		const places = await apiHandler<Place[]>({ endpoint, method: "GET" });
+		const endpoint = apiConfig.places.list(query);
+		const places = await apiHandler<PlacesResponse>({
+			endpoint,
+			method: "GET",
+		});
 		return places;
 	} catch (error) {
-		console.log(error);
 		throw new Error(getErrorMessage(error));
 	}
 }

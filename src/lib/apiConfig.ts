@@ -15,7 +15,8 @@ export const apiConfig = {
 	},
 	places: {
 		create: () => `places`,
-		list: () => `places`,
+		list: ({ search, ...rest }: Query) =>
+			`places${toQuery({ query: search, ...rest })}`,
 		update: (placeId: string) => `places/${placeId}`,
 		get_by_id: (placeId: string) => `places/${placeId}`,
 		get_by_slug: (slug: string) => `places/${slug}/slug`,

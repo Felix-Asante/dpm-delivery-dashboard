@@ -58,3 +58,7 @@ export function getErrorMessage(error: any) {
 
 	return data?.message;
 }
+
+export function pluralize(text: string, total = 2): string {
+	return total > 1 ? `${text}s` : text;
+}
