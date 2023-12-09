@@ -40,14 +40,14 @@ export default function PlaceTableFilters({
 	}, [category]);
 
 	return (
-		<HStack className='items-center justify-between'>
-			<HStack className='items-center'>
+		<HStack className='flex-col md:flex-row md:items-center justify-between'>
+			<HStack className='flex-col md:flex-row md:items-center'>
 				{categories?.length > 0 && (
 					<Controller
 						render={({ field }) => (
 							<Select
 								label='Sort by category'
-								className='w-52 max-w-xs'
+								className='md:w-52 max-w-xs'
 								size='sm'
 								radius='sm'
 								variant='bordered'
@@ -76,7 +76,7 @@ export default function PlaceTableFilters({
 					radius='sm'
 					placeholder='Search by place'
 					startContent={<SearchIcon className='text-gray-400' size={20} />}
-					className='w-64'
+					className='md:w-64'
 					variant='bordered'
 				/>
 			</HStack>
