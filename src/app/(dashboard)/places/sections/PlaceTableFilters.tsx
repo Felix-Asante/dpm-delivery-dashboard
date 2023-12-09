@@ -12,11 +12,18 @@ interface FormFields {
 	search: string;
 	category: string;
 }
+interface Props {
+	categories: Category[];
+	disableDelete: boolean;
+	onDelete: () => void;
+	deleting: boolean;
+}
 export default function PlaceTableFilters({
 	categories,
-}: {
-	categories: Category[];
-}) {
+	disableDelete,
+	onDelete,
+	deleting,
+}: Props) {
 	const { control, watch } = useForm<FormFields>();
 
 	const search = useDebounce(watch("search"), 1000);
@@ -73,7 +80,14 @@ export default function PlaceTableFilters({
 					variant='bordered'
 				/>
 			</HStack>
-			<Button color='danger' disableRipple radius='sm' disabled>
+			<Button
+				color='danger'
+				disableRipple
+				radius='sm'
+				isDisabled={disableDelete}
+				isLoading={deleting}
+				onClick={onDelete}
+			>
 				Delete places
 			</Button>
 		</HStack>

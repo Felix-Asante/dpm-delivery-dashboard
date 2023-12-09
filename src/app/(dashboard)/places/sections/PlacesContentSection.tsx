@@ -3,14 +3,17 @@ import HStack from "@/components/shared/layout/HStack";
 import { DASHBOARD_PATHS } from "@/config/routes";
 import { Button, Pagination } from "@nextui-org/react";
 import { PlusIcon } from "lucide-react";
-import React from "react";
+import React, { useState } from "react";
 import PlaceTableFilters from "./PlaceTableFilters";
 import PlaceTable from "./PlaceTable";
 import { Place } from "@/types/place";
 import { Category } from "@/types/category";
-import { pluralize } from "@/utils/helpers";
+import { getErrorMessage, pluralize } from "@/utils/helpers";
 import { ResponseMeta } from "@/types";
 import useQueryParams from "@/hooks/useQueryParam";
+import { useServerAction } from "@/hooks/useServerAction";
+import { deletePlace } from "@/actions/place";
+import { toast } from "sonner";
 
 interface Props {
 	places: Place[];
@@ -25,6 +28,34 @@ export default function PlacesContentSection({
 }: Props) {
 	const totalPlace = meta?.totalItems;
 	const { add } = useQueryParams();
+	const [selectedPlaces, setSelectedPlaces] = useState<Set<string>>(
+		new Set([]),
+	);
+
+	const [run, { loading }] = useServerAction<any, typeof deletePlace>(
+		deletePlace,
+	);
+
+	const deleteMorePlaceHandler = async () => {
+		let placeIds: string[] = [];
+		try {
+			if (typeof selectedPlaces === "string") {
+				placeIds = places?.map((place) => place.id);
+			} else {
+				placeIds = [...selectedPlaces];
+			}
+			if (placeIds.length === 0) {
+				toast.error("Make sure you have selected a place");
+				return;
+			}
+			await Promise.all(placeIds.map((placeId) => run(placeId)));
+			setSelectedPlaces(new Set([]));
+			toast.success("Places successfully deleted");
+		} catch (error) {
+			toast.error(getErrorMessage(error));
+		}
+	};
+
 	return (
 		<>
 			<HStack className='items-center justify-between'>
@@ -42,8 +73,17 @@ export default function PlacesContentSection({
 				</Button>
 			</HStack>
 			<div className='mt-3 border rounded-lg p-4'>
-				<PlaceTableFilters categories={categories} />
-				<PlaceTable places={places} />
+				<PlaceTableFilters
+					categories={categories}
+					disableDelete={selectedPlaces.size <= 0}
+					deleting={loading}
+					onDelete={deleteMorePlaceHandler}
+				/>
+				<PlaceTable
+					places={places}
+					selectedKeys={selectedPlaces}
+					onSelectionChange={setSelectedPlaces}
+				/>
 				{meta?.totalPages > 1 && (
 					<HStack className='justify-center mt-2'>
 						<Pagination

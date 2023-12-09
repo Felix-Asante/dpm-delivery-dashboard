@@ -1,11 +1,15 @@
 "use server";
 
+import { DASHBOARD_PATHS } from "@/config/routes";
 import { apiConfig } from "@/lib/apiConfig";
 import { apiHandler } from "@/lib/apiHandler";
 import { ResponseMeta } from "@/types";
 import { Place } from "@/types/place";
 import { Query } from "@/types/url";
 import { getErrorMessage } from "@/utils/helpers";
+import { Tags } from "@/utils/tags";
+import { revalidateTag } from "next/cache";
+import { redirect } from "next/navigation";
 
 interface PlacesResponse {
 	items: Place[];
@@ -18,9 +22,24 @@ export async function getPlaces(query: Query): Promise<PlacesResponse> {
 		const places = await apiHandler<PlacesResponse>({
 			endpoint,
 			method: "GET",
+			next: { tags: [Tags.places] },
 		});
 		return places;
 	} catch (error) {
+		throw new Error(getErrorMessage(error));
+	}
+}
+export async function deletePlace(placeId: string, redirectHome = false) {
+	try {
+		const endpoint = apiConfig.places.delete(placeId);
+		await apiHandler({
+			endpoint,
+			method: "DELETE",
+		});
+		revalidateTag(Tags.places);
+		redirectHome && redirect(DASHBOARD_PATHS.places.root);
+	} catch (error) {
+		console.log(error);
 		throw new Error(getErrorMessage(error));
 	}
 }

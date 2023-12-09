@@ -47,16 +47,16 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function getErrorMessage(error: any) {
-	if (!error?.response) {
+	if (!error?.response && !error?.message) {
 		return ERRORS.MESSAGE.NETWORK;
 	}
-	const { status, data } = error?.response;
-	if (status === 403) {
+	const { statusCode, data, message = "" } = error;
+	if (statusCode === 403) {
 		// logout
 		console.log("logout");
 	}
 
-	return data?.message;
+	return data?.message || message;
 }
 
 export function pluralize(text: string, total = 2): string {
