@@ -15,5 +15,7 @@ export interface CreatePlaceDto {
 	deliveryFee?: number;
 	minPrepTime?: number;
 	maxPrepTime?: number;
-	placeAdmin: CreateUserDto;
+	placeAdminFullName: string;
+	placeAdminPhone: string;
+	placeAdminPassword: string;
 }

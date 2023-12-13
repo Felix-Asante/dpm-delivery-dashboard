@@ -4,6 +4,7 @@ import { DASHBOARD_PATHS } from "@/config/routes";
 import { apiConfig } from "@/lib/apiConfig";
 import { apiHandler } from "@/lib/apiHandler";
 import { ResponseMeta } from "@/types";
+import { CreatePlaceDto } from "@/types/dtos/places";
 import { Place } from "@/types/place";
 import { Query } from "@/types/url";
 import { getErrorMessage } from "@/utils/helpers";
@@ -25,6 +26,16 @@ export async function getPlaces(query: Query): Promise<PlacesResponse> {
 			next: { tags: [Tags.places] },
 		});
 		return places;
+	} catch (error) {
+		throw new Error(getErrorMessage(error));
+	}
+}
+
+export async function addNewPlace(body: FormData) {
+	try {
+		const endpoint = apiConfig.places.create();
+		await apiHandler({ endpoint, method: "POST", json: false, body });
+		revalidateTag(Tags.places);
 	} catch (error) {
 		throw new Error(getErrorMessage(error));
 	}

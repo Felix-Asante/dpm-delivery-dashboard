@@ -17,7 +17,7 @@ import Link from "next/link";
 
 export default function MainNavbar() {
 	return (
-		<div className='bg-secondary py-3 px-8 md:px-16 w-full sticky top-0'>
+		<div className='bg-secondary py-3 px-8 md:px-16 w-full sticky top-0 z-[100]'>
 			<Container>
 				<HStack className='items-center justify-between'>
 					<Link

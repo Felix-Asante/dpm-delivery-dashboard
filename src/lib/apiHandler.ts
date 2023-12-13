@@ -9,7 +9,7 @@ interface ApiHandlerProps {
 	headers?: RequestInit["headers"];
 	cache?: RequestInit["cache"];
 	next?: RequestInit["next"];
-	isFormData?: boolean;
+	json?: boolean;
 }
 
 export const apiHandler = async <T>({
@@ -19,29 +19,25 @@ export const apiHandler = async <T>({
 	headers,
 	cache,
 	next,
-	isFormData = false,
+	json = true,
 }: ApiHandlerProps): Promise<T> => {
 	const session = await getServerSession<typeof authOptions, Session>(
 		authOptions,
 	);
 	const authorization = `Bearer ${session?.idToken}`;
-	const contentType = isFormData ? "multipart/form-data" : "application/json";
+	const requestBody = json ? JSON.stringify(body) : body;
 
-	const requestBody = body
-		? isFormData
-			? body
-			: JSON.stringify(body)
-		: undefined;
-
+	const requestHeaders: any = {
+		authorization,
+		...headers,
+	};
+	if (json) {
+		requestHeaders["Content-Type"] = "application/json";
+	}
 	const res = await fetch(apiConfig.baseUrl + endpoint, {
 		method,
 		body: requestBody,
-		headers: {
-			"Content-Type": contentType,
-			authorization,
-			Accept: contentType,
-			...headers,
-		},
+		headers: requestHeaders,
 		cache,
 		next,
 	});

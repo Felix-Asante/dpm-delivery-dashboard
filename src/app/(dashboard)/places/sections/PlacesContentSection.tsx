@@ -14,6 +14,7 @@ import useQueryParams from "@/hooks/useQueryParam";
 import { useServerAction } from "@/hooks/useServerAction";
 import { deletePlace } from "@/actions/place";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 interface Props {
 	places: Place[];
@@ -31,6 +32,7 @@ export default function PlacesContentSection({
 	const [selectedPlaces, setSelectedPlaces] = useState<Set<string>>(
 		new Set([]),
 	);
+	const { push } = useRouter();
 
 	const [run, { loading }] = useServerAction<any, typeof deletePlace>(
 		deletePlace,
@@ -65,7 +67,7 @@ export default function PlacesContentSection({
 				<Button
 					color='primary'
 					radius='sm'
-					href={DASHBOARD_PATHS.places.new}
+					onClick={() => push(DASHBOARD_PATHS.places.new)}
 					className='font-semibold'
 					startContent={<PlusIcon size={20} className='text-white' />}
 				>

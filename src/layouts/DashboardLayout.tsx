@@ -11,7 +11,7 @@ export default function DashboardLayout({
 }) {
 	return (
 		<AuthGuards>
-			<main className='h-screen'>
+			<main className='min-h-screen'>
 				<MainNavbar />
 
 				<DashboardSideBar />
