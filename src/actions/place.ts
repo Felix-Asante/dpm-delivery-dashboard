@@ -40,7 +40,7 @@ export async function addNewPlace(body: FormData) {
 		throw new Error(getErrorMessage(error));
 	}
 }
-export async function deletePlace(placeId: string, redirectHome = false) {
+export async function deletePlace(placeId: string) {
 	try {
 		const endpoint = apiConfig.places.delete(placeId);
 		await apiHandler({
@@ -48,7 +48,6 @@ export async function deletePlace(placeId: string, redirectHome = false) {
 			method: "DELETE",
 		});
 		revalidateTag(Tags.places);
-		redirectHome && redirect(DASHBOARD_PATHS.places.root);
 	} catch (error) {
 		console.log(error);
 		throw new Error(getErrorMessage(error));

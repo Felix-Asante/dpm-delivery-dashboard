@@ -18,7 +18,7 @@ export const createPlaceSchema = z.object({
 	address: z.string(),
 	longitude: z.string(),
 	latitude: z.string(),
-	website: z.string().url(),
+	website: z.string().url()?.optional(),
 	averagePrice: z.string().transform((val) => +val),
 	deliveryFee: z
 		.string()

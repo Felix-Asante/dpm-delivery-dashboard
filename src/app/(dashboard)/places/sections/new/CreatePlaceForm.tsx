@@ -1,19 +1,18 @@
 "use client";
+import { addNewPlace } from "@/actions/place";
+import FileUpload from "@/components/shared/input/FileUpload";
 import TextField from "@/components/shared/input/TextField";
-import { useReactHookForm } from "@/hooks/useReactHookForm";
-import { Category } from "@/types/category";
-import { Button, Select, SelectItem } from "@nextui-org/react";
-import React from "react";
-import { Controller } from "react-hook-form";
-import CreatePlaceDetails from "./CreatePlaceDetails";
 import HStack from "@/components/shared/layout/HStack";
 import { DASHBOARD_PATHS } from "@/config/routes";
-import { CreatePlaceField, createPlaceSchema } from "@/rules/validations/place";
-import FileUpload from "@/components/shared/input/FileUpload";
+import { useReactHookForm } from "@/hooks/useReactHookForm";
 import { useServerAction } from "@/hooks/useServerAction";
-import { addNewPlace } from "@/actions/place";
-import { toast } from "sonner";
+import { CreatePlaceField, createPlaceSchema } from "@/rules/validations/place";
+import { Category } from "@/types/category";
 import { getErrorMessage } from "@/utils/helpers";
+import { Button } from "@nextui-org/react";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import CreatePlaceDetails from "./CreatePlaceDetails";
 
 interface Props {
 	categories: Category[];
@@ -23,7 +22,6 @@ export default function CreatePlaceForm({ categories }: Props) {
 		control,
 		handleSubmit,
 		formState: { errors, isValid },
-		reset,
 		register,
 	} = useReactHookForm<CreatePlaceField>(createPlaceSchema);
 
@@ -31,6 +29,7 @@ export default function CreatePlaceForm({ categories }: Props) {
 		addNewPlace,
 	);
 
+	const router = useRouter();
 	const onSubmit = async (data: CreatePlaceField) => {
 		try {
 			const {
@@ -60,7 +59,7 @@ export default function CreatePlaceForm({ categories }: Props) {
 
 			await createPlace(formData);
 			toast.success("New place created");
-			reset();
+			router.push(DASHBOARD_PATHS.places.root);
 		} catch (error) {
 			toast.error(getErrorMessage(error));
 		}
@@ -71,7 +70,7 @@ export default function CreatePlaceForm({ categories }: Props) {
 				<h4 className='text-black text-xl'>Add New Place</h4>
 				<HStack className='justify-end'>
 					<Button
-						href={DASHBOARD_PATHS.places.root}
+						onClick={() => router.push(DASHBOARD_PATHS.places.root)}
 						variant='bordered'
 						color='success'
 						radius='none'
