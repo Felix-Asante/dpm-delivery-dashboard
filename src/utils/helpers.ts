@@ -1,4 +1,7 @@
+import { BookingStatus } from "@/config/constants";
 import { ERRORS } from "@/config/constants/errors";
+import regexPattern from "@/rules";
+import { Status } from "@/types";
 import { Query, paths } from "@/types/url";
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
@@ -59,6 +62,71 @@ export function getErrorMessage(error: any) {
 	return data?.message || message;
 }
 
+export function isValidUrl(url: string): boolean {
+	if (!regexPattern.URL.test(url)) return false;
+	return true;
+}
 export function pluralize(text: string, total = 2): string {
 	return total > 1 ? `${text}s` : text;
+}
+
+type AnyObject = { [key: string]: any };
+
+export function removeFromObject(obj: AnyObject, keys: string[]) {
+	keys.forEach((key) => {
+		delete obj[key];
+	});
+
+	return obj;
+}
+
+export function removeEmptyFields(obj: AnyObject): AnyObject {
+	const cleanedObj: AnyObject = {};
+
+	for (const key in obj) {
+		if (
+			obj.hasOwnProperty(key) &&
+			obj[key] !== null &&
+			obj[key] !== undefined &&
+			obj[key] !== ""
+		) {
+			cleanedObj[key] = obj[key];
+		}
+	}
+
+	return cleanedObj;
+}
+
+export function getInitials(name?: string) {
+	if (!name) return "";
+	const nameParts = name.split("");
+	if (nameParts.length === 1) {
+		return nameParts[0].charAt(0).toUpperCase();
+	} else if (nameParts.length > 1) {
+		const [firstName, lastName] = nameParts;
+		return `${firstName.charAt(0).toUpperCase()}${lastName
+			.charAt(0)
+			.toUpperCase()}`;
+	}
+	return "";
+}
+
+export function getStyleByStatus(status: Status) {
+	switch (status) {
+		case BookingStatus.CANCELLED:
+		case BookingStatus.REJECTED:
+			return { base: "border border-2 border-red-600", dot: "bg-red-600" };
+
+		case BookingStatus.PENDING:
+			return { base: "border border-2 border-warning", dot: "bg-warning" };
+
+		case BookingStatus.CONFIRMED:
+			return { base: "border border-2 border-secondary", dot: "bg-secondary" };
+
+		case BookingStatus.DELIVERED:
+			return { base: "border border-2 border-success", dot: "bg-success" };
+
+		default:
+			return { base: "border border-2 border-default", dot: "bg-default" };
+	}
 }

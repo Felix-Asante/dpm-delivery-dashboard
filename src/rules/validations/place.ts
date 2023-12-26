@@ -19,19 +19,19 @@ export const createPlaceSchema = z.object({
 	longitude: z.string(),
 	latitude: z.string(),
 	website: z.string().url()?.optional(),
-	averagePrice: z.string().transform((val) => +val),
+	averagePrice: z.any().transform((val) => parseFloat(val)),
 	deliveryFee: z
-		.string()
+		.any()
 		.optional()
-		.transform((val) => (val ? +val : 0)),
+		.transform((val) => (val ? parseFloat(val) : 0.0)),
 	min_prep_time: z
-		.string()
+		.any()
 		.optional()
-		.transform((val) => (val ? +val : 0)),
+		.transform((val) => (val ? parseFloat(val) : 0.0)),
 	max_prep_time: z
-		.string()
+		.any()
 		.optional()
-		.transform((val) => (val ? +val : 0)),
+		.transform((val) => (val ? parseFloat(val) : 0.0)),
 	fullName: z.string(),
 	admin_phone: z.string(),
 	password: z.string(),
@@ -40,3 +40,7 @@ export const createPlaceSchema = z.object({
 });
 
 export type CreatePlaceField = z.infer<typeof createPlaceSchema>;
+
+export const UpdatePlaceSchema = createPlaceSchema.partial();
+
+export type UpdatePlaceField = z.infer<typeof UpdatePlaceSchema>;

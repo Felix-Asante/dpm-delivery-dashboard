@@ -1,29 +1,46 @@
 "use client";
-import { addNewPlace } from "@/actions/place";
-import FileUpload from "@/components/shared/input/FileUpload";
-import TextField from "@/components/shared/input/TextField";
 import HStack from "@/components/shared/layout/HStack";
 import { DASHBOARD_PATHS } from "@/config/routes";
 import { useReactHookForm } from "@/hooks/useReactHookForm";
-import { useServerAction } from "@/hooks/useServerAction";
-import { CreatePlaceField, createPlaceSchema } from "@/rules/validations/place";
-import { Category } from "@/types/category";
-import { getErrorMessage } from "@/utils/helpers";
 import { Button } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
+import React, { useEffect, useMemo } from "react";
+import CreatePlaceDetails from "../new/CreatePlaceDetails";
+import FileUpload from "@/components/shared/input/FileUpload";
+import TextField from "@/components/shared/input/TextField";
+import { Place } from "@/types/place";
+import { Category } from "@/types/category";
+import { User } from "@/types/auth";
+import { UpdatePlaceField, UpdatePlaceSchema } from "@/rules/validations/place";
 import { toast } from "sonner";
-import CreatePlaceDetails from "./CreatePlaceDetails";
-import { useEffect } from "react";
+import {
+	getErrorMessage,
+	removeEmptyFields,
+	removeFromObject,
+} from "@/utils/helpers";
+import { useServerAction } from "@/hooks/useServerAction";
+import { updatePlace } from "@/actions/place";
 
 interface Props {
+	place: Place;
 	categories: Category[];
-	headline: string;
-	defaultValue?: Partial<CreatePlaceField>;
+	admin: User;
 }
-export default function CreatePlaceForm({
+
+const fieldsToRemove = [
+	"id",
+	"createdAt",
+	"deletedAt",
+	"updatedAt",
+	"productCategory",
+	"logo",
+	"mainImage",
+];
+
+export default function UpdatePlaceSection({
 	categories,
-	headline,
-	defaultValue,
+	place,
+	admin,
 }: Props) {
 	const {
 		control,
@@ -31,14 +48,33 @@ export default function CreatePlaceForm({
 		formState: { errors, isValid },
 		register,
 		setValue,
-	} = useReactHookForm<CreatePlaceField>(createPlaceSchema, defaultValue);
+	} = useReactHookForm<UpdatePlaceField>(UpdatePlaceSchema);
 
-	const [createPlace, { loading }] = useServerAction<any, typeof addNewPlace>(
-		addNewPlace,
-	);
+	const [runUpdatePlace, { loading }] = useServerAction<
+		any,
+		typeof updatePlace
+	>(updatePlace);
 
 	const router = useRouter();
 
+	const defaultValue = useMemo(() => {
+		return {
+			name: place?.name,
+			category: place?.category?.id,
+			phone: place?.phone,
+			email: place?.email,
+			address: place?.address,
+			latitude: place?.latitude,
+			longitude: place?.longitude,
+			website: place?.website,
+			averagePrice: place?.averagePrice,
+			deliveryFee: place?.deliveryFee!,
+			min_prep_time: place?.minPrepTime!,
+			max_prep_time: place?.maxPrepTime!,
+			fullName: admin?.fullName,
+			admin_phone: admin?.phone,
+		};
+	}, [place]);
 	useEffect(() => {
 		if (defaultValue) {
 			for (const key in defaultValue) {
@@ -48,35 +84,28 @@ export default function CreatePlaceForm({
 		}
 	}, [defaultValue]);
 
-	const onSubmit = async (data: CreatePlaceField) => {
+	const onSubmit = async (data: UpdatePlaceField) => {
 		try {
-			const {
-				fullName,
-				admin_phone,
-				password,
-				logo,
-				mainImage,
-				min_prep_time = "",
-				max_prep_time = "",
-				...placeData
-			} = data;
+			const payload = {
+				...removeFromObject(place, fieldsToRemove),
+				...removeEmptyFields(data),
+			};
 			const formData = new FormData();
-
-			formData.append("logo", logo[0] as unknown as File);
-			formData.append("mainImage", mainImage[0] as unknown as File);
-			formData.append("minPrepTime", min_prep_time?.toString() ?? "");
-			formData.append("maxPrepTime", max_prep_time?.toString() ?? "");
-			formData.append("placeAdminFullName", fullName);
-			formData.append("placeAdminPhone", admin_phone);
-			formData.append("placeAdminPassword", password);
-
-			for (const key in placeData) {
-				// @ts-ignore
-				formData.append(key, placeData[key]);
+			if (payload?.logo) {
+				formData.append("logo", payload?.logo[0] as unknown as File);
+			}
+			if (payload?.mainImage) {
+				formData.append("mainImage", payload?.mainImage[0] as unknown as File);
 			}
 
-			await createPlace(formData);
-			toast.success("New place created");
+			formData.append("minPrepTime", payload?.min_prep_time ?? "");
+			formData.append("maxPrepTime", payload?.max_prep_time ?? "");
+			for (const key in payload) {
+				formData.append(key, payload[key]);
+			}
+
+			await runUpdatePlace(formData, place?.id);
+			toast.success("place updated successfully");
 			router.push(DASHBOARD_PATHS.places.root);
 		} catch (error) {
 			toast.error(getErrorMessage(error));
@@ -85,7 +114,7 @@ export default function CreatePlaceForm({
 	return (
 		<div className='min-h-full'>
 			<HStack className='justify-between mb-4'>
-				<h4 className='text-black text-xl'>{headline}</h4>
+				<h4 className='text-black text-xl'>Update place</h4>
 				<HStack className='justify-end'>
 					<Button
 						onClick={() => router.push(DASHBOARD_PATHS.places.root)}
@@ -120,12 +149,14 @@ export default function CreatePlaceForm({
 					{...register("logo")}
 					name='logo'
 					errorMessage={errors?.logo?.message?.toString()}
+					defaultValue={place?.logo}
 				/>
 				<FileUpload
 					label='Place Photo'
 					{...register("mainImage")}
 					name='mainImage'
 					errorMessage={errors?.mainImage?.message?.toString()}
+					defaultValue={place?.mainImage}
 				/>
 			</div>
 			<section className='mt-5'>
@@ -149,16 +180,6 @@ export default function CreatePlaceForm({
 						labelPlacement='outside'
 						radius='sm'
 						type='phone'
-					/>
-					<TextField
-						name='password'
-						control={control}
-						label='Password'
-						placeholder='Password'
-						variant='bordered'
-						labelPlacement='outside'
-						radius='sm'
-						type='password'
 					/>
 				</div>
 			</section>

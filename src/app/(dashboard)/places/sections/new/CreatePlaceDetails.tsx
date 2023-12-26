@@ -50,6 +50,7 @@ export default function CreatePlaceDetails({
 				)}
 				name='category'
 				control={control}
+				defaultValue={categories[0].id}
 			/>
 			<TextField
 				name='phone'

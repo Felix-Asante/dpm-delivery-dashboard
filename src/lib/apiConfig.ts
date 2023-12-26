@@ -21,6 +21,7 @@ export const apiConfig = {
 		get_by_id: (placeId: string) => `places/${placeId}`,
 		get_by_slug: (slug: string) => `places/${slug}/slug`,
 		delete: (placeId: string) => `places/${placeId}`,
+		get_admin: (placeId: string) => `places/admin/${placeId}`,
 		search: (query: Query) => `places/search${toQuery(query)}`,
 		count: () => `places/count`,
 	},
@@ -54,8 +55,8 @@ export const apiConfig = {
 		count: () => `offers/count`,
 	},
 	bookings: {
-		list: () => `bookings`,
-		place_booking: () => `bookings/ours`,
+		list: (query?: Query) => `bookings${toQuery(query ?? {})}`,
+		place_booking: (query?: Query) => `bookings/ours${toQuery(query ?? {})}`,
 		delete: (bookingId: string) => `bookings/${bookingId}`,
 		cancel: (bookingId: string) => `bookings/${bookingId}/cancel-booking`,
 		confirm: (bookingId: string) => `bookings/${bookingId}/confirm-booking`,
