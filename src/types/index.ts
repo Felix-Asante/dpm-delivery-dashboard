@@ -6,6 +6,12 @@ export interface ResponseMeta {
 	currentPage: number;
 }
 
+export interface ModalProps {
+	isOpen: boolean;
+	onClose: () => void;
+	mode?: "edit" | "create";
+}
+
 export interface SeverActionResponse<R> {
 	error?: string;
 	results?: R;

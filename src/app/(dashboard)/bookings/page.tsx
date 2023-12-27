@@ -23,12 +23,12 @@ export default async function BookingsPage({ searchParams }: PageProps) {
 	]);
 
 	const totalBookings = bookings?.results?.meta?.totalItems;
-
+	const error = bookings?.error ?? categories?.error;
 	return (
-		<WithServerError error={bookings?.error}>
+		<WithServerError error={error}>
 			<div className='bg-white min-h-screen'>
 				<BookingLists
-					categories={categories}
+					categories={categories?.results!}
 					bookings={bookings?.results?.items!}
 					totalBookings={totalBookings!}
 					totalPages={bookings?.results?.meta?.totalPages!}

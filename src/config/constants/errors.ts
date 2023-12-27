@@ -18,5 +18,7 @@ export const ERRORS = {
 	},
 	MESSAGE: {
 		NETWORK: "Network Error",
+		DELETE_PROMPT:
+			"Do you really want to delete this category? This operation cannot be undone.",
 	},
 };

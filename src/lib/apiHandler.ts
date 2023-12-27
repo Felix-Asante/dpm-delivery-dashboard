@@ -34,6 +34,7 @@ export const apiHandler = async <T>({
 	if (json) {
 		requestHeaders["Content-Type"] = "application/json";
 	}
+
 	const res = await fetch(apiConfig.baseUrl + endpoint, {
 		method,
 		body: requestBody,

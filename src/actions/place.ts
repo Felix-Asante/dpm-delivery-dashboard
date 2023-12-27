@@ -3,7 +3,7 @@
 import { DASHBOARD_PATHS } from "@/config/routes";
 import { apiConfig } from "@/lib/apiConfig";
 import { apiHandler } from "@/lib/apiHandler";
-import { ResponseMeta } from "@/types";
+import { ResponseMeta, SeverActionResponse } from "@/types";
 import { User } from "@/types/auth";
 import { CreatePlaceDto } from "@/types/dtos/places";
 import { Place } from "@/types/place";
@@ -18,7 +18,9 @@ interface PlacesResponse {
 	meta: ResponseMeta;
 }
 
-export async function getPlaces(query: Query): Promise<PlacesResponse> {
+export async function getPlaces(
+	query: Query,
+): Promise<SeverActionResponse<PlacesResponse>> {
 	try {
 		const endpoint = apiConfig.places.list(query);
 		const places = await apiHandler<PlacesResponse>({
@@ -26,9 +28,9 @@ export async function getPlaces(query: Query): Promise<PlacesResponse> {
 			method: "GET",
 			next: { tags: [Tags.places] },
 		});
-		return places;
+		return { results: places };
 	} catch (error) {
-		throw new Error(getErrorMessage(error));
+		throw { error: getErrorMessage(error) };
 	}
 }
 
@@ -54,28 +56,32 @@ export async function deletePlace(placeId: string) {
 		throw new Error(getErrorMessage(error));
 	}
 }
-export async function getPlaceBySlug(slug: string): Promise<Place> {
+export async function getPlaceBySlug(
+	slug: string,
+): Promise<SeverActionResponse<Place>> {
 	try {
 		const endpoint = apiConfig.places.get_by_slug(slug);
 		const place = await apiHandler<Place>({
 			endpoint,
 			method: "GET",
 		});
-		return place;
+		return { results: place };
 	} catch (error) {
-		throw new Error(getErrorMessage(error));
+		return { error: getErrorMessage(error) };
 	}
 }
-export async function getPlaceAdmin(placeId: string): Promise<User> {
+export async function getPlaceAdmin(
+	placeId: string,
+): Promise<SeverActionResponse<User>> {
 	try {
 		const endpoint = apiConfig.places.get_admin(placeId);
 		const admin = await apiHandler<User>({
 			endpoint,
 			method: "GET",
 		});
-		return admin;
+		return { results: admin };
 	} catch (error) {
-		throw new Error(getErrorMessage(error));
+		return { error: getErrorMessage(error) };
 	}
 }
 

@@ -1,6 +1,6 @@
 import * as z from "zod";
 
-const File = z.object({
+export const File = z.object({
 	name: z.string(),
 	size: z.number(),
 	type: z.string(),
