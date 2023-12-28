@@ -130,3 +130,33 @@ export function getStyleByStatus(status: Status) {
 			return { base: "border border-2 border-default", dot: "bg-default" };
 	}
 }
+
+export function generateRandomPassword(length: number) {
+	const lowerCaseChars = "abcdefghijklmnopqrstuvwxyz";
+	const upperCaseChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	const numberChars = "0123456789";
+	const specialChars = "!@#$%^&*()_+[]{}|;:,.<>?";
+
+	const allChars = lowerCaseChars + upperCaseChars + numberChars + specialChars;
+
+	let password = "";
+
+	// Ensure at least one of each character type
+	password += lowerCaseChars[Math.floor(Math.random() * lowerCaseChars.length)];
+	password += upperCaseChars[Math.floor(Math.random() * upperCaseChars.length)];
+	password += numberChars[Math.floor(Math.random() * numberChars.length)];
+	password += specialChars[Math.floor(Math.random() * specialChars.length)];
+
+	// Generate the remaining characters
+	for (let i = password.length; i < length; i++) {
+		password += allChars[Math.floor(Math.random() * allChars.length)];
+	}
+
+	// Shuffle the password to randomize the order
+	password = password
+		.split("")
+		.sort(() => Math.random() - 0.5)
+		.join("");
+
+	return password;
+}

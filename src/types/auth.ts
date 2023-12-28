@@ -1,3 +1,5 @@
+import { Place } from "./place";
+
 export interface User {
 	id: string;
 	createdAt: string;
@@ -13,7 +15,7 @@ export interface User {
 	codeExpiryDate: string;
 	likes: string[];
 	role: Role;
-	adminFor?: any; // change to Place
+	adminFor?: Place;
 }
 
 export interface Role {

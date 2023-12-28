@@ -39,7 +39,7 @@ export default function Modal(props: ModalProps) {
 				<ModalHeader>{title}</ModalHeader>
 				<ModalBody>
 					{description && <p className='text-gray-500'>{description}</p>}
-					{content && <div className='my-3'>{content}</div>}
+					{content && <div className='my-2'>{content}</div>}
 				</ModalBody>
 			</ModalContent>
 		</NextuiModal>

@@ -27,7 +27,7 @@ export enum ExportType {
 	csv = "csv",
 }
 
-export const enum UserRoles {
+export enum UserRoles {
 	ADMIN = "Admin",
 	USER = "User",
 	PLACE_ADMIN = "Place Admin",

@@ -5,9 +5,10 @@ export const apiConfig = {
 	baseUrl: process.env.API_URL,
 	auth: {
 		login: () => "auth/login",
+		signup: () => "auth/signup",
 	},
 	users: {
-		list: () => "users",
+		list: (query: Query) => `users${toQuery(query)}`,
 		likes: (userId: string) => `users/likes/${userId}`,
 		bookings: (userId: string) => `users/likes/${userId}`,
 		delete: (userId: string) => `users/${userId}`,
