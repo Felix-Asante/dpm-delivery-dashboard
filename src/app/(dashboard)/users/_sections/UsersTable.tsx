@@ -1,10 +1,15 @@
+import { deleteUser } from "@/actions/users";
 import EmptyContent from "@/components/shared/EmptyContent";
 import TextField from "@/components/shared/input/TextField";
 import HStack from "@/components/shared/layout/HStack";
+import Modal from "@/components/shared/modal";
 import { UserRoles } from "@/config/constants";
+import { ERRORS } from "@/config/constants/errors";
 import useDebounce from "@/hooks/useDebounce";
 import useQueryParams from "@/hooks/useQueryParam";
+import { useServerAction } from "@/hooks/useServerAction";
 import { User } from "@/types/auth";
+import { getErrorMessage } from "@/utils/helpers";
 import {
 	Button,
 	Chip,
@@ -18,6 +23,7 @@ import {
 import { Trash2Icon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 const columns = [
 	{ label: "Joined at", key: "JoinedAt" },
@@ -37,14 +43,47 @@ export default function UsersTable({ users }: UsersTableProps) {
 		"toggle" | "replace" | undefined
 	>("toggle");
 	const [selectedUsers, setSelectedUsers] = useState<Set<string>>(new Set([]));
+	const [selectedUser, setSelectedUser] = useState<string | null>(null);
 	const { add, query } = useQueryParams();
 	const search = useDebounce(watch("search"), 2000);
+
+	const [runDeleteUser, { loading }] = useServerAction<any, typeof deleteUser>(
+		deleteUser,
+	);
 
 	useEffect(() => {
 		add("search", search);
 	}, [search]);
 
 	const adminRoleSelected = query?.role === UserRoles.PLACE_ADMIN;
+
+	const removeUser = async (id: string) => {
+		try {
+			if (!id || adminRoleSelected) {
+				toast.error("Operation not allowed");
+				return;
+			}
+			await runDeleteUser(id);
+			toast.success("User successfully deleted");
+			setSelectedUser(null);
+		} catch (error) {
+			toast.error(getErrorMessage(error));
+		}
+	};
+
+	const bulkDelete = async () => {
+		try {
+			let userIds: string[] = [];
+			if (typeof selectedUsers === "string") {
+				userIds = users?.map((user) => user?.id);
+			} else {
+				userIds = [...selectedUsers];
+			}
+			await Promise.all(userIds?.map((user) => removeUser(user)));
+		} catch (error) {
+			toast.error(getErrorMessage(error));
+		}
+	};
 
 	return (
 		<div className='border rounded-md p-3'>
@@ -65,8 +104,8 @@ export default function UsersTable({ users }: UsersTableProps) {
 					color='danger'
 					disableRipple
 					className='font-semibold'
-					// onClick={onOpen}
-					isDisabled={selectedUsers?.size === 0 || adminRoleSelected}
+					onClick={bulkDelete}
+					isDisabled={selectedUsers?.size === 0 || adminRoleSelected || loading}
 				>
 					Delete users
 				</Button>
@@ -112,7 +151,7 @@ export default function UsersTable({ users }: UsersTableProps) {
 										size='sm'
 										disableRipple
 										color='danger'
-										// onClick={() => setSelectedCategory(category)}
+										onClick={() => setSelectedUser(user?.id)}
 										isIconOnly
 										isDisabled={adminRoleSelected}
 									>
@@ -124,6 +163,34 @@ export default function UsersTable({ users }: UsersTableProps) {
 					))}
 				</TableBody>
 			</Table>
+			<Modal
+				isOpen={selectedUser !== null}
+				onClose={() => setSelectedUser(null)}
+				title='Delete user'
+				description={ERRORS.MESSAGE.DELETE_PROMPT}
+				content={
+					<HStack className='justify-end'>
+						<Button
+							variant='bordered'
+							radius='sm'
+							size='sm'
+							onClick={() => setSelectedUser(null)}
+							isDisabled={loading}
+						>
+							Cancel
+						</Button>
+						<Button
+							color='primary'
+							radius='sm'
+							size='sm'
+							onClick={() => removeUser(selectedUser!)}
+							isLoading={loading}
+						>
+							Continue
+						</Button>
+					</HStack>
+				}
+			/>
 		</div>
 	);
 }

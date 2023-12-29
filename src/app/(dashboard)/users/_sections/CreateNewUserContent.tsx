@@ -37,7 +37,7 @@ export default function CreateNewUserContent() {
 
 	const getRandomPassword = () => {
 		const password = generateRandomPassword(8);
-		setValue("password", password);
+		setValue("password", password, { shouldTouch: true, shouldDirty: true });
 		setIsPassword(false);
 	};
 
