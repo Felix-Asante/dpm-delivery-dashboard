@@ -55,7 +55,11 @@ export function DatePicker(props: DatePickerProps) {
 						)}
 					>
 						<CalendarIcon className='mr-2 h-4 w-4' />
-						{date ? format(date, "PPP") : <span>{label}</span>}
+						{date ? (
+							format(date, "PPP")
+						) : (
+							<span>{field?.value?.toLocaleDateString() || label}</span>
+						)}
 					</Button>
 				</PopoverTrigger>
 				<PopoverContent className='w-auto p-0 bg-white'>

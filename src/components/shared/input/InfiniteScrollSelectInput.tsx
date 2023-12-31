@@ -88,11 +88,10 @@ const InfiniteScrollSelect = React.forwardRef(function Input(
 		<div>
 			<FormControl.Label className='mb-1'>{label}</FormControl.Label>
 			<AsyncPaginate
-				value={selectedOption}
 				loadOptions={loadOptions}
 				onChange={(option) => {
 					setSelectedOption(option);
-					onChange && onChange(option);
+					onChange && onChange(option?.id);
 				}}
 				placeholder={placeholder}
 				isLoading={loading || isLoading}
@@ -137,6 +136,7 @@ const InfiniteScrollSelect = React.forwardRef(function Input(
 				selectRef={selectRef}
 				defaultInputValue={defaultValue}
 				{...rest}
+				value={selectedOption}
 			/>
 		</div>
 	);

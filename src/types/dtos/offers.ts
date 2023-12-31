@@ -9,6 +9,6 @@ export interface CreateOfferDto {
 	offerType: string;
 	productId: string;
 	placeId: string;
-	title?: string;
+	title: string;
 	description?: string;
 }

@@ -13,8 +13,6 @@ interface Props {
 	watch: (field: string) => string;
 }
 export default function CreateOfferContent({ control, watch }: Props) {
-	const startDate = watch("start_date");
-	console.log(startDate);
 	return (
 		<div className='grid md:grid-cols-2 gap-5'>
 			<TextField
@@ -27,7 +25,7 @@ export default function CreateOfferContent({ control, watch }: Props) {
 				labelPlacement='outside'
 			/>
 			<Controller
-				name='place'
+				name='placeId'
 				render={({ field }) => (
 					<InfiniteScrollSelect
 						url={apiConfig.places.list({})}
@@ -44,7 +42,7 @@ export default function CreateOfferContent({ control, watch }: Props) {
 				control={control}
 			/>
 			<Controller
-				name='type'
+				name='offerType'
 				render={({ field }) => (
 					<InfiniteScrollSelect
 						url={apiConfig.special_offers.list_offer_types()}
@@ -71,10 +69,11 @@ export default function CreateOfferContent({ control, watch }: Props) {
 				minDate={new Date()}
 			/>
 			<DatePicker
-				minDate={new Date()}
+				minDate={(watch("start_date") as unknown as Date) || new Date()}
 				name='end_date'
 				control={control}
 				label='Offer ending date'
+				defaultValue={watch("start_date")}
 			/>
 			<TextField
 				control={control}
@@ -88,23 +87,32 @@ export default function CreateOfferContent({ control, watch }: Props) {
 			<TextField
 				control={control}
 				label='Discount'
-				name='discount'
+				name='reductionPercent'
 				placeholder='Discount'
 				radius='sm'
 				variant='bordered'
 				labelPlacement='outside'
 			/>
-			<Textarea
-				label='Description'
-				variant='bordered'
-				labelPlacement='outside'
-				placeholder='Add offer description'
-				disableAnimation
-				classNames={{
-					// base: "max-w-xs",
-					input: "resize-y min-h-[40px]",
-				}}
-			/>
+			<div>
+				<Controller
+					name='description'
+					control={control}
+					render={({ field }) => (
+						<Textarea
+							label='Description'
+							variant='bordered'
+							labelPlacement='outside'
+							placeholder='Add offer description'
+							disableAnimation
+							classNames={{
+								// base: "max-w-xs",
+								input: "resize-y min-h-[40px]",
+							}}
+							{...field}
+						/>
+					)}
+				/>
+			</div>
 		</div>
 	);
 }
