@@ -1,5 +1,6 @@
 import { Category, ProductCategory } from "./category";
 import { CreatePlaceDto } from "./dtos/places";
+import { Special } from "./specials";
 
 type placeBaseType = Omit<CreatePlaceDto, "logo" | "category" | "mainImage">;
 
@@ -23,4 +24,16 @@ export interface PlaceService {
 	name: string;
 	price: number;
 	productCategory: ProductCategory;
+}
+
+export interface PlaceProducts {
+	id: string;
+	createdAt: string;
+	updatedAt: string;
+	deletedAt: string | null;
+	description: string;
+	photo: string | null;
+	name: string;
+	price: number;
+	offers: Special[];
 }

@@ -3,4 +3,5 @@ export enum Tags {
 	categories = "categories",
 	users = "users",
 	bookings = "bookings",
+	offers = "offers",
 }

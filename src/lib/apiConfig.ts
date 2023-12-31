@@ -2,7 +2,7 @@ import { Query } from "@/types/url";
 import { toQuery } from "@/utils/helpers";
 
 export const apiConfig = {
-	baseUrl: process.env.API_URL,
+	baseUrl: process.env.NEXT_PUBLIC_API_URL,
 	auth: {
 		login: () => "auth/login",
 		signup: () => "auth/signup",
@@ -25,6 +25,8 @@ export const apiConfig = {
 		get_admin: (placeId: string) => `places/admin/${placeId}`,
 		search: (query: Query) => `places/search${toQuery(query)}`,
 		count: () => `places/count`,
+		products: (placeId: string) => `places/${placeId}/products`,
+		new: () => `places/new`,
 	},
 	categories: {
 		create: () => `categories`,
@@ -49,7 +51,7 @@ export const apiConfig = {
 		delete_type: (typeId: string) => `offers/${typeId}/types`,
 		get_offer_by_type: (typeId: string) => `offers/types/${typeId}/offers`,
 		create: () => `offers`,
-		list: () => `offers`,
+		list: (query: Query) => `offers${toQuery(query)}`,
 		places: () => `place-offers`,
 		products: () => `product-offers`,
 		delete: (offerId: string) => `offers/${offerId}`,

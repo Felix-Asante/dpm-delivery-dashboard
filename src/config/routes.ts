@@ -37,5 +37,8 @@ export const DASHBOARD_PATHS = {
 	},
 	specials: {
 		root: path(DASHBOARD_ROOT, "specials"),
+		new: (query?: Query) =>
+			path(DASHBOARD_ROOT, `specials/new-offer${toQuery(query || {})}`),
+		edit: (offerId: string) => path(DASHBOARD_ROOT, `specials/edit/${offerId}`),
 	},
 };
