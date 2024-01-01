@@ -4,7 +4,7 @@ import { apiHandler } from "@/lib/apiHandler";
 import { ResponseMeta } from "@/types";
 import { toQuery } from "@/utils/helpers";
 import { useSession } from "next-auth/react";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { AsyncPaginate } from "react-select-async-paginate";
 import FormControl from "./FormControl";
 
@@ -13,7 +13,7 @@ interface SelectProps {
 	required?: boolean;
 	isSearchable?: boolean;
 	isLoading?: boolean;
-	defaultValue?: string;
+	defaultValue?: any;
 	onChange?: (option: Object) => void | null;
 	placeholder?: string;
 	label?: string;
@@ -45,6 +45,10 @@ const InfiniteScrollSelect = React.forwardRef(function Input(
 	const selectRef = useRef<any>();
 
 	const [selectedOption, setSelectedOption] = useState<any>(null);
+
+	useEffect(() => {
+		onChange && onChange(defaultValue?.id);
+	}, [defaultValue, onChange]);
 
 	const session = useSession();
 

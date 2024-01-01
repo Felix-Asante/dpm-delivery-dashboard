@@ -11,8 +11,15 @@ import { Controller } from "react-hook-form";
 interface Props {
 	control: any;
 	watch: (field: string) => string;
+	selectedPlace?: Place;
+	selectedType?: SpecialType;
 }
-export default function CreateOfferContent({ control, watch }: Props) {
+export default function CreateOfferContent({
+	control,
+	watch,
+	selectedPlace,
+	selectedType,
+}: Props) {
 	return (
 		<div className='grid md:grid-cols-2 gap-5'>
 			<TextField
@@ -29,7 +36,6 @@ export default function CreateOfferContent({ control, watch }: Props) {
 				render={({ field }) => (
 					<InfiniteScrollSelect
 						url={apiConfig.places.list({})}
-						{...field}
 						getOptionLabel={(option: Place) => option?.name}
 						getOptionValue={(option: Place) => option.id}
 						isOptionSelected={(option: Place, selectedValue: Place[]) => {
@@ -37,25 +43,7 @@ export default function CreateOfferContent({ control, watch }: Props) {
 							return isSelected;
 						}}
 						label='Establishment'
-					/>
-				)}
-				control={control}
-			/>
-			<Controller
-				name='offerType'
-				render={({ field }) => (
-					<InfiniteScrollSelect
-						url={apiConfig.special_offers.list_offer_types()}
-						getOptionLabel={(option: SpecialType) => option?.name}
-						getOptionValue={(option: SpecialType) => option?.id}
-						isOptionSelected={(
-							option: SpecialType,
-							selectedValue: SpecialType[],
-						) => {
-							const isSelected = option?.id === selectedValue?.[0]?.id;
-							return isSelected;
-						}}
-						label='Offer Type'
+						defaultValue={selectedPlace}
 						{...field}
 					/>
 				)}
@@ -74,6 +62,27 @@ export default function CreateOfferContent({ control, watch }: Props) {
 				control={control}
 				label='Offer ending date'
 				defaultValue={watch("start_date")}
+			/>
+			<Controller
+				name='offerType'
+				render={({ field }) => (
+					<InfiniteScrollSelect
+						url={apiConfig.special_offers.list_offer_types()}
+						getOptionLabel={(option: SpecialType) => option?.name}
+						getOptionValue={(option: SpecialType) => option?.id}
+						isOptionSelected={(
+							option: SpecialType,
+							selectedValue: SpecialType[],
+						) => {
+							const isSelected = option?.id === selectedValue?.[0]?.id;
+							return isSelected;
+						}}
+						label='Offer Type'
+						defaultValue={selectedType}
+						{...field}
+					/>
+				)}
+				control={control}
 			/>
 			<TextField
 				control={control}

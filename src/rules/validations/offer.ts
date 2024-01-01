@@ -14,3 +14,4 @@ export const createOfferSchema = z.object({
 });
 
 export const updateOfferSchema = createOfferSchema.partial();
+export type UpdateOffer = z.infer<typeof updateOfferSchema>;

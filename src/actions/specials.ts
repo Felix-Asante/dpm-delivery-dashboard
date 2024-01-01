@@ -46,3 +46,21 @@ export async function deleteOffer(offerId: string) {
 		throw new Error(getErrorMessage(error));
 	}
 }
+export async function getOffer(offerId: string): Promise<Special> {
+	try {
+		const endpoint = apiConfig.special_offers.get_and_update(offerId);
+		const offer = await apiHandler<Special>({ endpoint, method: "GET" });
+		return offer;
+	} catch (error) {
+		throw new Error(getErrorMessage(error));
+	}
+}
+export async function updateOffer(offerId: string, body: CreateOfferDto) {
+	try {
+		const endpoint = apiConfig.special_offers.get_and_update(offerId);
+		await apiHandler<Special>({ endpoint, method: "PUT", body });
+		revalidateTag(Tags.offers);
+	} catch (error) {
+		throw new Error(getErrorMessage(error));
+	}
+}

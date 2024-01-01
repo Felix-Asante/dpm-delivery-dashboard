@@ -56,6 +56,7 @@ export const apiConfig = {
 		products: () => `product-offers`,
 		delete: (offerId: string) => `offers/${offerId}`,
 		count: () => `offers/count`,
+		get_and_update: (offerId: string) => `offers/${offerId}`,
 	},
 	bookings: {
 		list: (query?: Query) => `bookings${toQuery(query ?? {})}`,
