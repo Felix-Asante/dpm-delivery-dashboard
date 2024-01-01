@@ -66,6 +66,7 @@ export default function OffersTable({ offers }: Props) {
 			}
 			await runDeleteOffer(offerId);
 			toast.success("Offer deleted successfully");
+			setSelectedOffer(null);
 		} catch (error) {
 			toast.error(getErrorMessage(error));
 		}
@@ -79,6 +80,7 @@ export default function OffersTable({ offers }: Props) {
 				offerIds = [...selectedOffers];
 			}
 			await Promise.all(offerIds?.map((offer) => removeOffer(offer)));
+			setSelectedOffers(new Set([]));
 		} catch (error) {
 			toast.error(getErrorMessage(error));
 		}
