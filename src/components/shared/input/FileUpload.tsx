@@ -63,17 +63,18 @@ export default forwardRef(function FileUpload(props: FileUploadProp, ref: any) {
 				</div>
 			)}
 
-			<Button
-				size='sm'
-				radius='sm'
-				variant='light'
-				color='primary'
-				className='mt-1'
-				onClick={() => setEditMode((mode) => !mode)}
-			>
-				{editMode ? "Cancel" : "Modify"}
-			</Button>
-
+			{defaultValue && (
+				<Button
+					size='sm'
+					radius='sm'
+					variant='light'
+					color='primary'
+					className='mt-1'
+					onClick={() => setEditMode((mode) => !mode)}
+				>
+					{editMode ? "Cancel" : "Modify"}
+				</Button>
+			)}
 			<FormControl.ErrorMessage>{errorMessage}</FormControl.ErrorMessage>
 		</div>
 	);
