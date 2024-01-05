@@ -4,12 +4,13 @@ import { UserRoles } from "@/config/constants";
 import { apiConfig } from "@/lib/apiConfig";
 import { apiHandler } from "@/lib/apiHandler";
 import { checkUserRole } from "@/lib/auth";
-import { ResponseMeta, SeverActionResponse } from "@/types";
-import { Booking } from "@/types/booking";
+import { CountResponse, ResponseMeta, SeverActionResponse } from "@/types";
+import { Booking, Sales } from "@/types/booking";
 import { Query } from "@/types/url";
 import { getErrorMessage } from "@/utils/helpers";
 import { Tags } from "@/utils/tags";
 import { revalidateTag } from "next/cache";
+import { ServerActionAction } from "next/dist/client/components/router-reducer/router-reducer-types";
 
 interface GetBookingResponse {
 	meta: ResponseMeta;
@@ -61,5 +62,35 @@ export async function deliverBooking(bookingId: string) {
 		revalidateTag(Tags.bookings);
 	} catch (error) {
 		throw new Error(getErrorMessage(error));
+	}
+}
+
+export async function getBookingsCount(): Promise<
+	SeverActionResponse<CountResponse>
+> {
+	try {
+		const endpoint = apiConfig.bookings.count();
+		const results = await apiHandler<CountResponse>({
+			endpoint,
+			method: "GET",
+		});
+		return { results };
+	} catch (error) {
+		return { error: getErrorMessage(error) };
+	}
+}
+
+export async function getSales(
+	year: string,
+): Promise<SeverActionResponse<Sales[]>> {
+	try {
+		const endpoint = apiConfig.bookings.sales(year);
+		const results = await apiHandler<Sales[]>({
+			endpoint,
+			method: "GET",
+		});
+		return { results };
+	} catch (error) {
+		return { error: getErrorMessage(error) };
 	}
 }

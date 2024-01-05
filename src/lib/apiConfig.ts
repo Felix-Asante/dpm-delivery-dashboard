@@ -24,9 +24,10 @@ export const apiConfig = {
 		delete: (placeId: string) => `places/${placeId}`,
 		get_admin: (placeId: string) => `places/admin/${placeId}`,
 		search: (query: Query) => `places/search${toQuery(query)}`,
-		count: () => `places/count`,
+		count: () => `places/all/count`,
 		products: (placeId: string) => `places/${placeId}/products`,
 		new: () => `places/new`,
+		popular: () => `places/popular/locations`,
 	},
 	categories: {
 		create: () => `categories`,
@@ -35,6 +36,7 @@ export const apiConfig = {
 		get_by_id: (categoryId: string) => `categories/${categoryId}`,
 		get_by_slug: (slug: string) => `categories/${slug}/slug`,
 		delete: (categoryId: string) => `categories/${categoryId}`,
+		count: () => `categories/all/count`,
 		places: (slug: string) => `categories/${slug}/places`,
 	},
 	products: {
@@ -66,6 +68,7 @@ export const apiConfig = {
 		confirm: (bookingId: string) => `bookings/${bookingId}/confirm-booking`,
 		delivered: (bookingId: string) => `bookings/${bookingId}/deliver-booking`,
 		reject: (bookingId: string) => `bookings/${bookingId}/reject-booking`,
-		count: () => `bookings/count`,
+		count: () => `bookings/all/count`,
+		sales: (year: string) => `bookings/all/sales${toQuery({ year })}`,
 	},
 };

@@ -5,7 +5,10 @@ export interface ResponseMeta {
 	totalPages: number;
 	currentPage: number;
 }
-
+export interface CountResponse {
+	currentMonth: number;
+	all_time: number;
+}
 export interface ModalProps {
 	isOpen: boolean;
 	onClose: () => void;

@@ -2,7 +2,7 @@
 
 import { apiConfig } from "@/lib/apiConfig";
 import { apiHandler } from "@/lib/apiHandler";
-import { ResponseMeta, SeverActionResponse } from "@/types";
+import { CountResponse, ResponseMeta, SeverActionResponse } from "@/types";
 import { User } from "@/types/auth";
 import { CreateUserDto } from "@/types/dtos/users";
 import { Query } from "@/types/url";
@@ -43,6 +43,21 @@ export async function getUsers(
 			next: { tags: [Tags.users] },
 		});
 		return { results: users };
+	} catch (error) {
+		return { error: getErrorMessage(error) };
+	}
+}
+
+export async function getUsersCount(): Promise<
+	SeverActionResponse<CountResponse>
+> {
+	try {
+		const endpoint = apiConfig.users.count();
+		const results = await apiHandler<CountResponse>({
+			endpoint,
+			method: "GET",
+		});
+		return { results };
 	} catch (error) {
 		return { error: getErrorMessage(error) };
 	}

@@ -13,6 +13,7 @@ export interface Place extends placeBaseType {
 	createdAt: string;
 	updatedAt: string;
 	category: Category;
+	visits: number;
 }
 
 export interface PlaceService {

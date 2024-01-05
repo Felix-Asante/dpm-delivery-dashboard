@@ -58,3 +58,14 @@ export function getDateRange(rangeType: Periods) {
 
 	return [fromDate, toDate];
 }
+
+export function getAllYearsFrom(startYear: number): number[] {
+	const currentYear = new Date().getFullYear();
+	const years: number[] = [];
+
+	for (let year = startYear; year <= currentYear; year++) {
+		years.push(year);
+	}
+
+	return years;
+}

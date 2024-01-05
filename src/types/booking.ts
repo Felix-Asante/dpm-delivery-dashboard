@@ -29,3 +29,8 @@ interface BookingStatus {
 	deletedAt?: any;
 	label: Status;
 }
+
+export interface Sales {
+	month: string;
+	totalamount: string;
+}

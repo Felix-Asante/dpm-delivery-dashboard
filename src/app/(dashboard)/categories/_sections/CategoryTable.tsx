@@ -20,6 +20,7 @@ import { useServerAction } from "@/hooks/useServerAction";
 import { deleteCategory } from "@/actions/category";
 import { toast } from "sonner";
 import { getErrorMessage } from "@/utils/helpers";
+import useQueryParams from "@/hooks/useQueryParam";
 
 interface CategoryTableProp {
 	categories: Category[];
@@ -32,6 +33,8 @@ export default function CategoryTable(props: CategoryTableProp) {
 	const [selectedCategory, setSelectedCategory] = useState<Category | null>(
 		null,
 	);
+
+	const { query, remove } = useQueryParams();
 
 	const [runDeleteCategory, { loading }] = useServerAction<
 		any,
@@ -129,8 +132,11 @@ export default function CategoryTable(props: CategoryTableProp) {
 					</TableBody>
 				</Table>
 				<NewCategoryModal
-					isOpen={isOpen}
-					onClose={onClose}
+					isOpen={isOpen || query?.new === "true"}
+					onClose={() => {
+						onClose();
+						query?.new === "true" && remove("new");
+					}}
 					mode={selectedCategory !== null ? "edit" : "create"}
 					category={selectedCategory}
 				/>

@@ -2,7 +2,7 @@
 
 import { apiConfig } from "@/lib/apiConfig";
 import { apiHandler } from "@/lib/apiHandler";
-import { ResponseMeta, SeverActionResponse } from "@/types";
+import { CountResponse, ResponseMeta, SeverActionResponse } from "@/types";
 import { CreateOfferDto } from "@/types/dtos/offers";
 import { Special } from "@/types/specials";
 import { Query } from "@/types/url";
@@ -62,5 +62,20 @@ export async function updateOffer(offerId: string, body: CreateOfferDto) {
 		revalidateTag(Tags.offers);
 	} catch (error) {
 		throw new Error(getErrorMessage(error));
+	}
+}
+
+export async function getSpecialsCount(): Promise<
+	SeverActionResponse<CountResponse>
+> {
+	try {
+		const endpoint = apiConfig.special_offers.count();
+		const results = await apiHandler<CountResponse>({
+			endpoint,
+			method: "GET",
+		});
+		return { results };
+	} catch (error) {
+		return { error: getErrorMessage(error) };
 	}
 }

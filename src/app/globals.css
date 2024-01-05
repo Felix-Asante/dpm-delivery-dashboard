@@ -53,3 +53,6 @@ body {
 		--ring: 240 4.9% 83.9%;
 	}
 }
+.recharts-rectangle.recharts-tooltip-cursor {
+	fill: white;
+}

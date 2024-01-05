@@ -1,7 +1,7 @@
 "use server";
 import { apiConfig } from "@/lib/apiConfig";
 import { apiHandler } from "@/lib/apiHandler";
-import { SeverActionResponse } from "@/types";
+import { CountResponse, SeverActionResponse } from "@/types";
 import { Category } from "@/types/category";
 import { getErrorMessage } from "@/utils/helpers";
 import { Tags } from "@/utils/tags";
@@ -58,5 +58,20 @@ export async function deleteCategory(categoryId: string) {
 		revalidateTag(Tags.categories);
 	} catch (error) {
 		throw new Error(getErrorMessage(error));
+	}
+}
+
+export async function getCategoryCount(): Promise<
+	SeverActionResponse<CountResponse>
+> {
+	try {
+		const endpoint = apiConfig.categories.count();
+		const results = await apiHandler<CountResponse>({
+			endpoint,
+			method: "GET",
+		});
+		return { results };
+	} catch (error) {
+		return { error: getErrorMessage(error) };
 	}
 }

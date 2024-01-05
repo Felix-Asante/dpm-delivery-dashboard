@@ -3,7 +3,7 @@
 import { DASHBOARD_PATHS } from "@/config/routes";
 import { apiConfig } from "@/lib/apiConfig";
 import { apiHandler } from "@/lib/apiHandler";
-import { ResponseMeta, SeverActionResponse } from "@/types";
+import { CountResponse, ResponseMeta, SeverActionResponse } from "@/types";
 import { User } from "@/types/auth";
 import { CreatePlaceDto } from "@/types/dtos/places";
 import { Place } from "@/types/place";
@@ -92,5 +92,35 @@ export async function updatePlace(body: FormData, placeId: string) {
 		revalidateTag(Tags.places);
 	} catch (error) {
 		throw new Error(getErrorMessage(error));
+	}
+}
+
+export async function getPlacesCount(): Promise<
+	SeverActionResponse<CountResponse>
+> {
+	try {
+		const endpoint = apiConfig.places.count();
+		const results = await apiHandler<CountResponse>({
+			endpoint,
+			method: "GET",
+		});
+		return { results };
+	} catch (error) {
+		return { error: getErrorMessage(error) };
+	}
+}
+
+export async function getPopularPlaces(): Promise<
+	SeverActionResponse<Place[]>
+> {
+	try {
+		const endpoint = apiConfig.places.popular();
+		const results = await apiHandler<Place[]>({
+			endpoint,
+			method: "GET",
+		});
+		return { results };
+	} catch (error) {
+		return { error: getErrorMessage(error) };
 	}
 }
