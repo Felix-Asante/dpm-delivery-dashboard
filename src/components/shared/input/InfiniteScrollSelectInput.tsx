@@ -1,7 +1,5 @@
 import { theme } from "@/config/constants/theme";
 import { apiConfig } from "@/lib/apiConfig";
-import { apiHandler } from "@/lib/apiHandler";
-import { ResponseMeta } from "@/types";
 import { toQuery } from "@/utils/helpers";
 import { useSession } from "next-auth/react";
 import React, { useEffect, useRef, useState } from "react";
