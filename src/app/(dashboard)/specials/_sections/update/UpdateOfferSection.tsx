@@ -41,10 +41,12 @@ export default function UpdateOfferSection({ offer }: { offer: Special }) {
 		setValue("placeId", place?.id);
 		Object.keys(offerDetails).forEach((key: any) => {
 			if (key.includes("date")) {
+				// @ts-ignore
 				setValue(key, new Date(offerDetails[key]?.toString()), {
 					shouldTouch: true,
 				});
 			} else {
+				// @ts-ignore
 				setValue(key, offerDetails[key]?.toString() ?? "", {
 					shouldTouch: true,
 				});

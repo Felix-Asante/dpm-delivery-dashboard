@@ -92,6 +92,7 @@ const InfiniteScrollSelect = React.forwardRef(function Input(
 		<div>
 			<FormControl.Label className='mb-1'>{label}</FormControl.Label>
 			<AsyncPaginate
+				// @ts-ignore
 				loadOptions={loadOptions}
 				onChange={(option) => {
 					setSelectedOption(option);

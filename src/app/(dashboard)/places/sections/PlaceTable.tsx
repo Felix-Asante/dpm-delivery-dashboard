@@ -41,6 +41,10 @@ const columns = [
 		key: "delivery fee",
 		label: "DELIVERY FEE",
 	},
+	{
+		key: "",
+		label: "",
+	},
 ];
 
 interface TableProps {
@@ -90,12 +94,10 @@ export default function PlaceTable({
 				selectedKeys={selectedKeys}
 				onSelectionChange={onSelectionChange}
 			>
-				<TableHeader>
-					{columns.map((column) => (
+				<TableHeader columns={columns}>
+					{(column) => (
 						<TableColumn key={column.key}>{column.label}</TableColumn>
-					))}
-
-					<TableColumn />
+					)}
 				</TableHeader>
 				<TableBody
 					emptyContent={

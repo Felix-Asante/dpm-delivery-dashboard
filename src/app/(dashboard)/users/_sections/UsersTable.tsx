@@ -32,6 +32,7 @@ const columns = [
 	{ label: "Email", key: "email" },
 	{ label: "Status", key: "status" },
 	{ label: "Place", key: "place" },
+	{ label: "", key: "" },
 ];
 
 interface UsersTableProps {
@@ -118,14 +119,13 @@ export default function UsersTable({ users }: UsersTableProps) {
 				shadow='none'
 				radius='none'
 				selectedKeys={selectedUsers}
+				// @ts-ignore
 				onSelectionChange={setSelectedUsers}
 			>
-				<TableHeader>
-					{columns.map((column) => (
+				<TableHeader columns={columns}>
+					{(column) => (
 						<TableColumn key={column.key}>{column.label}</TableColumn>
-					))}
-
-					<TableColumn>{null}</TableColumn>
+					)}
 				</TableHeader>
 				<TableBody
 					emptyContent={<EmptyContent title='' description='Users not found' />}

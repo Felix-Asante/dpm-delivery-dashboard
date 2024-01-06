@@ -61,6 +61,10 @@ const columns = [
 		key: "Status",
 		label: "Status",
 	},
+	{
+		key: "",
+		label: "",
+	},
 ];
 
 export default function BookingListTable({ bookings }: Props) {
@@ -106,13 +110,12 @@ export default function BookingListTable({ bookings }: Props) {
 				shadow='none'
 				radius='none'
 			>
-				{/* @ts-ignore */}
-				<TableHeader>
-					{columns.map((column) => (
+				<TableHeader columns={columns}>
+					{(column) => (
 						<TableColumn key={column.key}>{column.label}</TableColumn>
-					))}
+					)}
 
-					<TableColumn>{null}</TableColumn>
+					{/* <TableColumn>{null}</TableColumn> */}
 				</TableHeader>
 				<TableBody
 					emptyContent={

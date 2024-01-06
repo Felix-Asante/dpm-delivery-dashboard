@@ -37,6 +37,7 @@ const columns = [
 	{ key: "discount", label: "Discount" },
 	{ key: "price", label: "Price" },
 	{ key: "type", label: "Type" },
+	{ key: "", label: "" },
 ];
 export default function OffersTable({ offers }: Props) {
 	const { control, watch } = useForm();
@@ -118,14 +119,13 @@ export default function OffersTable({ offers }: Props) {
 				shadow='none'
 				radius='none'
 				selectedKeys={selectedOffers}
+				// @ts-ignore
 				onSelectionChange={setSelectedOffers}
 			>
-				<TableHeader>
-					{columns.map((column) => (
+				<TableHeader columns={columns}>
+					{(column) => (
 						<TableColumn key={column.key}>{column.label}</TableColumn>
-					))}
-
-					<TableColumn>{null}</TableColumn>
+					)}
 				</TableHeader>
 				<TableBody
 					emptyContent={<EmptyContent title='' description='Users not found' />}
