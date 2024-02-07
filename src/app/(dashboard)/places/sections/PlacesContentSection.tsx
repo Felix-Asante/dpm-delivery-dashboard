@@ -50,7 +50,13 @@ export default function PlacesContentSection({
 				toast.error("Make sure you have selected a place");
 				return;
 			}
-			await Promise.all(placeIds.map((placeId) => run(placeId)));
+			const response = await Promise.all(
+				placeIds.map((placeId) => run(placeId)),
+			);
+			if (response?.some((res) => res?.error)) {
+				toast.error("Some places failed to delete");
+				return;
+			}
 			setSelectedPlaces(new Set([]));
 			toast.success("Places successfully deleted");
 		} catch (error) {

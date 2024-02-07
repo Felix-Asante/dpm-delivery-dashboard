@@ -75,7 +75,11 @@ export default function CreatePlaceForm({
 				formData.append(key, placeData[key]);
 			}
 
-			await createPlace(formData);
+			const response = await createPlace(formData);
+			if (response?.error) {
+				toast.error(response.error);
+				return;
+			}
 			toast.success("New place created");
 			router.push(DASHBOARD_PATHS.places.root);
 		} catch (error) {

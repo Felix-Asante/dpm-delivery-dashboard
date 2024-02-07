@@ -40,7 +40,7 @@ export async function addNewPlace(body: FormData) {
 		await apiHandler({ endpoint, method: "POST", json: false, body });
 		revalidateTag(Tags.places);
 	} catch (error) {
-		throw new Error(getErrorMessage(error));
+		return { error: getErrorMessage(error) };
 	}
 }
 export async function deletePlace(placeId: string) {
@@ -53,7 +53,7 @@ export async function deletePlace(placeId: string) {
 		revalidateTag(Tags.places);
 	} catch (error) {
 		console.log(error);
-		throw new Error(getErrorMessage(error));
+		return { error: getErrorMessage(error) };
 	}
 }
 export async function getPlaceBySlug(
@@ -61,6 +61,20 @@ export async function getPlaceBySlug(
 ): Promise<SeverActionResponse<Place>> {
 	try {
 		const endpoint = apiConfig.places.get_by_slug(slug);
+		const place = await apiHandler<Place>({
+			endpoint,
+			method: "GET",
+		});
+		return { results: place };
+	} catch (error) {
+		return { error: getErrorMessage(error) };
+	}
+}
+export async function getPlace(
+	id: string,
+): Promise<SeverActionResponse<Place>> {
+	try {
+		const endpoint = apiConfig.places.get_by_id(id);
 		const place = await apiHandler<Place>({
 			endpoint,
 			method: "GET",
@@ -91,7 +105,7 @@ export async function updatePlace(body: FormData, placeId: string) {
 		await apiHandler({ endpoint, method: "PUT", json: false, body });
 		revalidateTag(Tags.places);
 	} catch (error) {
-		throw new Error(getErrorMessage(error));
+		return { error: getErrorMessage(error) };
 	}
 }
 

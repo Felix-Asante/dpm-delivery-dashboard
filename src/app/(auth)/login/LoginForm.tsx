@@ -87,6 +87,7 @@ export default function LoginForm() {
 					size='lg'
 					onClick={handleSubmit(attemptLogin)}
 					isLoading={loading}
+					type='button'
 				>
 					Login
 				</Button>

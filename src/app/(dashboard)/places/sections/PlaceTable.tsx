@@ -14,7 +14,7 @@ import {
 	TableHeader,
 	TableRow,
 } from "@nextui-org/react";
-import { PencilIcon, TrashIcon } from "lucide-react";
+import { EyeIcon, PencilIcon, TrashIcon } from "lucide-react";
 import Link from "next/link";
 import React, { useState, useTransition } from "react";
 import illustration_empty_content from "../../../../../public/svg/illustration_empty_content.svg";
@@ -74,7 +74,11 @@ export default function PlaceTable({
 	const deletePlaceHandler = async () => {
 		try {
 			if (placeToBeDeleted) {
-				await run(placeToBeDeleted);
+				const response = await run(placeToBeDeleted);
+				if (response?.error) {
+					toast.error(response.error);
+					return;
+				}
 				toast.success("Place successfully deleted");
 				closeModal();
 			}
@@ -146,6 +150,9 @@ export default function PlaceTable({
 									>
 										<TrashIcon size={20} className='text-danger' />
 									</Button>
+									<Link href={DASHBOARD_PATHS.places.get(row.id)}>
+										<EyeIcon size={20} className='text-black' />
+									</Link>
 								</HStack>
 							</TableCell>
 						</TableRow>

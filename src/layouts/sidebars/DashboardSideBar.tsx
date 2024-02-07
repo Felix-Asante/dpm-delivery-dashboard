@@ -8,7 +8,6 @@ import React from "react";
 
 export default function DashboardSideBar() {
 	const pathname = parsePathname(usePathname());
-
 	return (
 		<aside className='bg-white border-r border-gray-200 h-full py-8 fixed top-[3.8rem]'>
 			<VStack className='gap-2'>

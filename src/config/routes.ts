@@ -28,6 +28,7 @@ export const DASHBOARD_PATHS = {
 		root: path(DASHBOARD_ROOT, "places"),
 		new: path(DASHBOARD_ROOT, "places/new-place"),
 		edit: (placeId: string) => path(DASHBOARD_ROOT, `places/edit/${placeId}`),
+		get: (placeId: string) => path(DASHBOARD_ROOT, `places/${placeId}`),
 	},
 	bookings: {
 		root: path(DASHBOARD_ROOT, "bookings"),

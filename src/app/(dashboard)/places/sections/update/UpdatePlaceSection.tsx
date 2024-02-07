@@ -104,7 +104,11 @@ export default function UpdatePlaceSection({
 				formData.append(key, payload[key]);
 			}
 
-			await runUpdatePlace(formData, place?.id);
+			const response = await runUpdatePlace(formData, place?.id);
+			if (response?.error) {
+				toast.error(response.error);
+				return;
+			}
 			toast.success("place updated successfully");
 			router.push(DASHBOARD_PATHS.places.root);
 		} catch (error) {
