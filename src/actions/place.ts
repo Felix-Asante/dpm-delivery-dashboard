@@ -78,6 +78,7 @@ export async function getPlace(
 		const place = await apiHandler<Place>({
 			endpoint,
 			method: "GET",
+			next: { tags: [Tags.place] },
 		});
 		return { results: place };
 	} catch (error) {

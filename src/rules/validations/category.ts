@@ -13,3 +13,11 @@ export const UpdateCategorySchema = createCategorySchema.partial({
 });
 
 export type UpdateCategoryField = z.infer<typeof UpdateCategorySchema>;
+
+export const createProductCategorySchema = z.object({
+	name: z.string({ required_error: "Category name is required" }).min(1),
+});
+
+export type CreateProductCategoryDto = z.infer<
+	typeof createProductCategorySchema
+>;

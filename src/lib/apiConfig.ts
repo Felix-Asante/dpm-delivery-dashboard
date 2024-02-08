@@ -39,6 +39,10 @@ export const apiConfig = {
 		count: () => `categories/all/count`,
 		places: (slug: string) => `categories/${slug}/places`,
 	},
+	productCategory: {
+		root: () => `products-category`,
+		get: (id: string) => `products-category/${id}`,
+	},
 	products: {
 		create: () => `products`,
 		update: (productId: string) => `products/${productId}`,

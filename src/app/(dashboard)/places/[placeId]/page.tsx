@@ -2,6 +2,7 @@ import React from "react";
 import PlaceSidebar from "./_sections/PlaceSidebar";
 import { getPlace } from "@/actions/place";
 import WithServerError from "@/components/hoc/WithServerError";
+import PlaceContent from "./_sections/placeContent";
 
 interface PageProps {
 	params: {
@@ -16,7 +17,9 @@ export default async function PlaceDetailPage({ params }: PageProps) {
 				<div className='w-1/4 sticky top-0 min-h-full'>
 					<PlaceSidebar place={response?.results!} />
 				</div>
-				<p>Home</p>
+				<div className='w-[75%]'>
+					<PlaceContent place={response?.results!} />
+				</div>
 			</div>
 		</WithServerError>
 	);

@@ -1,6 +1,7 @@
 "use server";
 import { apiConfig } from "@/lib/apiConfig";
 import { apiHandler } from "@/lib/apiHandler";
+import { CreateProductCategoryDto } from "@/rules/validations/category";
 import { CountResponse, SeverActionResponse } from "@/types";
 import { Category } from "@/types/category";
 import { getErrorMessage } from "@/utils/helpers";
@@ -71,6 +72,51 @@ export async function getCategoryCount(): Promise<
 			method: "GET",
 		});
 		return { results };
+	} catch (error) {
+		return { error: getErrorMessage(error) };
+	}
+}
+interface CreateProductCategory {
+	name: string;
+	place: string;
+}
+export async function createProductCategory(body: CreateProductCategory) {
+	try {
+		const endpoint = apiConfig.productCategory.root();
+		await apiHandler<CountResponse>({
+			endpoint,
+			method: "POST",
+			body,
+		});
+		revalidateTag(Tags.place);
+	} catch (error) {
+		return { error: getErrorMessage(error) };
+	}
+}
+export async function updateProductCategory(
+	body: CreateProductCategoryDto,
+	categoryId: string,
+) {
+	try {
+		const endpoint = apiConfig.productCategory.get(categoryId);
+		await apiHandler<CountResponse>({
+			endpoint,
+			method: "PUT",
+			body,
+		});
+		revalidateTag(Tags.place);
+	} catch (error) {
+		return { error: getErrorMessage(error) };
+	}
+}
+export async function deleteProductCategory(categoryId: string) {
+	try {
+		const endpoint = apiConfig.productCategory.get(categoryId);
+		await apiHandler<CountResponse>({
+			endpoint,
+			method: "DELETE",
+		});
+		revalidateTag(Tags.place);
 	} catch (error) {
 		return { error: getErrorMessage(error) };
 	}
