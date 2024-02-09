@@ -57,7 +57,7 @@ export default function ProductCategoriesSection({
 	};
 
 	return (
-		<div>
+		<div className='p-3'>
 			<div className='flex justify-between items-center mb-5'>
 				<div>
 					<h3 className='text-lg'>Service categories</h3>

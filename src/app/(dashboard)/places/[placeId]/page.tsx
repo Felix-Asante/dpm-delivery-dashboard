@@ -17,7 +17,7 @@ export default async function PlaceDetailPage({ params }: PageProps) {
 
 	return (
 		<WithServerError error={error}>
-			<div className='flex gap-3 min-h-screen bg-gray-50'>
+			<div className='flex min-h-screen bg-gray-50'>
 				<div className='w-1/4 sticky top-0 min-h-full'>
 					<PlaceSidebar place={response?.results!} />
 				</div>

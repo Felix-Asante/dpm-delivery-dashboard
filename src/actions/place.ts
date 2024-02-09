@@ -5,6 +5,7 @@ import { apiHandler } from "@/lib/apiHandler";
 import { CountResponse, ResponseMeta, SeverActionResponse } from "@/types";
 import { User } from "@/types/auth";
 import { Place, PlaceService } from "@/types/place";
+import { Ratings } from "@/types/ratings";
 import { Query } from "@/types/url";
 import { getErrorMessage } from "@/utils/helpers";
 import { Tags } from "@/utils/tags";
@@ -12,6 +13,10 @@ import { revalidateTag } from "next/cache";
 
 interface PlacesResponse {
 	items: Place[];
+	meta: ResponseMeta;
+}
+interface RatingsResponse {
+	items: Ratings[];
 	meta: ResponseMeta;
 }
 
@@ -145,6 +150,23 @@ export async function getPlaceService(
 			endpoint,
 			method: "GET",
 			next: { tags: [Tags.place_service] },
+		});
+		return { results };
+	} catch (error) {
+		console.log(error);
+		return { error: getErrorMessage(error) };
+	}
+}
+export async function getPlaceRatings(
+	placeId: string,
+	query: Query,
+): Promise<SeverActionResponse<RatingsResponse>> {
+	try {
+		const endpoint = apiConfig.places.ratings(placeId, query);
+		const results = await apiHandler<RatingsResponse>({
+			endpoint,
+			method: "GET",
+			next: { tags: [Tags.reviews] },
 		});
 		return { results };
 	} catch (error) {

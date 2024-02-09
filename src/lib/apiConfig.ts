@@ -28,6 +28,8 @@ export const apiConfig = {
 		products: (placeId: string) => `places/${placeId}/products`,
 		new: () => `places/new`,
 		popular: () => `places/popular/locations`,
+		ratings: (placeId: string, query: Query) =>
+			`places/${placeId}/ratings${toQuery(query)}`,
 	},
 	categories: {
 		create: () => `categories`,
@@ -72,5 +74,9 @@ export const apiConfig = {
 		reject: (bookingId: string) => `bookings/${bookingId}/reject-booking`,
 		count: () => `bookings/all/count`,
 		sales: (year: string) => `bookings/all/sales${toQuery({ year })}`,
+	},
+	ratings: {
+		root: () => `reviews`,
+		get: (ratingId: string) => `reviews/${ratingId}`,
 	},
 };

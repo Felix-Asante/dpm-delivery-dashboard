@@ -29,7 +29,7 @@ export default function PlaceBookings({ place }: Props) {
 
 	return (
 		<WithServerError error={error?.message}>
-			<div className='mt-4'>
+			<div className='mt-4 px-3'>
 				<h3 className='font-semibold text-lg mb-2'>List of all bookings </h3>
 				<BookingListTable bookings={bookings?.results?.items ?? []} />
 				{totalPages > 1 && (

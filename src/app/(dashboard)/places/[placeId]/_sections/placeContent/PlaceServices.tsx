@@ -58,7 +58,7 @@ export default function PlaceServices({ place }: Props) {
 	}
 
 	return (
-		<div className='mt-6'>
+		<div className='mt-6 px-3'>
 			<HStack className='justify-between mb-4'>
 				<Controller
 					render={({ field }) => (
