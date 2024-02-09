@@ -13,6 +13,7 @@ import { PlaceProducts } from "@/types/place";
 import { getErrorMessage } from "@/utils/helpers";
 import { Button, Textarea } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import { Controller } from "react-hook-form";
 import { toast } from "sonner";
 
@@ -35,7 +36,11 @@ export default function CreateServiceForm(props: Props) {
 		typeof updateService
 	>(updateService);
 
-	const router = useRouter();
+	useEffect(() => {
+		if (service) {
+			form.setValue("productCategory", service?.id);
+		}
+	}, [service]);
 
 	const onSubmit = async (data: CreateServiceDto) => {
 		try {
@@ -85,6 +90,7 @@ export default function CreateServiceForm(props: Props) {
 							className='w-full border rounded-sm p-2 h-10 shadow focus:outline-black focus:ring-1 focus:ring-black'
 							value={field.value}
 							onChange={field.onChange}
+							defaultValue={service?.id}
 							// errorMessage={}
 						>
 							{productCategories?.map((category) => (
