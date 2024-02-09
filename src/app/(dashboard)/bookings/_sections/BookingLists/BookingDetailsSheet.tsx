@@ -13,6 +13,7 @@ interface Props {
 	booking: Booking | null;
 }
 export default function BookingDetailsSheet({ open, onClose, booking }: Props) {
+	const place = booking?.place;
 	return (
 		<Sheet open={open} onOpenChange={onClose}>
 			<SheetContent size={"lg"}>
@@ -85,25 +86,25 @@ export default function BookingDetailsSheet({ open, onClose, booking }: Props) {
 					<HStack className='items-center mb-2'>
 						<h3 className='text-base'>Booked Places</h3>
 						<div className='bg-primary text-white py-1 px-3 w-5 h-5 rounded-md flex items-center justify-center'>
-							{booking?.place?.length}
+							1
 						</div>
 					</HStack>
 					<div className='border p-3 rounded-md flex flex-col gap-2 divide-y'>
-						{booking?.place?.map((place) => (
-							<HStack key={place?.id} className='py-1'>
-								<Avatar src={place?.logo} size='sm' radius='full' />
-								<div>
-									<h3 className='text-base font-bold'>{place?.name}</h3>
-									<p className='text-sm text-gray-400'>
-										Address: {place?.address} <span className='mx-2'>|</span>
-										<span>
-											Average price: {DEFAULT_CURRENCY.symbol}
-											{place?.averagePrice}
-										</span>{" "}
-									</p>
-								</div>
-							</HStack>
-						))}
+						{/* {booking?.place?.map((place) => ( */}
+						<HStack key={place?.id} className='py-1'>
+							<Avatar src={place?.logo} size='sm' radius='full' />
+							<div>
+								<h3 className='text-base font-bold'>{place?.name}</h3>
+								<p className='text-sm text-gray-400'>
+									Address: {place?.address} <span className='mx-2'>|</span>
+									<span>
+										Average price: {DEFAULT_CURRENCY.symbol}
+										{place?.averagePrice}
+									</span>{" "}
+								</p>
+							</div>
+						</HStack>
+						{/* ))} */}
 					</div>
 				</section>
 				<section className='m-4 mt-5'>
@@ -118,16 +119,18 @@ export default function BookingDetailsSheet({ open, onClose, booking }: Props) {
 							booking?.services?.map((service) => (
 								<HStack key={service?.id} className='py-1'>
 									<Avatar
-										src={service?.photo}
-										fallback={getInitials(service?.name)}
+										src={service?.product?.photo!}
+										fallback={getInitials(service?.product?.name)}
 										size='sm'
 										radius='full'
 									/>
 									<div>
-										<h3 className='text-base font-bold'>{service?.name}</h3>
+										<h3 className='text-base font-bold'>
+											{service?.product?.name}
+										</h3>
 										<p className='text-sm text-gray-400'>
 											Price: {DEFAULT_CURRENCY.symbol}
-											{service?.price}
+											{service?.product?.price}
 										</p>
 									</div>
 								</HStack>

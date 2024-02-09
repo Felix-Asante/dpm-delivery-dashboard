@@ -26,6 +26,10 @@ export const apiHandler = async <T>({
 	);
 	const authorization = `Bearer ${session?.idToken}`;
 	const requestBody = json ? JSON.stringify(body) : body;
+	if (process.env.NODE_ENV === "development") {
+		console.log(session?.idToken);
+		console.log("EP", endpoint);
+	}
 
 	const requestHeaders: any = {
 		authorization,

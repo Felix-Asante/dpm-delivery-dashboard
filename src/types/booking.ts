@@ -1,7 +1,7 @@
 import { Status } from ".";
 import { User } from "./auth";
 import { ProductCategory } from "./category";
-import { Place } from "./place";
+import { Place, PlaceProducts } from "./place";
 
 export interface BookedService {
 	createdAt: string;
@@ -29,8 +29,12 @@ export interface Booking {
 	reference_code: string;
 	status: BookingStatus;
 	user: User;
-	place: Place[];
-	services: BookedService[];
+	place: Place;
+	// services: BookedService[];
+	services: {
+		id: string;
+		product: PlaceProducts;
+	}[];
 }
 
 interface BookingStatus {
