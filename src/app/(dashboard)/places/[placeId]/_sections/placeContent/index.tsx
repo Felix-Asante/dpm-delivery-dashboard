@@ -4,6 +4,7 @@ import { Tab, Tabs } from "@nextui-org/react";
 import React from "react";
 import ProductCategoriesSection from "./ProductCategoriesSection";
 import PlaceServices from "./PlaceServices";
+import PlaceBookings from "./PlaceBookings";
 
 interface Props {
 	place: Place;
@@ -27,7 +28,7 @@ export default function PlaceContent({ place }: Props) {
 						<PlaceServices place={place} />
 					</Tab>
 					<Tab key='bookings' title='Bookings'>
-						<div>Bookings</div>
+						<PlaceBookings place={place} />
 					</Tab>
 					<Tab key='Reviews' title='Reviews'>
 						<div>Reviews</div>
