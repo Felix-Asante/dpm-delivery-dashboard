@@ -45,9 +45,7 @@ export const apiConfig = {
 	},
 	products: {
 		create: () => `products`,
-		update: (productId: string) => `products/${productId}`,
-		get_by_id: (productId: string) => `products/${productId}`,
-		delete: (productId: string) => `products/${productId}`,
+		get: (productId: string) => `products/${productId}`,
 		count: () => `products/count`,
 	},
 	special_offers: {

@@ -1,7 +1,18 @@
 import { Status } from ".";
 import { User } from "./auth";
-import { Place, PlaceService } from "./place";
+import { ProductCategory } from "./category";
+import { Place } from "./place";
 
+export interface BookedService {
+	createdAt: string;
+	updatedAt: string;
+	id: string;
+	description: string;
+	photo: string;
+	name: string;
+	price: number;
+	productCategory: ProductCategory;
+}
 export interface Booking {
 	id: string;
 	createdAt: string;
@@ -19,7 +30,7 @@ export interface Booking {
 	status: BookingStatus;
 	user: User;
 	place: Place[];
-	services: PlaceService[];
+	services: BookedService[];
 }
 
 interface BookingStatus {

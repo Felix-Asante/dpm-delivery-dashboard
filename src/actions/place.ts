@@ -1,17 +1,14 @@
 "use server";
 
-import { DASHBOARD_PATHS } from "@/config/routes";
 import { apiConfig } from "@/lib/apiConfig";
 import { apiHandler } from "@/lib/apiHandler";
 import { CountResponse, ResponseMeta, SeverActionResponse } from "@/types";
 import { User } from "@/types/auth";
-import { CreatePlaceDto } from "@/types/dtos/places";
-import { Place } from "@/types/place";
+import { Place, PlaceService } from "@/types/place";
 import { Query } from "@/types/url";
 import { getErrorMessage } from "@/utils/helpers";
 import { Tags } from "@/utils/tags";
 import { revalidateTag } from "next/cache";
-import { redirect } from "next/navigation";
 
 interface PlacesResponse {
 	items: Place[];
@@ -136,6 +133,22 @@ export async function getPopularPlaces(): Promise<
 		});
 		return { results };
 	} catch (error) {
+		return { error: getErrorMessage(error) };
+	}
+}
+export async function getPlaceService(
+	placeId: string,
+): Promise<SeverActionResponse<PlaceService[]>> {
+	try {
+		const endpoint = apiConfig.places.products(placeId);
+		const results = await apiHandler<PlaceService[]>({
+			endpoint,
+			method: "GET",
+			next: { tags: [Tags.place_service] },
+		});
+		return { results };
+	} catch (error) {
+		console.log(error);
 		return { error: getErrorMessage(error) };
 	}
 }

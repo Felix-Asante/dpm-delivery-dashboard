@@ -1,7 +1,6 @@
 import Image from "next/image";
 
-const illustration_empty_content =
-	"/svg/illustrations/illustration_empty_content.svg";
+const illustration_empty_content = "/svg/illustration_empty_content.svg";
 
 interface EmptyContentProps {
 	title: string;
@@ -24,7 +23,7 @@ export default function EmptyContent({
 				src={img || illustration_empty_content}
 			/>
 
-			<h1 className='font-bold text-2xl  text-white'>{title}</h1>
+			<h1 className='font-bold text-2xl'>{title}</h1>
 
 			{description && (
 				<p

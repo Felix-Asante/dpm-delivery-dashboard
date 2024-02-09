@@ -16,17 +16,9 @@ export interface Place extends placeBaseType {
 	visits: number;
 }
 
-export interface PlaceService {
-	createdAt: string;
-	updatedAt: string;
-	id: string;
-	description: string;
-	photo: string;
-	name: string;
-	price: number;
-	productCategory: ProductCategory;
+export interface PlaceService extends ProductCategory {
+	products: PlaceProducts[];
 }
-
 export interface PlaceProducts {
 	id: string;
 	createdAt: string;
