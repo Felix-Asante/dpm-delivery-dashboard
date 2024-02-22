@@ -30,6 +30,7 @@ export const apiConfig = {
 		popular: () => `places/popular/locations`,
 		ratings: (placeId: string, query: Query) =>
 			`places/${placeId}/ratings${toQuery(query)}`,
+		opening_hrs: (placeId: string) => `places/${placeId}/openingHours`,
 	},
 	categories: {
 		create: () => `categories`,

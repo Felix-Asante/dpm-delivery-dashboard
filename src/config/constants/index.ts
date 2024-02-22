@@ -33,3 +33,13 @@ export enum UserRoles {
 	PLACE_ADMIN = "Place Admin",
 	COURIER = "Rider",
 }
+
+export const DAYS_OF_WEEK = [
+	"Monday",
+	"Tuesday",
+	"Wednesday",
+	"Thursday",
+	"Friday",
+	"Saturday",
+	"Sunday",
+];

@@ -1,3 +1,4 @@
+import { OpeningHours } from ".";
 import { Category, ProductCategory } from "./category";
 import { CreatePlaceDto } from "./dtos/places";
 import { Special } from "./specials";
@@ -14,6 +15,7 @@ export interface Place extends placeBaseType {
 	updatedAt: string;
 	category: Category;
 	visits: number;
+	openingHours: OpeningHours | null;
 }
 
 export interface PlaceService extends ProductCategory {

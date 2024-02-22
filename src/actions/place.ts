@@ -2,7 +2,12 @@
 
 import { apiConfig } from "@/lib/apiConfig";
 import { apiHandler } from "@/lib/apiHandler";
-import { CountResponse, ResponseMeta, SeverActionResponse } from "@/types";
+import {
+	CountResponse,
+	OpeningHours,
+	ResponseMeta,
+	SeverActionResponse,
+} from "@/types";
 import { User } from "@/types/auth";
 import { Place, PlaceService } from "@/types/place";
 import { Ratings } from "@/types/ratings";
@@ -172,5 +177,21 @@ export async function getPlaceRatings(
 	} catch (error) {
 		console.log(error);
 		return { error: getErrorMessage(error) };
+	}
+}
+
+export async function addPlaceOpeningHour(placeId: string, body: OpeningHours) {
+	try {
+		const endpoint = apiConfig.places.opening_hrs(placeId);
+		await apiHandler({
+			endpoint,
+			method: "POST",
+			body,
+		});
+	} catch (error) {
+		console.log(error);
+		return { error: getErrorMessage(error) };
+	} finally {
+		revalidateTag(Tags.place);
 	}
 }

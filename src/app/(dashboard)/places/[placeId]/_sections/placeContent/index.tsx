@@ -6,6 +6,7 @@ import ProductCategoriesSection from "./ProductCategoriesSection";
 import PlaceServices from "./PlaceServices";
 import PlaceBookings from "./PlaceBookings";
 import PlaceReviews from "./PlaceReviews";
+import PlaceOpeningHour from "./PlaceOpeningHour";
 
 interface Props {
 	place: Place;
@@ -34,6 +35,9 @@ export default function PlaceContent({ place }: Props) {
 					</Tab>
 					<Tab className='p-4' key='Reviews' title='Reviews'>
 						<PlaceReviews place={place} />
+					</Tab>
+					<Tab className='p-4' key='openingHours' title='openingHours'>
+						<PlaceOpeningHour place={place} />
 					</Tab>
 				</Tabs>
 			</div>

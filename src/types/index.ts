@@ -26,3 +26,25 @@ export type Status =
 	| "rejected"
 	| "delivered"
 	| "cancelled";
+
+export type OpeningHoursRange = {
+	from: string;
+	to: string;
+};
+
+export type OpeningHour = {
+	closed?: boolean;
+	openAllDay?: boolean;
+	ranges?: OpeningHoursRange[];
+};
+
+export type OpeningHours = {
+	exceptions: string[];
+	monday: OpeningHour;
+	tuesday: OpeningHour;
+	wednesday: OpeningHour;
+	thursday: OpeningHour;
+	friday: OpeningHour;
+	saturday: OpeningHour;
+	sunday: OpeningHour;
+};
