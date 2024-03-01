@@ -15,7 +15,6 @@ export async function deleteRating(ratingId: string) {
 		});
 		revalidateTag(Tags.reviews);
 	} catch (error) {
-		console.log(error);
 		return { error: getErrorMessage(error) };
 	}
 }
