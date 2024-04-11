@@ -36,7 +36,7 @@ interface CellData {
 	revenue: string;
 }
 export default function SalesChart() {
-	const [selectedYear, setSelectedYear] = useState("2023");
+	const [selectedYear, setSelectedYear] = useState("2024");
 	const [selectedCell, setSelectedCell] = useState(0);
 
 	const [runGetSales, { loading, data }] = useServerAction<
@@ -103,7 +103,7 @@ export default function SalesChart() {
 							defaultSelectedKeys={[selectedYear]}
 							onChange={(e) => setSelectedYear(e.target.value)}
 						>
-							{getAllYearsFrom(2023).map((year) => (
+							{getAllYearsFrom(2024).map((year) => (
 								<SelectItem key={year} value={year.toString()}>
 									{year.toString()}
 								</SelectItem>

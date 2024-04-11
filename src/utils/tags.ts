@@ -7,4 +7,5 @@ export enum Tags {
 	users = "users",
 	bookings = "bookings",
 	offers = "offers",
+	variables = "variables",
 }

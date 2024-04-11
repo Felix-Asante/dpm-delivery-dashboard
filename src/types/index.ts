@@ -48,3 +48,11 @@ export type OpeningHours = {
 	saturday: OpeningHour;
 	sunday: OpeningHour;
 };
+
+export type Variables = {
+	id: string;
+	createdAt: string;
+	updatedAt: string;
+	label: string;
+	value: string;
+};

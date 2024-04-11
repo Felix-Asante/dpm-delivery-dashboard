@@ -1,4 +1,5 @@
 import {
+	ArrowLeftRightIcon,
 	BadgePercentIcon,
 	BarChartBigIcon,
 	BookMarkedIcon,
@@ -38,5 +39,10 @@ export const SIDEBAR_NAVIGATION = [
 		label: "Offers",
 		icon: BadgePercentIcon,
 		href: DASHBOARD_PATHS.specials.root,
+	},
+	{
+		label: "Variables",
+		icon: ArrowLeftRightIcon,
+		href: DASHBOARD_PATHS.variables.root,
 	},
 ];

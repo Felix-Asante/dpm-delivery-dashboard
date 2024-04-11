@@ -80,4 +80,8 @@ export const apiConfig = {
 		root: () => `reviews`,
 		get: (ratingId: string) => `reviews/${ratingId}`,
 	},
+	variables: {
+		root: () => `variables`,
+		get: (variableId: string) => `variables/${variableId}`,
+	},
 };

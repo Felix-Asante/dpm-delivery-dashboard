@@ -36,6 +36,9 @@ export const DASHBOARD_PATHS = {
 	users: {
 		root: path(DASHBOARD_ROOT, "users"),
 	},
+	variables: {
+		root: path(DASHBOARD_ROOT, "variables"),
+	},
 	specials: {
 		root: path(DASHBOARD_ROOT, "specials"),
 		new: (query?: Query) =>
