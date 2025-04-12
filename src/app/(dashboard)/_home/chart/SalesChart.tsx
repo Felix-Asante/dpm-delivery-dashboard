@@ -99,7 +99,7 @@ export default function SalesChart() {
               </h3>
             </div>
             <Select
-              size="sm"
+              size="md"
               variant="bordered"
               className="max-w-[15%]"
               defaultSelectedKeys={[selectedYear]}
