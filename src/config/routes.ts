@@ -39,6 +39,7 @@ export const DASHBOARD_PATHS = {
   riders: {
     root: path(DASHBOARD_ROOT, "riders"),
     new: path(DASHBOARD_ROOT, "riders/new"),
+    get: (riderId: string) => path(DASHBOARD_ROOT, `riders/${riderId}`),
   },
   variables: {
     root: path(DASHBOARD_ROOT, "variables"),
