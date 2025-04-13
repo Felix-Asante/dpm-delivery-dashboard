@@ -138,7 +138,7 @@ export default function CreateRiderDetails(props: Props) {
             radius="sm"
             type="number"
             min={2000}
-            max={2007}
+            max={new Date().getFullYear()}
           />
           <TextField
             name="identificationDocumentType"
@@ -169,6 +169,7 @@ export default function CreateRiderDetails(props: Props) {
               variant="bordered"
               labelPlacement="outside"
               radius="sm"
+              type="date"
             />
           </div>
 

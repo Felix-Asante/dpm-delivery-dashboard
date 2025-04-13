@@ -7,6 +7,13 @@ import Link from "next/link";
 import { DASHBOARD_PATHS } from "@/config/routes";
 import { buttonVariants } from "@/components/ui/button";
 import { Button } from "@nextui-org/react";
+import { RiderDto, riderValidations } from "@/rules/validations/rider";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useServerAction } from "@/hooks/useServerAction";
+import { createRider } from "@/actions/riders";
+import { getErrorMessage } from "@/utils/helpers";
+import { toast } from "sonner";
+import { useRouter } from "next13-progressbar";
 
 export default function CreateRiderSection() {
   const {
@@ -15,12 +22,43 @@ export default function CreateRiderSection() {
     register,
     formState: { errors },
     handleSubmit,
-  } = useForm();
+  } = useForm<RiderDto>({
+    resolver: zodResolver(riderValidations),
+  });
 
-  const loading = false;
+  const [createNewRider, { loading }] = useServerAction<
+    any,
+    typeof createRider
+  >(createRider);
 
-  const onSubmit = (data: any) => {
-    console.log(data);
+  const router = useRouter();
+
+  const onSubmit = async (data: RiderDto) => {
+    try {
+      const { identificationDocumentImage, bikeImage, ...rest } = data;
+
+      const formData = new FormData();
+
+      for (const key in rest) {
+        // @ts-ignore
+        formData.append(key, rest[key]);
+      }
+      formData.append(
+        "identificationDocumentImage",
+        identificationDocumentImage[0] as unknown as File
+      );
+      formData.append("bikeImage", bikeImage[0] as unknown as File);
+
+      const response = await createNewRider(formData);
+      if (response?.error) {
+        toast.error(response.error);
+        return;
+      }
+      toast.success("New rider created");
+      router.push(DASHBOARD_PATHS.riders.root);
+    } catch (error) {
+      toast.error(getErrorMessage(error));
+    }
   };
 
   return (

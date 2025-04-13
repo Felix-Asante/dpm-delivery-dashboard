@@ -18,8 +18,25 @@ export interface User {
   adminFor?: Place;
 }
 
-export interface Rider {
-  user: User;
+export interface Rider extends User {
+  rider: {
+    id: string;
+    createdAt: string;
+    updatedAt: string;
+    deletedAt: any;
+    bikeRegistrationNumber: string;
+    bikeType: string;
+    bikeColor: string;
+    bikeBrand: string;
+    bikeModel: string;
+    bikeYear: number;
+    bikeImage: string;
+    identificationDocumentNumber: string;
+    identificationDocumentType: string;
+    identificationDocumentImage: string;
+    documentExpiryDate: string;
+    riderId: string;
+  };
 }
 
 export interface Role {

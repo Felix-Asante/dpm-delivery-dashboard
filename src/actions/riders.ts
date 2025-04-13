@@ -28,3 +28,17 @@ export async function getRiders(
     return { error: getErrorMessage(error) };
   }
 }
+
+export async function createRider(data: FormData) {
+  try {
+    const endpoint = apiConfig.riders.root();
+    await apiHandler({
+      endpoint,
+      method: "POST",
+      json: false,
+      body: data,
+    });
+  } catch (error) {
+    return { error: getErrorMessage(error) };
+  }
+}
