@@ -13,6 +13,7 @@ export const apiConfig = {
     bookings: (userId: string) => `users/likes/${userId}`,
     delete: (userId: string) => `users/${userId}`,
     count: () => `users/count`,
+    get: (userId: string) => `users/${userId}`,
   },
   places: {
     create: () => `places`,
@@ -87,5 +88,6 @@ export const apiConfig = {
   riders: {
     list: (query: Query) => `rider${toQuery(query)}`,
     root: () => `rider`,
+    get: (riderId: string) => `rider/${riderId}`,
   },
 };

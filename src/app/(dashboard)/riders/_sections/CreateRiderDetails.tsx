@@ -1,4 +1,5 @@
 import PasswordAdornment from "@/components/shared/adornments/PasswordAdornment";
+import { DatePicker } from "@/components/shared/input/DatePicker";
 import FileUpload from "@/components/shared/input/FileUpload";
 import TextField from "@/components/shared/input/TextField";
 import { generateRandomPassword } from "@/utils/helpers";
@@ -161,7 +162,7 @@ export default function CreateRiderDetails(props: Props) {
           />
 
           <div className="sm:col-span-2">
-            <TextField
+            {/* <TextField
               name="documentExpiryDate"
               control={control}
               label="Document Expiry Date"
@@ -170,6 +171,12 @@ export default function CreateRiderDetails(props: Props) {
               labelPlacement="outside"
               radius="sm"
               type="date"
+            /> */}
+            <DatePicker
+              name="documentExpiryDate"
+              control={control}
+              label="Document Expiry Date"
+              minDate={new Date()}
             />
           </div>
 

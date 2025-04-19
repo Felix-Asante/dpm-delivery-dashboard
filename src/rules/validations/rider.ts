@@ -1,11 +1,7 @@
 import * as z from "zod";
 import { emailValidation, passwordValidation } from "./auth";
 
-export const riderValidations = z.object({
-  fullName: z.string().min(3).max(100),
-  phone: z.string().min(10).max(15),
-  email: emailValidation,
-  password: passwordValidation,
+export const bikeDetailsValidations = z.object({
   bikeRegistrationNumber: z.string(),
   bikeType: z.string(),
   bikeColor: z.string(),
@@ -18,11 +14,19 @@ export const riderValidations = z.object({
     .transform((val) => Number(val)),
   identificationDocumentType: z.string(),
   identificationDocumentNumber: z.string(),
-  documentExpiryDate: z
-    .string()
-    .transform((val) => new Date(val).toISOString()),
+  documentExpiryDate: z.date(),
   bikeImage: z.any(),
   identificationDocumentImage: z.any(),
 });
 
+export const riderValidations = z
+  .object({
+    fullName: z.string().min(3).max(100),
+    phone: z.string().min(10).max(15),
+    email: emailValidation,
+    password: passwordValidation,
+  })
+  .and(bikeDetailsValidations);
+
 export type RiderDto = z.infer<typeof riderValidations>;
+export type BikeDetailsDto = z.infer<typeof bikeDetailsValidations>;
