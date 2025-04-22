@@ -4,20 +4,20 @@ import WithServerError from "@/components/hoc/WithServerError";
 import BookingLists from "./_sections/BookingLists";
 
 interface PageProps {
-  searchParams: {
+  searchParams: Promise<{
     status?: string;
     search?: string;
     category?: string;
     from?: string;
     to?: string;
     page?: string;
-  };
+  }>;
 }
 export default async function BookingsPage({ searchParams }: PageProps) {
-  const { search = "" } = searchParams;
+  const { search = "", ...rest } = await searchParams;
   const [categories, bookings] = await Promise.all([
     getCategory(),
-    getBookings({ ...searchParams, query: search }),
+    getBookings({ ...rest, query: search }),
   ]);
 
   const totalBookings = bookings?.results?.meta?.totalItems;
