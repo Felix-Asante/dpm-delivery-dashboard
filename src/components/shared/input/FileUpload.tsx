@@ -16,6 +16,14 @@ interface FileUploadProp {
   errorMessage?: string;
   defaultValue?: string;
 }
+
+const getFilePreview = (file: File): string | null => {
+  if (file.type.startsWith("image/")) {
+    return URL.createObjectURL(file);
+  }
+  return null;
+};
+
 export default forwardRef(function FileUpload(props: FileUploadProp, ref: any) {
   const {
     label,
@@ -26,6 +34,7 @@ export default forwardRef(function FileUpload(props: FileUploadProp, ref: any) {
   } = props;
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [editMode, setEditMode] = useState(false);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
   return (
     <div>
@@ -44,6 +53,9 @@ export default forwardRef(function FileUpload(props: FileUploadProp, ref: any) {
             type="file"
             multiple={multiple}
             onChange={(e) => {
+              if (e.target?.files) {
+                setPreviewUrl(getFilePreview(e.target?.files?.[0]));
+              }
               setSelectedFile(e?.target?.files?.[0] ?? null);
             }}
             className="absolute top-0 left-0 h-full w-full opacity-0"
@@ -60,6 +72,18 @@ export default forwardRef(function FileUpload(props: FileUploadProp, ref: any) {
               )}
             </p>
           </VStack>
+        </div>
+      )}
+
+      {previewUrl && (
+        <div className="mt-4">
+          <Image
+            src={previewUrl}
+            alt=""
+            width={250}
+            height={250}
+            className="rounded-md object-cover"
+          />
         </div>
       )}
 
