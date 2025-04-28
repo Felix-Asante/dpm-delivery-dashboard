@@ -5,13 +5,15 @@ export interface Shipment {
   createdAt: string;
   updatedAt: string;
   deletedAt: any;
-  pickupAddress: string;
+  pickupCity: string;
+  pickupArea: string;
   senderPhone: string;
   pickupDate: any;
-  dropOffAddress: string;
+  dropOffCity: string;
+  dropOffArea: string;
   recipientPhone: string;
   dropOffDate: any;
-  extraInformation: string;
+  extraInformation: string | null;
   shipmentOption: string;
   modeOfShipment: string;
   status: string;

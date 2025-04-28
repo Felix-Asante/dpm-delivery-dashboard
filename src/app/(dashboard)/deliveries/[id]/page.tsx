@@ -23,26 +23,22 @@ export default async function DeliveryDetails({ params }: PageProps) {
           <div className="bg-gray-100 p-8">
             <h3 className="font-semibold text-xl mb-4">Order Details</h3>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid sm:grid-cols-2 gap-4">
               <OrderItem
                 label="Order Date"
                 value={new Date(shipment.createdAt).toLocaleDateString()}
               />
               <OrderItem label="Reference" value={shipment.reference} />
-              <OrderItem
-                label="Pickup Address"
-                value={shipment.pickupAddress}
-              />
-              <OrderItem
-                label="Drop Off Address"
-                value={shipment.dropOffAddress}
-              />
+              <OrderItem label="Pickup City" value={shipment.pickupCity} />
+              <OrderItem label="Pickup Area" value={shipment.pickupArea} />
+              <OrderItem label="Drop Off City" value={shipment.dropOffCity} />
+              <OrderItem label="Drop Off Area" value={shipment.dropOffArea} />
               <OrderItem
                 label="Pickup Date"
                 value={
                   shipment.pickupDate
                     ? new Date(shipment.pickupDate).toLocaleDateString()
-                    : ""
+                    : "-"
                 }
               />
               <OrderItem
@@ -50,7 +46,7 @@ export default async function DeliveryDetails({ params }: PageProps) {
                 value={
                   shipment.dropOffDate
                     ? new Date(shipment.dropOffDate).toLocaleDateString()
-                    : ""
+                    : "-"
                 }
               />
               <OrderItem
@@ -62,10 +58,12 @@ export default async function DeliveryDetails({ params }: PageProps) {
                 value={shipment.modeOfShipment}
               />
               <OrderItem label="Sender Phone" value={shipment.senderPhone} />
-              <OrderItem
-                label="Recipient Phone"
-                value={shipment.recipientPhone}
-              />
+              <div className="sm:col-span-2">
+                <OrderItem
+                  label="Item Description"
+                  value={shipment?.extraInformation ?? "-"}
+                />
+              </div>
               <div>
                 <p className="font-semibold text-gray-500 text-sm mb-1">
                   Status

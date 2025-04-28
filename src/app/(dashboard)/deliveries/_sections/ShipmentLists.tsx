@@ -34,12 +34,20 @@ const columns = [
     label: "Order Date",
   },
   {
-    key: "pickupAddress",
-    label: "Pickup Address",
+    key: "pickupCity",
+    label: "Pickup City",
   },
   {
-    key: "dropOffAddress",
-    label: "Drop Off Address",
+    key: "pickupArea",
+    label: "Pickup Area",
+  },
+  {
+    key: "dropOffCity",
+    label: "Drop Off City",
+  },
+  {
+    key: "dropOffArea",
+    label: "Drop Off Area",
   },
   {
     key: "pickupDate",
@@ -96,13 +104,19 @@ export function ShipmentLists({ shipments }: Props) {
                   <TableCell>
                     {new Date(shipment.createdAt).toLocaleDateString()}
                   </TableCell>
-                  <TableCell>{shipment?.pickupAddress}</TableCell>
-                  <TableCell>{shipment?.dropOffAddress}</TableCell>
+                  <TableCell>{shipment?.pickupCity}</TableCell>
+                  <TableCell>{shipment?.pickupArea}</TableCell>
+                  <TableCell>{shipment?.dropOffCity}</TableCell>
+                  <TableCell>{shipment?.dropOffArea}</TableCell>
                   <TableCell>
-                    {new Date(shipment.pickupDate).toLocaleDateString()}
+                    {shipment?.pickupDate
+                      ? new Date(shipment.pickupDate).toLocaleDateString()
+                      : "-"}
                   </TableCell>
                   <TableCell>
-                    {new Date(shipment.dropOffDate).toLocaleDateString()}
+                    {shipment?.dropOffDate
+                      ? new Date(shipment.dropOffDate).toLocaleDateString()
+                      : "-"}
                   </TableCell>
                   <TableCell>
                     <Chip

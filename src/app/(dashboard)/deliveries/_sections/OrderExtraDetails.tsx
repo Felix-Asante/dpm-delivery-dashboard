@@ -73,7 +73,7 @@ function OrderHistory({ history }: { history: ShipmentHistory[] }) {
               </h3>
               <time className="text-sm font-normal text-gray-500">
                 {item.createdAt
-                  ? new Date(item.createdAt).toLocaleDateString()
+                  ? new Date(item.createdAt).toLocaleString()
                   : "-"}
               </time>
             </div>

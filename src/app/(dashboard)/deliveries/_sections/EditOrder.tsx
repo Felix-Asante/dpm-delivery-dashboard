@@ -53,12 +53,15 @@ const OrderStatus = [
 ];
 
 export function EditOrder({ shipment }: Props) {
-  const { control, handleSubmit } = useForm<UpdateShipmentHistoryField>({
-    resolver: zodResolver(updateShipmentHistorySchema),
-    defaultValues: {
-      status: shipment?.status,
-    },
-  });
+  const { control, handleSubmit, watch, register } =
+    useForm<UpdateShipmentHistoryField>({
+      resolver: zodResolver(updateShipmentHistorySchema),
+      defaultValues: {
+        status: shipment?.status,
+      },
+    });
+
+  const status = watch("status");
 
   const form = useForm<AssignRiderField>({
     resolver: zodResolver(assignRiderSchema),
@@ -89,7 +92,7 @@ export function EditOrder({ shipment }: Props) {
       const formData = new FormData();
       formData.append("status", data.status);
       formData.append("description", data.reason || "");
-      formData.append("photo", data.photo || "");
+      formData.append("photo", data.photo ? data.photo?.[0] : "");
 
       const response = await updateHistory(shipment.id, formData);
       if (response?.error) {
@@ -151,17 +154,20 @@ export function EditOrder({ shipment }: Props) {
           defaultValue={shipment?.status}
         />
 
-        <TextField
-          name="reason"
-          control={control}
-          label="Reason"
-          placeholder="Reason"
-          variant="bordered"
-          labelPlacement="outside"
-          radius="sm"
-        />
-
-        <FileUpload name="photo" label="Attach Photo" />
+        {status === ShipmentStatus.FAILED_DELIVERY_ATTEMPT && (
+          <TextField
+            name="reason"
+            control={control}
+            label="Reason"
+            placeholder="Reason"
+            variant="bordered"
+            labelPlacement="outside"
+            radius="sm"
+          />
+        )}
+        {status === ShipmentStatus.PICKUP_CONFIRMED && (
+          <FileUpload label="Attach Photo" {...register("photo")} />
+        )}
         <Button
           isLoading={loading}
           type="submit"

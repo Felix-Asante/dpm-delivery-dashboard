@@ -30,11 +30,20 @@ export default forwardRef(function FileUpload(props: FileUploadProp, ref: any) {
     multiple = false,
     errorMessage,
     defaultValue,
+    onChange,
     ...prop
   } = props;
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [editMode, setEditMode] = useState(false);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+
+  const onFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target?.files) {
+      setPreviewUrl(getFilePreview(e.target?.files?.[0]));
+    }
+    setSelectedFile(e?.target?.files?.[0] ?? null);
+    onChange?.(e);
+  };
 
   return (
     <div>
@@ -52,12 +61,7 @@ export default forwardRef(function FileUpload(props: FileUploadProp, ref: any) {
           <input
             type="file"
             multiple={multiple}
-            onChange={(e) => {
-              if (e.target?.files) {
-                setPreviewUrl(getFilePreview(e.target?.files?.[0]));
-              }
-              setSelectedFile(e?.target?.files?.[0] ?? null);
-            }}
+            onChange={onFileUpload}
             className="absolute top-0 left-0 h-full w-full opacity-0"
             {...prop}
             ref={ref}
