@@ -90,4 +90,12 @@ export const apiConfig = {
     root: () => `rider`,
     get: (riderId: string) => `rider/${riderId}`,
   },
+  shipments: {
+    list: (query: Query) => `shipping${toQuery(query)}`,
+    get: (shipmentId: string) => `shipping/${shipmentId}`,
+    update_history: (shipmentId: string) =>
+      `shipping/${shipmentId}/update-history`,
+    assign_rider: (shipmentId: string, riderId: string) =>
+      `shipping/${shipmentId}/assign-rider/${riderId}`,
+  },
 };

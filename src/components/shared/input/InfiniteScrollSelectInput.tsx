@@ -103,10 +103,10 @@ const InfiniteScrollSelect = React.forwardRef(function Input(
         maxMenuHeight={200}
         minMenuHeight={200}
         loadingMessage={() => <p>fetching options...</p>}
-        filterOption={(option, searchValue) => {
-          const value = option?.label || option?.name;
-          return value?.toLowerCase().includes(searchValue?.toLowerCase());
-        }}
+        // filterOption={(option, searchValue) => {
+        //   const value = option?.label || option?.name;
+        //   return value?.toLowerCase().includes(searchValue?.toLowerCase());
+        // }}
         theme={(inputTheme) => ({
           ...inputTheme,
           colors: {

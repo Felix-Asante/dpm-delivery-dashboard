@@ -1,0 +1,112 @@
+"use client";
+import { Shipment, ShipmentHistory } from "@/types/shipment";
+import { getShipmentStatusDisplay } from "@/utils/helpers";
+import { Tab, Tabs } from "@nextui-org/react";
+import { CheckIcon, HistoryIcon, TruckIcon } from "lucide-react";
+import Image from "next/image";
+import React from "react";
+import { EditOrder } from "./EditOrder";
+
+interface Props {
+  shipment: Shipment;
+}
+export default function OrderExtraDetails({ shipment }: Props) {
+  return (
+    <div className="mt-6 rounded-lg bg-white p-4">
+      <Tabs
+        aria-label="Options"
+        classNames={{
+          tabList:
+            "gap-6 w-full relative rounded-none p-0 border-b border-divider px-5",
+          cursor: "w-full bg-primary",
+          tab: "max-w-fit w-full px-0 h-12",
+          tabContent: " group-data-[selected=true]:text-primary",
+          base: "w-full",
+        }}
+        color="primary"
+        variant="underlined"
+      >
+        <Tab
+          key="information"
+          title={
+            <div className="flex items-center space-x-2">
+              <TruckIcon size={20} />
+              <span>Extra Details</span>
+            </div>
+          }
+        >
+          <EditOrder shipment={shipment} />
+        </Tab>
+        <Tab
+          key="order_history"
+          title={
+            <div className="flex items-center space-x-2">
+              <HistoryIcon size={20} />
+              <span>Order History</span>
+            </div>
+          }
+        >
+          <OrderHistory history={shipment.history} />
+        </Tab>
+      </Tabs>
+    </div>
+  );
+}
+
+function OrderHistory({ history }: { history: ShipmentHistory[] }) {
+  return (
+    <ol className="relative border-l border-gray-200 mt-3">
+      {history.map((item, index) => (
+        <li
+          className={`mb-10 ml-6 ${
+            index === history.length - 1 ? "pb-0" : "pb-4"
+          }`}
+          key={index}
+        >
+          <span className="absolute flex items-center justify-center w-6 h-6 bg-primary rounded-full -left-3 ring-8 ring-white">
+            <CheckIcon className="w-5 h-5 text-white" />
+          </span>
+          <div className="px-4">
+            <div className="mb-2">
+              <h3 className="font-medium text-primary">
+                {getShipmentStatusDisplay(item.status)}
+              </h3>
+              <time className="text-sm font-normal text-gray-500">
+                {item.createdAt
+                  ? new Date(item.createdAt).toLocaleDateString()
+                  : "-"}
+              </time>
+            </div>
+            {item.description && (
+              <p className="mb-1 text-sm font-normal text-gray-500 lg:w-3/4">
+                {item.description}
+              </p>
+            )}
+            {Object.keys(item.data).length > 0 && (
+              <div className="mt-2">
+                {item.data?.photo && (
+                  <div>
+                    <Image
+                      src={item.data.photo}
+                      alt="Photo"
+                      className="w-20 h-20 rounded-md object-cover"
+                      width={80}
+                      height={80}
+                    />
+                    <a
+                      href={item.data.photo}
+                      target="_blank"
+                      className="font-medium text-sm"
+                    >
+                      Expand photo
+                    </a>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        </li>
+      ))}
+    </ol>
+  );
+}

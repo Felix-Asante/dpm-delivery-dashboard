@@ -5,6 +5,8 @@ import {
   BookMarkedIcon,
   BoxesIcon,
   Building2Icon,
+  PackageIcon,
+  ShieldUserIcon,
   UsersIcon,
 } from "lucide-react";
 import { DASHBOARD_PATHS } from "../routes";
@@ -37,7 +39,7 @@ export const SIDEBAR_NAVIGATION = [
   },
   {
     label: "Riders",
-    icon: UsersIcon,
+    icon: ShieldUserIcon,
     href: DASHBOARD_PATHS.riders.root,
   },
   {
@@ -49,5 +51,10 @@ export const SIDEBAR_NAVIGATION = [
     label: "Variables",
     icon: ArrowLeftRightIcon,
     href: DASHBOARD_PATHS.variables.root,
+  },
+  {
+    label: "Deliveries",
+    icon: PackageIcon,
+    href: DASHBOARD_PATHS.deliveries.root,
   },
 ];

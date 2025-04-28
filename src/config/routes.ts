@@ -50,4 +50,7 @@ export const DASHBOARD_PATHS = {
       path(DASHBOARD_ROOT, `specials/new-offer${toQuery(query || {})}`),
     edit: (offerId: string) => path(DASHBOARD_ROOT, `specials/edit/${offerId}`),
   },
+  deliveries: {
+    root: path(DASHBOARD_ROOT, "deliveries"),
+  },
 };
