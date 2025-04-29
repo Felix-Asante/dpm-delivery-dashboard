@@ -1,6 +1,9 @@
 "use client";
 import { Shipment, ShipmentHistory } from "@/types/shipment";
-import { getShipmentStatusDisplay } from "@/utils/helpers";
+import {
+  getIconByShipmentStatus,
+  getShipmentStatusDisplay,
+} from "@/utils/helpers";
 import { Tab, Tabs } from "@nextui-org/react";
 import { CheckIcon, HistoryIcon, TruckIcon } from "lucide-react";
 import Image from "next/image";
@@ -56,57 +59,60 @@ export default function OrderExtraDetails({ shipment }: Props) {
 function OrderHistory({ history }: { history: ShipmentHistory[] }) {
   return (
     <ol className="relative border-l border-gray-200 mt-3">
-      {history.map((item, index) => (
-        <li
-          className={`mb-10 ml-6 ${
-            index === history.length - 1 ? "pb-0" : "pb-4"
-          }`}
-          key={index}
-        >
-          <span className="absolute flex items-center justify-center w-6 h-6 bg-primary rounded-full -left-3 ring-8 ring-white">
-            <CheckIcon className="w-5 h-5 text-white" />
-          </span>
-          <div className="px-4">
-            <div className="mb-2">
-              <h3 className="font-medium text-primary">
-                {getShipmentStatusDisplay(item.status)}
-              </h3>
-              <time className="text-sm font-normal text-gray-500">
-                {item.createdAt
-                  ? new Date(item.createdAt).toLocaleString()
-                  : "-"}
-              </time>
-            </div>
-            {item.description && (
-              <p className="mb-1 text-sm font-normal text-gray-500 lg:w-3/4">
-                {item.description}
-              </p>
-            )}
-            {Object.keys(item.data).length > 0 && (
-              <div className="mt-2">
-                {item.data?.photo && (
-                  <div>
-                    <Image
-                      src={item.data.photo}
-                      alt="Photo"
-                      className="w-20 h-20 rounded-md object-cover"
-                      width={80}
-                      height={80}
-                    />
-                    <a
-                      href={item.data.photo}
-                      target="_blank"
-                      className="font-medium text-sm"
-                    >
-                      Expand photo
-                    </a>
-                  </div>
-                )}
+      {history.map((item, index) => {
+        const StatusIcon = getIconByShipmentStatus(item.status);
+        return (
+          <li
+            className={`mb-10 ml-6 ${
+              index === history.length - 1 ? "pb-0" : "pb-4"
+            }`}
+            key={index}
+          >
+            <span className="absolute flex items-center justify-center w-8 h-8 bg-primary rounded-full -left-3 ring-8 ring-white">
+              <StatusIcon className="w-5 h-5 text-white" />
+            </span>
+            <div className="px-4">
+              <div className="mb-2">
+                <h3 className="font-medium text-primary">
+                  {getShipmentStatusDisplay(item.status)}
+                </h3>
+                <time className="text-sm font-normal text-gray-500">
+                  {item.createdAt
+                    ? new Date(item.createdAt).toLocaleString()
+                    : "-"}
+                </time>
               </div>
-            )}
-          </div>
-        </li>
-      ))}
+              {item.description && (
+                <p className="mb-1 text-sm font-normal text-gray-500 lg:w-3/4">
+                  {item.description}
+                </p>
+              )}
+              {Object.keys(item.data).length > 0 && (
+                <div className="mt-2">
+                  {item.data?.photo && (
+                    <div>
+                      <Image
+                        src={item.data.photo}
+                        alt="Photo"
+                        className="w-20 h-20 rounded-md object-cover"
+                        width={80}
+                        height={80}
+                      />
+                      <a
+                        href={item.data.photo}
+                        target="_blank"
+                        className="font-medium text-sm"
+                      >
+                        Expand photo
+                      </a>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          </li>
+        );
+      })}
     </ol>
   );
 }

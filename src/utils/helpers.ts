@@ -8,6 +8,15 @@ import regexPattern from "@/rules";
 import { Status } from "@/types";
 import { Query, paths } from "@/types/url";
 import { type ClassValue, clsx } from "clsx";
+import {
+  BanIcon,
+  CheckIcon,
+  LoaderIcon,
+  PackageCheckIcon,
+  TruckIcon,
+  UserCheckIcon,
+  UserPlusIcon,
+} from "lucide-react";
 import { twMerge } from "tailwind-merge";
 export function parsePathname(pathname: string): paths[] {
   // Remove leading slash if present
@@ -206,4 +215,23 @@ export function getShipmentOptionDisplay(option: string) {
     return "Bulk Delivery";
   }
   return option;
+}
+
+export function getIconByShipmentStatus(status: string) {
+  if (status === ShipmentStatus.OUT_FOR_DELIVERY) {
+    return TruckIcon;
+  } else if (status === ShipmentStatus.FAILED_DELIVERY_ATTEMPT) {
+    return BanIcon;
+  } else if (status === ShipmentStatus.DELIVERED) {
+    return CheckIcon;
+  } else if (status === ShipmentStatus.RIDER_REASSIGNED) {
+    return UserPlusIcon;
+  } else if (status === ShipmentStatus.PICKUP_CONFIRMED) {
+    return PackageCheckIcon;
+  } else if (status === ShipmentStatus.PENDING) {
+    return LoaderIcon;
+  } else if (status === ShipmentStatus.RIDER_ASSIGNED) {
+    return UserCheckIcon;
+  }
+  return CheckIcon;
 }
