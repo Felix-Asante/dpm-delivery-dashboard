@@ -14,6 +14,11 @@ import { updateRider } from "@/actions/riders";
 import { getErrorMessage } from "@/utils/helpers";
 import { toast } from "sonner";
 import { DatePicker } from "@/components/shared/input/DatePicker";
+import {
+  BikeTypes,
+  IdentificationDocumentTypeOptions,
+} from "@/config/constants/data";
+import SelectInput from "@/components/shared/input/SelectInput";
 
 export default function BikeInformation({ rider }: { rider: Rider }) {
   const { rider: riderData } = rider;
@@ -85,7 +90,7 @@ export default function BikeInformation({ rider }: { rider: Rider }) {
             radius="sm"
             size="md"
           />
-          <TextField
+          {/* <TextField
             name="bikeType"
             control={form.control}
             label="Bike Type"
@@ -94,6 +99,14 @@ export default function BikeInformation({ rider }: { rider: Rider }) {
             labelPlacement="outside"
             radius="sm"
             size="md"
+          /> */}
+          <SelectInput
+            options={BikeTypes}
+            control={form.control}
+            name="bikeType"
+            label="Bike Type"
+            placeholder="Bike Type"
+            defaultValue={riderData.bikeType}
           />
           <TextField
             name="bikeColor"
@@ -139,7 +152,7 @@ export default function BikeInformation({ rider }: { rider: Rider }) {
             min={2000}
             max={new Date().getFullYear()}
           />
-          <TextField
+          {/* <TextField
             name="identificationDocumentType"
             control={form.control}
             label="Identification Document Type"
@@ -148,6 +161,14 @@ export default function BikeInformation({ rider }: { rider: Rider }) {
             labelPlacement="outside"
             radius="sm"
             size="md"
+          /> */}
+          <SelectInput
+            options={IdentificationDocumentTypeOptions}
+            control={form.control}
+            name="identificationDocumentType"
+            label="Identification Document Type"
+            placeholder="Identification Document Type"
+            defaultValue={riderData.identificationDocumentType}
           />
 
           <TextField

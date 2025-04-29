@@ -1,7 +1,12 @@
 import PasswordAdornment from "@/components/shared/adornments/PasswordAdornment";
 import { DatePicker } from "@/components/shared/input/DatePicker";
 import FileUpload from "@/components/shared/input/FileUpload";
+import SelectInput from "@/components/shared/input/SelectInput";
 import TextField from "@/components/shared/input/TextField";
+import {
+  BikeTypes,
+  IdentificationDocumentTypeOptions,
+} from "@/config/constants/data";
 import { generateRandomPassword } from "@/utils/helpers";
 import { useState } from "react";
 
@@ -92,7 +97,7 @@ export default function CreateRiderDetails(props: Props) {
             labelPlacement="outside"
             radius="sm"
           />
-          <TextField
+          {/* <TextField
             name="bikeType"
             control={control}
             label="Bike Type"
@@ -100,6 +105,13 @@ export default function CreateRiderDetails(props: Props) {
             variant="bordered"
             labelPlacement="outside"
             radius="sm"
+          /> */}
+          <SelectInput
+            options={BikeTypes}
+            control={control}
+            name="bikeType"
+            label="Bike Type"
+            placeholder="Bike Type"
           />
           <TextField
             name="bikeColor"
@@ -141,7 +153,7 @@ export default function CreateRiderDetails(props: Props) {
             min={2000}
             max={new Date().getFullYear()}
           />
-          <TextField
+          {/* <TextField
             name="identificationDocumentType"
             control={control}
             label="Identification Document Type"
@@ -149,8 +161,15 @@ export default function CreateRiderDetails(props: Props) {
             variant="bordered"
             labelPlacement="outside"
             radius="sm"
-          />
+          /> */}
 
+          <SelectInput
+            options={IdentificationDocumentTypeOptions}
+            control={control}
+            name="identificationDocumentType"
+            label="Identification Document Type"
+            placeholder="Identification Document Type"
+          />
           <TextField
             name="identificationDocumentNumber"
             control={control}

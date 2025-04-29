@@ -31,3 +31,24 @@ export const ShipmentStatusOptions = [
     value: ShipmentStatus.RIDER_ASSIGNED,
   },
 ];
+
+export const IdentificationDocumentTypeOptions = [
+  {
+    label: "Ghana Card",
+    value: "ghana_card",
+  },
+  {
+    label: "Passport",
+    value: "passport",
+  },
+  {
+    label: "Driver's License",
+    value: "drivers_license",
+  },
+];
+
+export const BikeTypes = [
+  { value: "Aboboyaa", label: "Aboboyaa" },
+  { value: "Bike", label: "Bike" },
+  { value: "Van", label: "Van" },
+];
