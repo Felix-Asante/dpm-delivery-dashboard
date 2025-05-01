@@ -4,7 +4,7 @@ import { Tab, Tabs } from "@nextui-org/react";
 import { useQueryState } from "nuqs";
 
 export function Filters() {
-  const [tab, setTab] = useQueryState("status");
+  const [tab, setTab] = useQueryState("status", { shallow: false });
   return (
     <div>
       <Tabs
