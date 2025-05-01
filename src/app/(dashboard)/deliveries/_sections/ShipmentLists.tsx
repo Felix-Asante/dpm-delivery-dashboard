@@ -1,8 +1,10 @@
 "use client";
 import { GetShipmentsResponse } from "@/actions/shipment";
 import EmptyContent from "@/components/shared/EmptyContent";
+import TextField from "@/components/shared/input/TextField";
 import HStack from "@/components/shared/layout/HStack";
 import { Button } from "@/components/ui/button";
+import useDebounce from "@/hooks/useDebounce";
 import { Status } from "@/types";
 import {
   cn,
@@ -23,6 +25,8 @@ import {
 } from "@nextui-org/react";
 import Link from "next/link";
 import { useQueryState } from "nuqs";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
 
 interface Props {
   shipments: GetShipmentsResponse;
@@ -79,6 +83,14 @@ const columns = [
 export function ShipmentLists({ shipments }: Props) {
   const { meta } = shipments;
   const [page, setPage] = useQueryState("page");
+  const [query, setQuery] = useQueryState("query", { shallow: false });
+  const { control, watch } = useForm();
+
+  const debouncedSearch = useDebounce(watch("search"), 500);
+
+  useEffect(() => {
+    setQuery(debouncedSearch);
+  }, [debouncedSearch]);
 
   return (
     <div className="p-4">
@@ -86,7 +98,19 @@ export function ShipmentLists({ shipments }: Props) {
         {meta?.totalItems} {pluralize("Order", meta?.totalItems)}
       </h3>
       <p className="text-gray-400">List of all orders</p>
-      <div className="px-2 py-1 border rounded-md my-4">
+      <div className="px-2 py-1 border rounded-md my-4 bg-white">
+        <div className="px-2 mb-3">
+          <TextField
+            name="search"
+            placeholder="Search by reference or rider name"
+            control={control}
+            variant="bordered"
+            radius="sm"
+            size="md"
+            className="md:w-[350px]"
+            defaultValue={query ?? ""}
+          />
+        </div>
         <Table aria-label="list of shipments" shadow="none" radius="none">
           <TableHeader columns={columns}>
             {(column) => (

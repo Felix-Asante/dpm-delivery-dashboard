@@ -7,6 +7,7 @@ import { ShipmentLists } from "./_sections/ShipmentLists";
 interface PageProps {
   searchParams: Promise<{
     status: string;
+    query: string;
   }>;
 }
 export default async function DeliveriesPage({ searchParams }: PageProps) {
