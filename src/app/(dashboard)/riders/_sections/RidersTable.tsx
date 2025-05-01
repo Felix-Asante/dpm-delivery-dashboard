@@ -22,6 +22,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 
 const columns = [
+  { label: "ID", key: "riderId" },
   { label: "Joined at", key: "JoinedAt" },
   { label: "Full Name", key: "name" },
   { label: "Phone", key: "phone" },
@@ -103,6 +104,7 @@ export default function RidersTable({ data }: RidersTableProps) {
           >
             {riders?.map((rider) => (
               <TableRow key={rider?.id}>
+                <TableCell>{rider?.rider?.riderId}</TableCell>
                 <TableCell>
                   {new Date(rider?.createdAt)?.toLocaleDateString()}
                 </TableCell>

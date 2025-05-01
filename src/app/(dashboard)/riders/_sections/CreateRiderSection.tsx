@@ -35,7 +35,12 @@ export default function CreateRiderSection() {
 
   const onSubmit = async (data: RiderDto) => {
     try {
-      const { identificationDocumentImage, bikeImage, ...rest } = data;
+      const {
+        identificationDocumentImage,
+        bikeImage,
+        profilePicture,
+        ...rest
+      } = data;
 
       const formData = new FormData();
 
@@ -48,6 +53,7 @@ export default function CreateRiderSection() {
         identificationDocumentImage[0] as unknown as File
       );
       formData.append("bikeImage", bikeImage[0] as unknown as File);
+      formData.append("profilePicture", profilePicture[0] as unknown as File);
 
       const response = await createNewRider(formData);
       if (response?.error) {

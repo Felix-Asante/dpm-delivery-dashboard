@@ -55,6 +55,7 @@ export const updateUserValidationSchema = z.object({
     .regex(regexPattern.Phone, ERRORS.AUTH.PHONE.invalid)
     .optional(),
   email: emailValidation.optional(),
+  profilePicture: z.any().optional(),
 });
 
 export type UpdateUserFields = z.infer<typeof updateUserValidationSchema>;

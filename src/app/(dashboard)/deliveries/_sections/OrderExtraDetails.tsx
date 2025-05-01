@@ -82,6 +82,21 @@ function OrderHistory({ history }: { history: ShipmentHistory[] }) {
                     : "-"}
                 </time>
               </div>
+              {item.data?.rider_name && (
+                <p className="text-sm font-normal text-gray-500 mb-1">
+                  Rider: {item.data.rider_name}
+                </p>
+              )}
+              {item.data?.old_rider_name && (
+                <p className="text-sm font-normal text-gray-500 mb-1">
+                  Previous Rider: {item.data.old_rider_name}
+                </p>
+              )}
+              {item.data?.new_rider_name && (
+                <p className="text-sm font-normal text-gray-500 mb-1">
+                  New Rider: {item.data.new_rider_name}
+                </p>
+              )}
               {item.description && (
                 <p className="mb-1 text-sm font-normal text-gray-500 lg:w-3/4">
                   {item.description}

@@ -25,6 +25,7 @@ export const riderValidations = z
     phone: z.string().min(10).max(15),
     email: emailValidation,
     password: passwordValidation,
+    profilePicture: z.any(),
   })
   .and(bikeDetailsValidations);
 

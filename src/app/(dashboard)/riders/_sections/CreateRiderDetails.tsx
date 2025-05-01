@@ -83,6 +83,12 @@ export default function CreateRiderDetails(props: Props) {
               Generate random password
             </button>
           </div>
+          <FileUpload
+            label="Profile Picture"
+            {...register("profilePicture")}
+            name="profilePicture"
+            errorMessage={errors?.profilePicture?.message?.toString()}
+          />
         </div>
       </div>
       <div className="bg-white p-5 my-6">

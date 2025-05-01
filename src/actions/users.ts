@@ -64,12 +64,13 @@ export async function getUsersCount(): Promise<
   }
 }
 
-export async function updateUser(userId: string, data: UpdateUserFields) {
+export async function updateUser(userId: string, data: FormData) {
   try {
     const endpoint = apiConfig.users.get(userId);
     await apiHandler({
       endpoint,
       method: "PATCH",
+      json: false,
       body: data,
     });
     revalidateTag(Tags.users);

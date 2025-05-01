@@ -12,6 +12,7 @@ import { useServerAction } from "@/hooks/useServerAction";
 import { updateUser } from "@/actions/users";
 import { toast } from "sonner";
 import { getErrorMessage } from "@/utils/helpers";
+import FileUpload from "@/components/shared/input/FileUpload";
 
 export default function RiderGeneralInformation({ user }: { user: User }) {
   const form = useForm<UpdateUserFields>({
@@ -31,7 +32,16 @@ export default function RiderGeneralInformation({ user }: { user: User }) {
 
   const onSubmit = async (data: UpdateUserFields) => {
     try {
-      const response = await updateUserAction(user.id, data);
+      const { profilePicture, ...rest } = data;
+      const formData = new FormData();
+      for (const key in rest) {
+        // @ts-ignore
+        formData.append(key, rest[key]);
+      }
+      if (profilePicture) {
+        formData.append("profilePicture", profilePicture[0] as unknown as File);
+      }
+      const response = await updateUserAction(user.id, formData);
       if (response?.error) {
         toast.error(response.error);
         return;
@@ -94,6 +104,15 @@ export default function RiderGeneralInformation({ user }: { user: User }) {
             size="lg"
             control={form.control}
           />
+          <div className="md:col-span-2">
+            <FileUpload
+              label="Profile Picture"
+              {...form.register("profilePicture")}
+              name="profilePicture"
+              errorMessage={form.formState.errors?.profilePicture?.message?.toString()}
+              defaultValue={user.profilePicture ?? undefined}
+            />
+          </div>
           <Button
             type="submit"
             variant="solid"

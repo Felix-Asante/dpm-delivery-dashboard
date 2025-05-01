@@ -9,6 +9,7 @@ export interface User {
   email?: any;
   fullName: string;
   address?: string | null;
+  profilePicture?: string | null;
   isVerified: boolean;
   code?: string | null;
   codeUseCase?: string | null;
