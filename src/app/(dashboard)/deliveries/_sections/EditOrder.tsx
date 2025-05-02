@@ -19,6 +19,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@nextui-org/react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 interface Props {
   shipment: Shipment;
@@ -73,6 +74,7 @@ export function EditOrder({ shipment }: Props) {
 
   const [updateHistory, { loading }] = useServerAction(updateShipmentHistory);
   const [addRider, { loading: assigningRider }] = useServerAction(assignRider);
+  const router = useRouter();
 
   const assignRiderHandler = async (data: AssignRiderField) => {
     try {
@@ -101,6 +103,7 @@ export function EditOrder({ shipment }: Props) {
         return;
       }
       toast.success("Shipment history updated");
+      router.refresh();
     } catch (error) {
       toast.error(getErrorMessage(error));
     }
