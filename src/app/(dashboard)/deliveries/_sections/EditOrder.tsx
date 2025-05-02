@@ -93,6 +93,7 @@ export function EditOrder({ shipment }: Props) {
       formData.append("status", data.status);
       formData.append("description", data.reason || "");
       formData.append("photo", data.photo ? data.photo?.[0] : "");
+      formData.append("confirmationCode", data.confirmationCode || "");
 
       const response = await updateHistory(shipment.id, formData);
       if (response?.error) {
@@ -160,6 +161,17 @@ export function EditOrder({ shipment }: Props) {
             control={control}
             label="Reason"
             placeholder="Reason"
+            variant="bordered"
+            labelPlacement="outside"
+            radius="sm"
+          />
+        )}
+        {status === ShipmentStatus.DELIVERED && (
+          <TextField
+            name="confirmationCode"
+            control={control}
+            label="Confirmation Code"
+            placeholder="Confirmation Code"
             variant="bordered"
             labelPlacement="outside"
             radius="sm"
