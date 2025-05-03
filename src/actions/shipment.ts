@@ -26,6 +26,19 @@ export async function getShipments(
   }
 }
 
+export async function getShipmentsByRider(riderId: string, query: Query) {
+  try {
+    const endpoint = apiConfig.shipments.get_by_rider(riderId, query);
+    const results = await apiHandler<GetShipmentsResponse>({
+      endpoint,
+      method: "GET",
+    });
+    return { results };
+  } catch (error) {
+    return { error: getErrorMessage(error) };
+  }
+}
+
 export async function getShipmentById(id: string) {
   try {
     const endpoint = apiConfig.shipments.get(id);

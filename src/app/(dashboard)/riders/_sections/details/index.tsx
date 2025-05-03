@@ -5,6 +5,7 @@ import { CarTaxiFrontIcon, ContactRoundIcon, FileTextIcon } from "lucide-react";
 import { useQueryState } from "nuqs";
 import BikeInformation from "./BikeInformation";
 import RiderGeneralInformation from "./RiderGeneralInformation";
+import { RiderOrderHistory } from "./RiderOrderHistory";
 
 export default function RiderDetailsPage({
   riderDetails,
@@ -63,7 +64,7 @@ export default function RiderDetailsPage({
             </div>
           }
         >
-          <p>Ride history</p>
+          <RiderOrderHistory riderId={user.id} />
         </Tab>
       </Tabs>
     </div>

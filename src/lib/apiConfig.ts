@@ -97,5 +97,7 @@ export const apiConfig = {
       `shipping/${shipmentId}/update-history`,
     assign_rider: (shipmentId: string, riderId: string) =>
       `shipping/${shipmentId}/assign-rider/${riderId}`,
+    get_by_rider: (riderId: string, query: Query) =>
+      `shipping/riders/${riderId}${toQuery(query)}`,
   },
 };

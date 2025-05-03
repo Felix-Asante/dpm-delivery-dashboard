@@ -18,9 +18,9 @@ export default async function DeliveryDetails({ params }: PageProps) {
 
   return (
     <WithServerError error={error}>
-      <div className="h-screen">
-        <div className="max-w-4xl 2xl:max-w-5xl p-4 mx-auto mt-10">
-          <div className="bg-gray-100 p-8">
+      <div>
+        <div className="max-w-4xl 2xl:max-w-5xl p-4 mx-auto mt-10 h-full">
+          <div className="bg-gray-100 h-full p-8">
             <h3 className="font-semibold text-xl mb-4">Order Details</h3>
 
             <div className="grid sm:grid-cols-2 gap-4">
@@ -30,9 +30,15 @@ export default async function DeliveryDetails({ params }: PageProps) {
               />
               <OrderItem label="Reference" value={shipment.reference} />
               <OrderItem label="Pickup City" value={shipment.pickupCity} />
-              <OrderItem label="Pickup Area" value={shipment.pickupArea} />
               <OrderItem label="Drop Off City" value={shipment.dropOffCity} />
+              <OrderItem label="Pickup Area" value={shipment.pickupArea} />
               <OrderItem label="Drop Off Area" value={shipment.dropOffArea} />
+              <OrderItem label="Sender Phone" value={shipment.senderPhone} />
+              <OrderItem
+                label="Recipient Phone"
+                value={shipment.recipientPhone}
+              />
+
               <OrderItem
                 label="Pickup Date"
                 value={
@@ -57,7 +63,6 @@ export default async function DeliveryDetails({ params }: PageProps) {
                 label="Mode of Transport"
                 value={shipment.modeOfShipment}
               />
-              <OrderItem label="Sender Phone" value={shipment.senderPhone} />
               <div className="sm:col-span-2">
                 <OrderItem
                   label="Item Description"

@@ -102,7 +102,7 @@ export function ShipmentLists({ shipments }: Props) {
         <div className="px-2 mb-3">
           <TextField
             name="search"
-            placeholder="Search by reference or rider name"
+            placeholder="Search"
             control={control}
             variant="bordered"
             radius="sm"
