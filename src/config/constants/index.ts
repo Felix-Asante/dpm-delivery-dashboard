@@ -11,6 +11,13 @@ export enum BookingStatus {
   REJECTED = "rejected",
 }
 
+export enum RiderBookingStatus {
+  ASSIGNED = "assigned",
+  DELIVERED = "delivered",
+  CANCELLED = "cancelled",
+  REJECTED = "rejected",
+}
+
 export enum Periods {
   currentMonth = "currentMonth",
   last3Months = "last3Months",

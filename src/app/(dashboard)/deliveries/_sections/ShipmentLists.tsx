@@ -4,11 +4,11 @@ import EmptyContent from "@/components/shared/EmptyContent";
 import TextField from "@/components/shared/input/TextField";
 import HStack from "@/components/shared/layout/HStack";
 import { Button } from "@/components/ui/button";
+import { DELIVIRIES_TABLE_COLUMNS } from "@/config/constants/tables";
 import useDebounce from "@/hooks/useDebounce";
-import { Status } from "@/types";
+import type { Status } from "@/types";
 import {
   cn,
-  getShipmentOptionDisplay,
   getShipmentStatusDisplay,
   getStyleByStatus,
   pluralize,
@@ -31,54 +31,6 @@ import { useForm } from "react-hook-form";
 interface Props {
   shipments: GetShipmentsResponse;
 }
-
-const columns = [
-  {
-    key: "createdAt",
-    label: "Order Date",
-  },
-  {
-    key: "pickupCity",
-    label: "Pickup City",
-  },
-  {
-    key: "pickupArea",
-    label: "Pickup Area",
-  },
-  {
-    key: "dropOffCity",
-    label: "Drop Off City",
-  },
-  {
-    key: "dropOffArea",
-    label: "Drop Off Area",
-  },
-  {
-    key: "pickupDate",
-    label: "Pickup Date",
-  },
-  {
-    key: "dropOffDate",
-    label: "Drop Off Date",
-  },
-  {
-    key: "status",
-    label: "Status",
-  },
-  {
-    key: "senderPhone",
-    label: "Sender Phone",
-  },
-  {
-    key: "recipientPhone",
-    label: "Recipient Phone",
-  },
-
-  {
-    key: "",
-    label: "",
-  },
-];
 
 export function ShipmentLists({ shipments }: Props) {
   const { meta } = shipments;
@@ -112,7 +64,7 @@ export function ShipmentLists({ shipments }: Props) {
           />
         </div>
         <Table aria-label="list of shipments" shadow="none" radius="none">
-          <TableHeader columns={columns}>
+          <TableHeader columns={DELIVIRIES_TABLE_COLUMNS}>
             {(column) => (
               <TableColumn key={column.key}>{column.label}</TableColumn>
             )}
@@ -132,7 +84,7 @@ export function ShipmentLists({ shipments }: Props) {
                   <TableCell>{shipment?.pickupArea}</TableCell>
                   <TableCell>{shipment?.dropOffCity}</TableCell>
                   <TableCell>{shipment?.dropOffArea}</TableCell>
-                  <TableCell>
+                  {/* <TableCell>
                     {shipment?.pickupDate
                       ? new Date(shipment.pickupDate).toLocaleDateString()
                       : "-"}
@@ -141,7 +93,7 @@ export function ShipmentLists({ shipments }: Props) {
                     {shipment?.dropOffDate
                       ? new Date(shipment.dropOffDate).toLocaleDateString()
                       : "-"}
-                  </TableCell>
+                  </TableCell> */}
                   <TableCell>
                     <Chip
                       variant="dot"

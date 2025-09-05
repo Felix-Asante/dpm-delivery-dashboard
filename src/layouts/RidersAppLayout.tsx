@@ -12,9 +12,9 @@ interface RidersAppLayoutProps {
 export async function RidersAppLayout({ children }: RidersAppLayoutProps) {
   const user = await getCurrentUser();
   return (
-    <main>
+    <main className="min-h-screen bg-gray-50">
       <header className="border-b border-boder py-4">
-        <nav className="max-w-5xl mx-auto px-5 sm:px-0">
+        <nav className="max-w-5xl mx-auto px-5 lg:px-0">
           <HStack className="items-center justify-between">
             <Link
               href={"/"}
@@ -36,7 +36,7 @@ export async function RidersAppLayout({ children }: RidersAppLayoutProps) {
           </HStack>
         </nav>
       </header>
-      <section className="max-w-5xl mx-auto px-5 sm:px-0">{children}</section>
+      <section className="max-w-5xl mx-auto px-5">{children}</section>
     </main>
   );
 }
