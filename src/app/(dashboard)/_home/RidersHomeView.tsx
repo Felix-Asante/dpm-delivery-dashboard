@@ -1,10 +1,11 @@
+import { getRiderStats } from "@/actions/riders";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { DEFAULT_CURRENCY } from "@/config/constants";
+import { getCurrentUser } from "@/lib/auth";
 import { Alert } from "@nextui-org/react";
+import { Suspense } from "react";
 import { RiderBookingsTable } from "./riders/RiderBookingsTable";
 import { RidersHomeHeader } from "./riders/RidersHomeHeader";
-import { getCurrentUser } from "@/lib/auth";
-import { getRiderStats } from "@/actions/riders";
 
 export async function RidersHomeView() {
   const user = await getCurrentUser();
@@ -69,7 +70,9 @@ export async function RidersHomeView() {
         </ScrollArea>
         <div className="mt-7">
           <h4 className="font-semibold text-lg mb-2">Recent orders</h4>
-          <RiderBookingsTable />
+          <Suspense fallback={<p>Loading orders...</p>}>
+            <RiderBookingsTable />
+          </Suspense>
         </div>
       </div>
     </section>

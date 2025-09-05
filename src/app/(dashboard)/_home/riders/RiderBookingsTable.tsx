@@ -1,6 +1,8 @@
 "use client";
+import { getShipments } from "@/actions/shipment";
+import { buttonVariants } from "@/components/ui/button";
 import { RiderBookingStatus } from "@/config/constants";
-import { DELIVIRIES_TABLE_COLUMNS } from "@/config/constants/tables";
+import { RIDER_DELIVERIES_TABLE_COLUMNS } from "@/config/constants/tables";
 import type { Status } from "@/types";
 import { getShipmentStatusDisplay, getStyleByStatus } from "@/utils/helpers";
 import {
@@ -15,6 +17,7 @@ import {
   TableRow,
   Tabs,
 } from "@nextui-org/react";
+import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import { parseAsString, useQueryStates } from "nuqs";
 
@@ -22,6 +25,13 @@ export function RiderBookingsTable() {
   const [filters, setFilters] = useQueryStates({
     status: parseAsString.withDefault(RiderBookingStatus.ASSIGNED),
   });
+
+  const { data } = useQuery({
+    queryKey: [filters.status],
+    queryFn: () => getShipments({ status: filters.status }),
+  });
+
+  const shipments = data?.results?.items || [];
 
   return (
     <div>
@@ -39,7 +49,11 @@ export function RiderBookingsTable() {
         }
       >
         {Object.values(RiderBookingStatus).map((status) => (
-          <Tab key={status} title={status} className="capitalize pb-0" />
+          <Tab
+            key={status}
+            title={status?.replaceAll("_", " ")}
+            className="capitalize pb-0"
+          />
         ))}
       </Tabs>
 
@@ -54,7 +68,7 @@ export function RiderBookingsTable() {
             base: "max-w-full",
           }}
         >
-          <TableHeader columns={DELIVIRIES_TABLE_COLUMNS}>
+          <TableHeader columns={RIDER_DELIVERIES_TABLE_COLUMNS}>
             {(column) => (
               <TableColumn key={column.key}>{column.label}</TableColumn>
             )}
@@ -64,7 +78,7 @@ export function RiderBookingsTable() {
               <p className="text-gray-300 text-sm">There are no orders yet</p>
             }
           >
-            {[]?.map((shipment: any) => {
+            {shipments?.map((shipment: any) => {
               return (
                 <TableRow key={shipment?.id}>
                   <TableCell>
@@ -75,20 +89,18 @@ export function RiderBookingsTable() {
                   <TableCell>{shipment?.dropOffCity}</TableCell>
                   <TableCell>{shipment?.dropOffArea}</TableCell>
 
-                  <TableCell>
-                    <Chip
-                      variant="dot"
-                      className={cn("capitalize")}
-                      classNames={getStyleByStatus(shipment?.status as Status)}
-                    >
-                      {getShipmentStatusDisplay(shipment?.status)}
-                    </Chip>
-                  </TableCell>
                   <TableCell>{shipment?.senderPhone}</TableCell>
                   <TableCell>{shipment?.recipientPhone}</TableCell>
 
                   <TableCell>
-                    <Link href={`/deliveries/${shipment?.id}`}>View</Link>
+                    <Link
+                      className={buttonVariants({
+                        className: "!rounded-full !py-px",
+                      })}
+                      href={`/deliveries/${shipment?.id}`}
+                    >
+                      View
+                    </Link>
                   </TableCell>
                 </TableRow>
               );

@@ -12,7 +12,7 @@ export enum BookingStatus {
 }
 
 export enum RiderBookingStatus {
-  ASSIGNED = "assigned",
+  ASSIGNED = "rider_assigned",
   DELIVERED = "delivered",
   CANCELLED = "cancelled",
   REJECTED = "rejected",
