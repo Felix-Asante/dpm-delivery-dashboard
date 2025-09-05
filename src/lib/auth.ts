@@ -5,14 +5,21 @@ import { authOptions } from "./authentication";
 import { getServerSession } from "next-auth";
 
 export async function getUserRole() {
-	const session = await getServerSession<typeof authOptions, Session>(
-		authOptions,
-	);
+  const session = await getServerSession<typeof authOptions, Session>(
+    authOptions
+  );
 
-	return session?.user.role.name;
+  return session?.user.role.name;
 }
 export async function checkUserRole(role: string) {
-	const userRole = await getUserRole();
+  const userRole = await getUserRole();
 
-	return userRole?.toLowerCase() === role?.toLocaleLowerCase();
+  return userRole?.toLowerCase() === role?.toLocaleLowerCase();
+}
+
+export async function getCurrentUser() {
+  const session = await getServerSession<typeof authOptions, Session>(
+    authOptions
+  );
+  return session?.user;
 }

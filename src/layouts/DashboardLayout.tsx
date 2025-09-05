@@ -1,14 +1,18 @@
 import AuthGuards from "@/guards/AuthGuards";
 import MainNavbar from "./Navbar";
 import { ReactNode } from "react";
-import HStack from "@/components/shared/layout/HStack";
 import DashboardSideBar from "./sidebars/DashboardSideBar";
+import { checkUserRole } from "@/lib/auth";
+import { UserRoles } from "@/config/constants";
+import { RidersAppLayout } from "@/layouts/RidersAppLayout";
 
-export default function DashboardLayout({
+export default async function DashboardLayout({
   children,
 }: {
   children?: ReactNode;
 }) {
+  const isCourier = await checkUserRole(UserRoles.COURIER);
+  if (isCourier) return <RidersAppLayout>{children}</RidersAppLayout>;
   return (
     <AuthGuards>
       <main className="min-h-screen">
