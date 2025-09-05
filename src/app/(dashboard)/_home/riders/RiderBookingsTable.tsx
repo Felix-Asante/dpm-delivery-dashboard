@@ -43,7 +43,7 @@ export function RiderBookingsTable() {
         ))}
       </Tabs>
 
-      <div className="border rounded-lg bg-white p-4 mt-4">
+      <div className="border rounded-lg bg-white p-4 mt-4 overflow-x-scroll">
         <Table
           removeWrapper
           aria-label="list of shipments"

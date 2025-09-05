@@ -16,12 +16,15 @@ export async function RidersAppLayout({ children }: RidersAppLayoutProps) {
       <header className="border-b border-boder py-4">
         <nav className="max-w-5xl mx-auto px-5 lg:px-0">
           <HStack className="items-center justify-between">
-            <Link
-              href={"/"}
-              className="text-secondary uppercase text-xl sm:text-2xl font-bold"
-            >
-              Dpm <span className="text-primary">delivery</span>{" "}
-            </Link>
+            <div>
+              <Link
+                href={"/"}
+                className="text-secondary uppercase text-xl sm:text-2xl font-bold"
+              >
+                Dpm <span className="text-primary">delivery</span>{" "}
+              </Link>
+              <p className="text-gray-500 text-xs">Riders dashboard</p>
+            </div>
 
             <Link
               href="/account/settings"

@@ -2,6 +2,7 @@ import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { DEFAULT_CURRENCY } from "@/config/constants";
 import { RidersHomeHeader } from "./riders/RidersHomeHeader";
 import { RiderBookingsTable } from "./riders/RiderBookingsTable";
+import { Alert } from "@nextui-org/react";
 
 export function RidersHomeView() {
   const STATS = [
@@ -24,6 +25,15 @@ export function RidersHomeView() {
   ];
   return (
     <section className="py-10">
+      <Alert
+        // color="primary"
+        classNames={{
+          base: "mb-5 bg-primary/15",
+          iconWrapper: "text-primary",
+          title: "text-primary",
+        }}
+        title={`You have 20 orders assigned to you`}
+      />
       <RidersHomeHeader />
       <div className="mt-7">
         <h4 className="font-semibold text-lg">My stats</h4>
