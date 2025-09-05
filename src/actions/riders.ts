@@ -3,8 +3,9 @@
 import { apiConfig } from "@/lib/apiConfig";
 import { apiHandler } from "@/lib/apiHandler";
 import { ResponseMeta, SeverActionResponse } from "@/types";
-import { Rider } from "@/types/auth";
-import { Query } from "@/types/url";
+import type { Rider } from "@/types/auth";
+import type { RiderStats } from "@/types/rider";
+import type { Query } from "@/types/url";
 import { getErrorMessage } from "@/utils/helpers";
 import { Tags } from "@/utils/tags";
 import { revalidateTag } from "next/cache";
@@ -68,6 +69,18 @@ export async function updateRider(id: string, data: FormData) {
       body: data,
     });
     revalidateTag(Tags.rider);
+  } catch (error) {
+    return { error: getErrorMessage(error) };
+  }
+}
+export async function getRiderStats(id: string) {
+  try {
+    const endpoint = apiConfig.riders.stats(id);
+    const stats = await apiHandler<RiderStats>({
+      endpoint,
+      method: "GET",
+    });
+    return { results: stats };
   } catch (error) {
     return { error: getErrorMessage(error) };
   }

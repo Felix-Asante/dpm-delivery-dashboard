@@ -17,27 +17,39 @@ export interface User {
   likes: string[];
   role: Role;
   adminFor?: Place;
+  wallet: Wallet | null;
+  rider: RiderInfo;
 }
 
+export interface Wallet {
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: string;
+  balance: string;
+  totalEarned: string;
+}
+
+export interface RiderInfo {
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: any;
+  bikeRegistrationNumber: string;
+  bikeType: string;
+  bikeColor: string;
+  bikeBrand: string;
+  bikeModel: string;
+  bikeYear: number;
+  bikeImage: string;
+  identificationDocumentNumber: string;
+  identificationDocumentType: string;
+  identificationDocumentImage: string;
+  documentExpiryDate: string;
+  riderId: string;
+}
 export interface Rider extends User {
-  rider: {
-    id: string;
-    createdAt: string;
-    updatedAt: string;
-    deletedAt: any;
-    bikeRegistrationNumber: string;
-    bikeType: string;
-    bikeColor: string;
-    bikeBrand: string;
-    bikeModel: string;
-    bikeYear: number;
-    bikeImage: string;
-    identificationDocumentNumber: string;
-    identificationDocumentType: string;
-    identificationDocumentImage: string;
-    documentExpiryDate: string;
-    riderId: string;
-  };
+  rider: RiderInfo;
 }
 
 export interface Role {

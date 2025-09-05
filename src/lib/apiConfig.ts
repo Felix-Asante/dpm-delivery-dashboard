@@ -89,6 +89,7 @@ export const apiConfig = {
     list: (query: Query) => `rider${toQuery(query)}`,
     root: () => `rider`,
     get: (riderId: string) => `rider/${riderId}`,
+    stats: (riderId: string) => `rider/${riderId}/stats`,
   },
   shipments: {
     list: (query: Query) => `shipping${toQuery(query)}`,

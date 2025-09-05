@@ -1,39 +1,55 @@
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { DEFAULT_CURRENCY } from "@/config/constants";
-import { RidersHomeHeader } from "./riders/RidersHomeHeader";
-import { RiderBookingsTable } from "./riders/RiderBookingsTable";
 import { Alert } from "@nextui-org/react";
+import { RiderBookingsTable } from "./riders/RiderBookingsTable";
+import { RidersHomeHeader } from "./riders/RidersHomeHeader";
+import { getCurrentUser } from "@/lib/auth";
+import { getRiderStats } from "@/actions/riders";
 
-export function RidersHomeView() {
+export async function RidersHomeView() {
+  const user = await getCurrentUser();
+
+  if (!user?.rider?.id) {
+    return;
+  }
+
+  const [stats] = await Promise.all([getRiderStats(user?.rider?.id)]);
+
+  const totalRevenue = user?.wallet ? +user.wallet.totalEarned : 0;
+  const totalAssignedOrders = stats?.results?.total_orders_assigned || 0;
+
   const STATS = [
     {
       label: "Total revenue",
-      value: `${DEFAULT_CURRENCY.symbol} 0.00`,
+      value: `${DEFAULT_CURRENCY.symbol} ${totalRevenue.toFixed(2)}`,
+    },
+    {
+      label: "Total deliveries today",
+      value: stats?.results?.total_deliveries_today || 0,
     },
     {
       label: "Total deliveries",
-      value: 100,
+      value: stats?.results?.total_orders_delivered || 0,
     },
     {
       label: "Cancelled Orders",
-      value: 3,
-    },
-    {
-      label: "Ratings",
-      value: 4.5,
+      value: stats?.results?.total_orders_cancelled || 0,
     },
   ];
+
   return (
     <section className="py-10">
-      <Alert
-        // color="primary"
-        classNames={{
-          base: "mb-5 bg-primary/15",
-          iconWrapper: "text-primary",
-          title: "text-primary",
-        }}
-        title={`You have 20 orders assigned to you`}
-      />
+      {totalAssignedOrders > 0 ? (
+        <Alert
+          // color="primary"
+          classNames={{
+            base: "mb-5 bg-primary/15",
+            iconWrapper: "text-primary",
+            title: "text-primary",
+          }}
+          title={`You have ${totalAssignedOrders} orders assigned to you`}
+        />
+      ) : null}
       <RidersHomeHeader />
       <div className="mt-7">
         <h4 className="font-semibold text-lg">My stats</h4>
