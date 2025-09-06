@@ -23,6 +23,7 @@ export default function CreateRiderSection() {
     formState: { errors },
     handleSubmit,
   } = useForm<RiderDto>({
+    // @ts-ignore
     resolver: zodResolver(riderValidations),
   });
 
@@ -33,7 +34,7 @@ export default function CreateRiderSection() {
 
   const router = useRouter();
 
-  const onSubmit = async (data: RiderDto) => {
+  const onSubmit = async (data: any) => {
     try {
       const {
         identificationDocumentImage,
@@ -87,7 +88,7 @@ export default function CreateRiderSection() {
           Cancel
         </Link>
         <Button
-          onClick={handleSubmit(onSubmit)}
+          onPress={() => handleSubmit(onSubmit)()}
           color="primary"
           radius="none"
           size="sm"
