@@ -1,16 +1,10 @@
-import { assignRider, updateShipmentHistory } from "@/actions/shipment";
-import FileUpload from "@/components/shared/input/FileUpload";
+import { assignRider } from "@/actions/shipment";
 import InfiniteScrollSelect from "@/components/shared/input/InfiniteScrollSelectInput";
-import SelectInput from "@/components/shared/input/SelectInput";
-import TextField from "@/components/shared/input/TextField";
-import { ShipmentStatus } from "@/config/constants";
 import { useServerAction } from "@/hooks/useServerAction";
 import { apiConfig } from "@/lib/apiConfig";
 import {
   AssignRiderField,
   assignRiderSchema,
-  UpdateShipmentHistoryField,
-  updateShipmentHistorySchema,
 } from "@/rules/validations/shipment";
 import { Rider } from "@/types/auth";
 import { Shipment } from "@/types/shipment";
@@ -19,51 +13,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@nextui-org/react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
+import UpdateDeliveryStatus from "./UpdateDeliveryStatus";
 
 interface Props {
   shipment: Shipment;
 }
 
-const OrderStatus = [
-  {
-    label: "Pending",
-    value: ShipmentStatus.PENDING,
-    key: ShipmentStatus.PENDING,
-  },
-  {
-    label: "Delivered",
-    value: ShipmentStatus.DELIVERED,
-    key: ShipmentStatus.DELIVERED,
-  },
-  {
-    label: "Failed Delivery Attempt",
-    value: ShipmentStatus.FAILED_DELIVERY_ATTEMPT,
-    key: ShipmentStatus.FAILED_DELIVERY_ATTEMPT,
-  },
-  {
-    label: "Pickup Confirmed",
-    value: ShipmentStatus.PICKUP_CONFIRMED,
-    key: ShipmentStatus.PICKUP_CONFIRMED,
-  },
-  {
-    label: "Out for Delivery",
-    value: ShipmentStatus.OUT_FOR_DELIVERY,
-    key: ShipmentStatus.OUT_FOR_DELIVERY,
-  },
-];
-
 export function EditOrder({ shipment }: Props) {
-  const { control, handleSubmit, watch, register } =
-    useForm<UpdateShipmentHistoryField>({
-      resolver: zodResolver(updateShipmentHistorySchema),
-      defaultValues: {
-        status: shipment?.status,
-      },
-    });
-
-  const status = watch("status");
-
   const form = useForm<AssignRiderField>({
     resolver: zodResolver(assignRiderSchema),
     defaultValues: {
@@ -72,9 +28,7 @@ export function EditOrder({ shipment }: Props) {
     },
   });
 
-  const [updateHistory, { loading }] = useServerAction(updateShipmentHistory);
   const [addRider, { loading: assigningRider }] = useServerAction(assignRider);
-  const router = useRouter();
 
   const assignRiderHandler = async (data: AssignRiderField) => {
     try {
@@ -84,26 +38,6 @@ export function EditOrder({ shipment }: Props) {
         return;
       }
       toast.success("Rider assigned to order");
-    } catch (error) {
-      toast.error(getErrorMessage(error));
-    }
-  };
-
-  const updateHistoryHandler = async (data: UpdateShipmentHistoryField) => {
-    try {
-      const formData = new FormData();
-      formData.append("status", data.status);
-      formData.append("description", data.reason || "");
-      formData.append("photo", data.photo ? data.photo?.[0] : "");
-      formData.append("confirmationCode", data.confirmationCode || "");
-
-      const response = await updateHistory(shipment.id, formData);
-      if (response?.error) {
-        toast.error(response.error);
-        return;
-      }
-      toast.success("Shipment history updated");
-      router.refresh();
     } catch (error) {
       toast.error(getErrorMessage(error));
     }
@@ -146,53 +80,8 @@ export function EditOrder({ shipment }: Props) {
           </div>
         </form>
       </div>
-      <form
-        onSubmit={handleSubmit(updateHistoryHandler)}
-        className="mt-4 flex flex-col gap-4"
-      >
-        <p>Update Order Status</p>
-        <SelectInput
-          options={OrderStatus}
-          control={control}
-          name="status"
-          defaultValue={shipment?.status}
-        />
-
-        {status === ShipmentStatus.FAILED_DELIVERY_ATTEMPT && (
-          <TextField
-            name="reason"
-            control={control}
-            label="Reason"
-            placeholder="Reason"
-            variant="bordered"
-            labelPlacement="outside"
-            radius="sm"
-          />
-        )}
-        {status === ShipmentStatus.DELIVERED && (
-          <TextField
-            name="confirmationCode"
-            control={control}
-            label="Confirmation Code"
-            placeholder="Confirmation Code"
-            variant="bordered"
-            labelPlacement="outside"
-            radius="sm"
-          />
-        )}
-        {status === ShipmentStatus.PICKUP_CONFIRMED && (
-          <FileUpload label="Attach Photo" {...register("photo")} />
-        )}
-        <Button
-          isLoading={loading}
-          type="submit"
-          radius="sm"
-          disableRipple
-          color="primary"
-        >
-          Update Order Status
-        </Button>
-      </form>
+      <p className="mt-5">Update Order Status</p>
+      <UpdateDeliveryStatus shipment={shipment} />
     </div>
   );
 }

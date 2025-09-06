@@ -4,6 +4,14 @@ import EmptyContent from "@/components/shared/EmptyContent";
 import TextField from "@/components/shared/input/TextField";
 import HStack from "@/components/shared/layout/HStack";
 import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { ShipmentStatusOptions } from "@/config/constants/data";
 import { DELIVIRIES_TABLE_COLUMNS } from "@/config/constants/tables";
 import useDebounce from "@/hooks/useDebounce";
 import type { Status } from "@/types";
@@ -39,6 +47,7 @@ export function ShipmentLists({ shipments }: Props) {
   const { control, watch } = useForm();
 
   const debouncedSearch = useDebounce(watch("search"), 500);
+  const [status, setStatus] = useQueryState("status", { shallow: false });
 
   useEffect(() => {
     setQuery(debouncedSearch);
@@ -51,7 +60,7 @@ export function ShipmentLists({ shipments }: Props) {
       </h3>
       <p className="text-gray-400">List of all orders</p>
       <div className="px-2 py-1 border rounded-md my-4 bg-white">
-        <div className="px-2 mb-3">
+        <div className="px-2 mb-3 flex items-center gap-5">
           <TextField
             name="search"
             placeholder="Search"
@@ -62,6 +71,20 @@ export function ShipmentLists({ shipments }: Props) {
             className="md:w-[350px]"
             defaultValue={query ?? ""}
           />
+          <div className="md:w-[350px]">
+            <Select value={status || ""} onValueChange={(e) => setStatus(e)}>
+              <SelectTrigger>
+                <SelectValue placeholder="Select status" />
+              </SelectTrigger>
+              <SelectContent>
+                {ShipmentStatusOptions.map((status) => (
+                  <SelectItem value={status.value} key={status.value}>
+                    {status.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
         </div>
         <Table aria-label="list of shipments" shadow="none" radius="none">
           <TableHeader columns={DELIVIRIES_TABLE_COLUMNS}>

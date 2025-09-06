@@ -92,7 +92,7 @@ interface OrderItemProps {
   value: string;
 }
 
-function OrderItem({ label, value }: OrderItemProps) {
+export function OrderItem({ label, value }: OrderItemProps) {
   return (
     <div>
       <p className="font-semibold text-gray-500 text-sm">{label}</p>

@@ -1,41 +1,61 @@
 "use client";
 import { getShipments } from "@/actions/shipment";
-import { buttonVariants } from "@/components/ui/button";
-import { RiderBookingStatus } from "@/config/constants";
-import { RIDER_DELIVERIES_TABLE_COLUMNS } from "@/config/constants/tables";
-import type { Status } from "@/types";
-import { getShipmentStatusDisplay, getStyleByStatus } from "@/utils/helpers";
+import HStack from "@/components/shared/layout/HStack";
+import { Button } from "@/components/ui/button";
 import {
-  Chip,
-  cn,
-  Tab,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { RiderBookingStatus } from "@/config/constants";
+import { ShipmentStatusOptions } from "@/config/constants/data";
+import { RIDER_DELIVERIES_TABLE_COLUMNS } from "@/config/constants/tables";
+import type { Shipment } from "@/types/shipment";
+import {
+  Drawer,
+  DrawerBody,
+  DrawerContent,
+  DrawerHeader,
   Table,
   TableBody,
   TableCell,
   TableColumn,
   TableHeader,
   TableRow,
-  Tabs,
 } from "@nextui-org/react";
 import { useQuery } from "@tanstack/react-query";
-import Link from "next/link";
 import { parseAsString, useQueryStates } from "nuqs";
+import { useState } from "react";
+import { RiderShipmentSheetContent } from "./RiderShipmentSheetContent";
 
 export function RiderBookingsTable() {
-  const [filters, setFilters] = useQueryStates({
-    status: parseAsString.withDefault(RiderBookingStatus.ASSIGNED),
-  });
+  const [filters, setFilters] = useQueryStates(
+    {
+      status: parseAsString.withDefault(RiderBookingStatus.ASSIGNED),
+      query: parseAsString.withDefault(""),
+      page: parseAsString.withDefault("1"),
+    },
+    { shallow: false }
+  );
+
+  const [selectedOrder, setSelectedShipmentOrder] = useState<Shipment | null>(
+    null
+  );
 
   const { data } = useQuery({
-    queryKey: [filters.status],
-    queryFn: () => getShipments({ status: filters.status }),
+    queryKey: [filters.status, filters.page],
+    queryFn: () => getShipments({ status: filters.status, page: filters.page }),
   });
 
   const shipments = data?.results?.items || [];
 
+  const filteredStatus = ShipmentStatusOptions.filter((s) => !s?.isAdmin);
+
   return (
     <div>
-      <Tabs
+      {/* <Tabs
         variant="underlined"
         aria-label="Tabs variants"
         color="primary"
@@ -55,7 +75,27 @@ export function RiderBookingsTable() {
             className="capitalize pb-0"
           />
         ))}
-      </Tabs>
+      </Tabs> */}
+      <HStack>
+        <div className="md:w-[350px]">
+          {/* <label htmlFor="status">Status</label> */}
+          <Select
+            value={filters.status || ""}
+            onValueChange={(e) => setFilters({ status: e })}
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="Select status" />
+            </SelectTrigger>
+            <SelectContent>
+              {filteredStatus.map((status) => (
+                <SelectItem value={status.value} key={status.value}>
+                  {status.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+      </HStack>
 
       <div className="border rounded-lg bg-white p-4 mt-4 overflow-x-scroll">
         <Table
@@ -93,20 +133,32 @@ export function RiderBookingsTable() {
                   <TableCell>{shipment?.recipientPhone}</TableCell>
 
                   <TableCell>
-                    <Link
-                      className={buttonVariants({
-                        className: "!rounded-full !py-px",
-                      })}
-                      href={`/deliveries/${shipment?.id}`}
+                    <Button
+                      onClick={() => setSelectedShipmentOrder(shipment)}
+                      className="!rounded-full"
                     >
                       View
-                    </Link>
+                    </Button>
                   </TableCell>
                 </TableRow>
               );
             })}
           </TableBody>
         </Table>
+        <Drawer
+          isOpen={selectedOrder != null}
+          onOpenChange={() => setSelectedShipmentOrder(null)}
+          size="2xl"
+        >
+          <DrawerContent>
+            <DrawerHeader className="mb-5">
+              Order: #{selectedOrder?.reference}
+            </DrawerHeader>
+            <DrawerBody className="pt-0">
+              <RiderShipmentSheetContent order={selectedOrder} />
+            </DrawerBody>
+          </DrawerContent>
+        </Drawer>
       </div>
     </div>
   );

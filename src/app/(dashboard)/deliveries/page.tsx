@@ -1,5 +1,3 @@
-import React from "react";
-import { Filters } from "./_sections/Filters";
 import { getShipments } from "@/actions/shipment";
 import WithServerError from "@/components/hoc/WithServerError";
 import { ShipmentLists } from "./_sections/ShipmentLists";
@@ -20,7 +18,7 @@ export default async function DeliveriesPage({ searchParams }: PageProps) {
   return (
     <WithServerError error={error}>
       <div className="bg-gray-50 min-h-screen">
-        <Filters />
+        {/* <Filters /> */}
         <ShipmentLists shipments={results!} />
       </div>
     </WithServerError>

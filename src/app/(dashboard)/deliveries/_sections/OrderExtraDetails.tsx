@@ -5,9 +5,8 @@ import {
   getShipmentStatusDisplay,
 } from "@/utils/helpers";
 import { Tab, Tabs } from "@nextui-org/react";
-import { CheckIcon, HistoryIcon, TruckIcon } from "lucide-react";
+import { HistoryIcon, TruckIcon } from "lucide-react";
 import Image from "next/image";
-import React from "react";
 import { EditOrder } from "./EditOrder";
 
 interface Props {

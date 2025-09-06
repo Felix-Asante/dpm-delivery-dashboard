@@ -4,10 +4,12 @@ export const ShipmentStatusOptions = [
   {
     label: "All",
     value: "all",
+    isAdmin: true,
   },
   {
     label: "Pending",
     value: ShipmentStatus.PENDING,
+    isAdmin: true,
   },
   {
     label: "Delivered",
@@ -29,6 +31,39 @@ export const ShipmentStatusOptions = [
   {
     label: "Rider Assigned",
     value: ShipmentStatus.RIDER_ASSIGNED,
+  },
+  {
+    label: "Returned",
+    value: ShipmentStatus.RETURNED,
+  },
+  {
+    label: "Repackaged",
+    value: ShipmentStatus.REPACKAGED,
+  },
+  {
+    label: "On Hold",
+    value: ShipmentStatus.ON_HOLD,
+  },
+
+  {
+    label: "Ready for Pickup",
+    value: ShipmentStatus.READY_FOR_PICKUP,
+  },
+  {
+    label: "Refunded",
+    value: ShipmentStatus.REFUNDED,
+  },
+  {
+    label: "In Transit",
+    value: ShipmentStatus.IN_TRANSIT,
+  },
+  {
+    label: "Arrived",
+    value: ShipmentStatus.ARRIVED,
+  },
+  {
+    label: "Payment Received",
+    value: ShipmentStatus.PAYMENT_RECEIVED,
   },
 ];
 
