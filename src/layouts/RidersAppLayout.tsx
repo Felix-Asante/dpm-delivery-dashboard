@@ -1,5 +1,5 @@
 import HStack from "@/components/shared/layout/HStack";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import { getCurrentUser } from "@/lib/auth";
 import { UserIcon } from "lucide-react";
 import Link from "next/link";
@@ -26,16 +26,18 @@ export async function RidersAppLayout({ children }: RidersAppLayoutProps) {
               <p className="text-gray-500 text-xs">Riders dashboard</p>
             </div>
 
-            <Link
-              href="/account/settings"
-              className={buttonVariants({
-                variant: "outline",
-                className: "!border-0 !bg-muted !gap-2 !item-center",
-              })}
-            >
-              <UserIcon size={20} />
-              <span>My Profile</span>
-            </Link>
+            <HStack>
+              <Link
+                href="/account/settings"
+                className={buttonVariants({
+                  variant: "outline",
+                  className: "!border-0 !bg-muted !gap-2 !item-center",
+                })}
+              >
+                <UserIcon size={20} />
+                <span>My Profile</span>
+              </Link>
+            </HStack>
           </HStack>
         </nav>
       </header>
