@@ -1,9 +1,9 @@
 import { Shipment } from "@/types/shipment";
 import { getShipmentOptionDisplay } from "@/utils/helpers";
 import { Tab, Tabs } from "@nextui-org/react";
-import { OrderItem } from "../../deliveries/[id]/page";
 import UpdateDeliveryStatus from "../../deliveries/_sections/UpdateDeliveryStatus";
 import { ShipmentStatus } from "@/config/constants";
+import { OrderItem } from "../../deliveries/_sections/OrderItem";
 
 interface Props {
   order: Shipment | null;

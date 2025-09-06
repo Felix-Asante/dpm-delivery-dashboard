@@ -6,6 +6,7 @@ import {
 } from "@/utils/helpers";
 import { Chip } from "@nextui-org/react";
 import OrderExtraDetails from "../_sections/OrderExtraDetails";
+import { OrderItem } from "../_sections/OrderItem";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -84,19 +85,5 @@ export default async function DeliveryDetails({ params }: PageProps) {
         </div>
       </div>
     </WithServerError>
-  );
-}
-
-interface OrderItemProps {
-  label: string;
-  value: string;
-}
-
-export function OrderItem({ label, value }: OrderItemProps) {
-  return (
-    <div>
-      <p className="font-semibold text-gray-500 text-sm">{label}</p>
-      <p className="text-base">{value}</p>
-    </div>
   );
 }
