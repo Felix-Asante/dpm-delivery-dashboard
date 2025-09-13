@@ -42,7 +42,7 @@ export default function RiderDetailsPage({
             </div>
           }
         >
-          <RiderGeneralInformation user={user} />
+          <RiderGeneralInformation user={riderDetails} />
         </Tab>
         <Tab
           key="bike_details"
