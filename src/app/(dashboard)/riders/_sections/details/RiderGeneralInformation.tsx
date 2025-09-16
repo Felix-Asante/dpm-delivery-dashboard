@@ -13,6 +13,7 @@ import { updateUser } from "@/actions/users";
 import { toast } from "sonner";
 import { getErrorMessage } from "@/utils/helpers";
 import FileUpload from "@/components/shared/input/FileUpload";
+import { RiderInfoSecuritySection } from "./RiderInfoSecuritySection";
 
 export default function RiderGeneralInformation({ user }: { user: User }) {
   const form = useForm<UpdateUserFields>({
@@ -127,6 +128,7 @@ export default function RiderGeneralInformation({ user }: { user: User }) {
           </Button>
         </div>
       </form>
+      <RiderInfoSecuritySection user={user} />
     </section>
   );
 }

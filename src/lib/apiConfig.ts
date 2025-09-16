@@ -6,6 +6,8 @@ export const apiConfig = {
   auth: {
     login: () => "auth/login",
     signup: () => "auth/signup",
+    change_password: () => "auth/change-password",
+    change_default_password: () => "auth/change-default-password",
   },
   users: {
     list: (query: Query) => `users${toQuery(query)}`,
