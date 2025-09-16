@@ -73,5 +73,24 @@ export const changePasswordSchema = z
     }
   });
 
+export const changeDefaultPasswordSchema = z
+  .object({
+    currentPassword: passwordValidation,
+    newPassword: passwordValidation,
+    confirmPassword: passwordValidation,
+  })
+  .superRefine((data, ctx) => {
+    if (data.newPassword !== data.confirmPassword) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["confirmPassword"],
+        message: "Passwords do not match",
+      });
+    }
+  });
+
 export type ChangePasswordFields = z.infer<typeof changePasswordSchema>;
+export type ChangeDefaultPasswordFields = z.infer<
+  typeof changeDefaultPasswordSchema
+>;
 export type UpdateUserFields = z.infer<typeof updateUserValidationSchema>;

@@ -8,9 +8,7 @@ import { RidersAppLayout } from "@/layouts/RidersAppLayout";
 
 export default async function DashboardLayout({
   children,
-}: {
-  children?: ReactNode;
-}) {
+}: Readonly<{ children?: ReactNode }>) {
   const isCourier = await checkUserRole(UserRoles.COURIER);
   if (isCourier) return <RidersAppLayout>{children}</RidersAppLayout>;
   return (

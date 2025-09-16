@@ -19,6 +19,7 @@ export interface User {
   adminFor?: Place;
   wallet: Wallet | null;
   rider: RiderInfo;
+  isDefaultPassword: boolean;
 }
 
 export interface Wallet {

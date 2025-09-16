@@ -1,16 +1,22 @@
 import HStack from "@/components/shared/layout/HStack";
 import { buttonVariants } from "@/components/ui/button";
-import { getCurrentUser } from "@/lib/auth";
 import { UserIcon } from "lucide-react";
 import Link from "next/link";
 import React from "react";
+import { getCurrentUser } from "@/lib/auth";
+import { ChangeDefaultPassword } from "@/components/shared/ChangeDefaultPassword";
 
 interface RidersAppLayoutProps {
   children: React.ReactNode;
 }
 
-export async function RidersAppLayout({ children }: RidersAppLayoutProps) {
+export async function RidersAppLayout({
+  children,
+}: Readonly<RidersAppLayoutProps>) {
   const user = await getCurrentUser();
+  if (user?.isDefaultPassword) {
+    return <ChangeDefaultPassword />;
+  }
   return (
     <main className="min-h-screen bg-gray-50">
       <header className="border-b border-boder py-4">
