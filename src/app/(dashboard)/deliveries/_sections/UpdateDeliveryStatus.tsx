@@ -30,6 +30,13 @@ const OrderStatus = [
     show: (role: UserRoles) => role === UserRoles.ADMIN,
   },
   {
+    label: "Out for Delivery",
+    value: ShipmentStatus.OUT_FOR_DELIVERY,
+    key: ShipmentStatus.OUT_FOR_DELIVERY,
+    show: (role: UserRoles) =>
+      [UserRoles.ADMIN, UserRoles.COURIER].includes(role),
+  },
+  {
     label: "Delivered",
     value: ShipmentStatus.DELIVERED,
     key: ShipmentStatus.DELIVERED,
@@ -55,6 +62,12 @@ const OrderStatus = [
     value: ShipmentStatus.PAYMENT_RECEIVED,
     key: ShipmentStatus.PAYMENT_RECEIVED,
     show: (role: UserRoles) => [UserRoles.ADMIN].includes(role),
+  },
+  {
+    label: "Returned",
+    value: ShipmentStatus.RETURNED,
+    key: ShipmentStatus.RETURNED,
+    show: (role: UserRoles) => role === UserRoles.ADMIN,
   },
   {
     label: "Refunded",
