@@ -20,7 +20,22 @@ export interface Shipment {
   reference: string;
   rider: Rider | null;
   history: ShipmentHistory[];
+  shipmentCost: ShipmentCost | null;
 }
+
+export type ShipmentCost = {
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: any;
+  pickupFee: number;
+  deliveryFee: number;
+  riderCommission: number;
+  repackagingFee: number;
+  paid: boolean;
+  includeRepackagingFee: boolean;
+  paidAt: string;
+};
 
 export type ShipmentHistory = {
   id: string;

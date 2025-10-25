@@ -3,9 +3,12 @@
 import { apiConfig } from "@/lib/apiConfig";
 import { apiHandler } from "@/lib/apiHandler";
 import { ResponseMeta, SeverActionResponse } from "@/types";
+import type { SetShipmentCostDto } from "@/types/dtos/shipment.dto";
 import { Shipment } from "@/types/shipment";
 import { Query } from "@/types/url";
 import { getErrorMessage } from "@/utils/helpers";
+import { Tags } from "@/utils/tags";
+import { revalidateTag } from "next/cache";
 
 export interface GetShipmentsResponse {
   meta: ResponseMeta;
@@ -19,6 +22,9 @@ export async function getShipments(
     const results = await apiHandler<GetShipmentsResponse>({
       endpoint,
       method: "GET",
+      next: {
+        tags: [Tags.shipments],
+      },
     });
     return { results };
   } catch (error) {
@@ -74,6 +80,23 @@ export async function assignRider(shipmentId: string, riderId: string) {
       method: "PATCH",
       body: {},
     });
+  } catch (error) {
+    return { error: getErrorMessage(error) };
+  }
+}
+
+export async function setShipmentCost(
+  shipmentId: string,
+  data: SetShipmentCostDto
+) {
+  try {
+    const endpoint = apiConfig.shipments.set_cost(shipmentId);
+    await apiHandler<Shipment>({
+      endpoint,
+      method: "PATCH",
+      body: data,
+    });
+    revalidateTag(Tags.shipments);
   } catch (error) {
     return { error: getErrorMessage(error) };
   }

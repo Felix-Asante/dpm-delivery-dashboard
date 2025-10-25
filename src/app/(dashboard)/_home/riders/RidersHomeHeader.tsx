@@ -5,11 +5,10 @@ import React from "react";
 import { useSession } from "next-auth/react";
 import HStack from "@/components/shared/layout/HStack";
 import { formatCurrency } from "@/utils/helpers";
+import { Wallet } from "@/types/wallet";
 
-export function RidersHomeHeader() {
-  const { data } = useSession();
-
-  const totalBalance = data?.user?.wallet ? +data.user.wallet.balance : 0;
+export function RidersHomeHeader({ wallet }: { wallet?: Wallet }) {
+  const totalBalance = wallet ? +wallet.balance : 0;
 
   return (
     <section>

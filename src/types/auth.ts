@@ -1,4 +1,5 @@
 import { Place } from "./place";
+import type { Wallet } from "./wallet";
 
 export interface User {
   id: string;
@@ -20,15 +21,6 @@ export interface User {
   wallet: Wallet | null;
   rider: RiderInfo;
   isDefaultPassword: boolean;
-}
-
-export interface Wallet {
-  id: string;
-  createdAt: string;
-  updatedAt: string;
-  deletedAt: string;
-  balance: string;
-  totalEarned: string;
 }
 
 export interface RiderInfo {

@@ -10,4 +10,5 @@ export enum Tags {
   variables = "variables",
   riders = "riders",
   rider = "rider",
+  shipments = "shipments",
 }

@@ -14,6 +14,7 @@ import { ShipmentStatusOptions } from "@/config/constants/data";
 import { RIDER_DELIVERIES_TABLE_COLUMNS } from "@/config/constants/tables";
 import type { Shipment } from "@/types/shipment";
 import {
+  Chip,
   Drawer,
   DrawerBody,
   DrawerContent,
@@ -29,11 +30,12 @@ import { useQuery } from "@tanstack/react-query";
 import { parseAsString, useQueryStates } from "nuqs";
 import { useState } from "react";
 import { RiderShipmentSheetContent } from "./RiderShipmentSheetContent";
+import { cn, getStyleByStatus } from "@/utils/helpers";
 
 export function RiderBookingsTable() {
   const [filters, setFilters] = useQueryStates(
     {
-      status: parseAsString.withDefault(RiderBookingStatus.ASSIGNED),
+      status: parseAsString,
       query: parseAsString.withDefault(""),
       page: parseAsString.withDefault("1"),
     },
@@ -46,7 +48,8 @@ export function RiderBookingsTable() {
 
   const { data } = useQuery({
     queryKey: [filters.status, filters.page],
-    queryFn: () => getShipments({ status: filters.status, page: filters.page }),
+    queryFn: () =>
+      getShipments({ status: filters.status ?? "", page: filters.page }),
   });
 
   const shipments = data?.results?.items || [];
@@ -55,30 +58,8 @@ export function RiderBookingsTable() {
 
   return (
     <div>
-      {/* <Tabs
-        variant="underlined"
-        aria-label="Tabs variants"
-        color="primary"
-        classNames={{
-          tabList: "w-full border-b border-divider pb-0",
-          tab: "max-w-fit w-full px-0 pr-4 sm:pr-7",
-          base: "w-full",
-        }}
-        onSelectionChange={(key) =>
-          setFilters({ status: key === "all" ? "" : key.toString() })
-        }
-      >
-        {Object.values(RiderBookingStatus).map((status) => (
-          <Tab
-            key={status}
-            title={status?.replaceAll("_", " ")}
-            className="capitalize pb-0"
-          />
-        ))}
-      </Tabs> */}
       <HStack>
         <div className="md:w-[350px]">
-          {/* <label htmlFor="status">Status</label> */}
           <Select
             value={filters.status || ""}
             onValueChange={(e) => setFilters({ status: e })}
@@ -131,6 +112,15 @@ export function RiderBookingsTable() {
 
                   <TableCell>{shipment?.senderPhone}</TableCell>
                   <TableCell>{shipment?.recipientPhone}</TableCell>
+                  <TableCell>
+                    <Chip
+                      variant="dot"
+                      className={cn("capitalize")}
+                      classNames={getStyleByStatus(shipment?.status)}
+                    >
+                      {shipment?.status}
+                    </Chip>
+                  </TableCell>
 
                   <TableCell>
                     <Button

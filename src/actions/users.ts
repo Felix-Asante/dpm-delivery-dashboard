@@ -7,6 +7,7 @@ import { CountResponse, ResponseMeta, SeverActionResponse } from "@/types";
 import { User } from "@/types/auth";
 import { CreateUserDto } from "@/types/dtos/users";
 import { Query } from "@/types/url";
+import type { Wallet } from "@/types/wallet";
 import { getErrorMessage } from "@/utils/helpers";
 import { Tags } from "@/utils/tags";
 import { revalidateTag } from "next/cache";
@@ -74,6 +75,19 @@ export async function updateUser(userId: string, data: FormData) {
       body: data,
     });
     revalidateTag(Tags.users);
+  } catch (error) {
+    return { error: getErrorMessage(error) };
+  }
+}
+
+export async function getUserWallet(): Promise<SeverActionResponse<Wallet>> {
+  try {
+    const endpoint = apiConfig.users.wallet();
+    const wallet = await apiHandler<Wallet>({
+      endpoint,
+      method: "GET",
+    });
+    return { results: wallet };
   } catch (error) {
     return { error: getErrorMessage(error) };
   }

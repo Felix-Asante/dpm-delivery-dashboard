@@ -6,6 +6,7 @@ import { Alert } from "@nextui-org/react";
 import { Suspense } from "react";
 import { RiderBookingsTable } from "./riders/RiderBookingsTable";
 import { RidersHomeHeader } from "./riders/RidersHomeHeader";
+import { getUserWallet } from "@/actions/users";
 
 export async function RidersHomeView() {
   const user = await getCurrentUser();
@@ -14,9 +15,13 @@ export async function RidersHomeView() {
     return;
   }
 
-  const [stats] = await Promise.all([getRiderStats(user?.rider?.id)]);
+  const [stats, walletResponse] = await Promise.all([
+    getRiderStats(user?.rider?.id),
+    getUserWallet(),
+  ]);
 
-  const totalRevenue = user?.wallet ? +user.wallet.totalEarned : 0;
+  const wallet = walletResponse?.results;
+  const totalRevenue = wallet?.totalEarned ? +wallet.totalEarned : 0;
   const totalAssignedOrders = stats?.results?.total_orders_assigned || 0;
 
   const STATS = [
@@ -51,7 +56,7 @@ export async function RidersHomeView() {
           title={`You have ${totalAssignedOrders} orders assigned to you`}
         />
       ) : null}
-      <RidersHomeHeader />
+      <RidersHomeHeader wallet={wallet} />
       <div className="mt-7">
         <h4 className="font-semibold text-lg">My stats</h4>
         <ScrollArea className="!w-full whitespace-nowrap">

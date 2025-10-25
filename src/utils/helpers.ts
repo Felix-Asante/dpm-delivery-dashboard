@@ -139,6 +139,7 @@ export function getStyleByStatus(status: Status) {
       return { base: "border border-2 border-secondary", dot: "bg-secondary" };
 
     case BookingStatus.DELIVERED:
+    case ShipmentStatus.DELIVERED:
       return { base: "border border-2 border-success", dot: "bg-success" };
 
     default:

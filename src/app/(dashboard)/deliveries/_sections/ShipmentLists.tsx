@@ -3,6 +3,7 @@ import { GetShipmentsResponse } from "@/actions/shipment";
 import EmptyContent from "@/components/shared/EmptyContent";
 import TextField from "@/components/shared/input/TextField";
 import HStack from "@/components/shared/layout/HStack";
+import Modal from "@/components/shared/modal";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -15,6 +16,7 @@ import { ShipmentStatusOptions } from "@/config/constants/data";
 import { DELIVIRIES_TABLE_COLUMNS } from "@/config/constants/tables";
 import useDebounce from "@/hooks/useDebounce";
 import type { Status } from "@/types";
+import type { Shipment } from "@/types/shipment";
 import {
   cn,
   getShipmentStatusDisplay,
@@ -33,8 +35,16 @@ import {
 } from "@nextui-org/react";
 import Link from "next/link";
 import { useQueryState } from "nuqs";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import AddDeliveryCostForm from "./AddDeliveryCostForm";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 interface Props {
   shipments: GetShipmentsResponse;
@@ -42,12 +52,16 @@ interface Props {
 
 export function ShipmentLists({ shipments }: Props) {
   const { meta } = shipments;
-  const [page, setPage] = useQueryState("page");
+  const [page, setPage] = useQueryState("page", { shallow: false });
   const [query, setQuery] = useQueryState("query", { shallow: false });
   const { control, watch } = useForm();
 
   const debouncedSearch = useDebounce(watch("search"), 500);
   const [status, setStatus] = useQueryState("status", { shallow: false });
+
+  const [selectedShipment, setSelectedShipment] = useState<Shipment | null>(
+    null
+  );
 
   useEffect(() => {
     setQuery(debouncedSearch);
@@ -130,16 +144,26 @@ export function ShipmentLists({ shipments }: Props) {
                   <TableCell>{shipment?.recipientPhone}</TableCell>
 
                   <TableCell>
-                    <Link href={`/deliveries/${shipment?.id}`}>
+                    <div className="flex items-center gap-2">
                       <Button
-                        variant="default"
-                        color="primary"
+                        variant="secondary"
                         size="sm"
                         className="text-xs rounded-full"
+                        onClick={() => setSelectedShipment(shipment)}
                       >
-                        View
+                        Set fee
                       </Button>
-                    </Link>
+                      <Link href={`/deliveries/${shipment?.id}`}>
+                        <Button
+                          variant="default"
+                          color="primary"
+                          size="sm"
+                          className="text-xs rounded-full"
+                        >
+                          View
+                        </Button>
+                      </Link>
+                    </div>
                   </TableCell>
                 </TableRow>
               );
@@ -158,6 +182,26 @@ export function ShipmentLists({ shipments }: Props) {
           />
         </HStack>
       )}
+
+      <Dialog
+        open={!!selectedShipment}
+        onOpenChange={() => setSelectedShipment(null)}
+      >
+        <DialogContent className="max-w-2xl">
+          <DialogHeader className="mb-5">
+            <DialogTitle>Add Delivery Cost</DialogTitle>
+            <DialogDescription>
+              Define and manage the cost details associated with a shipment,
+              including pickup, delivery, rider commission, and optional
+              repackaging fees
+            </DialogDescription>
+          </DialogHeader>
+          <AddDeliveryCostForm
+            shipment={selectedShipment!}
+            onSuccess={() => setSelectedShipment(null)}
+          />
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

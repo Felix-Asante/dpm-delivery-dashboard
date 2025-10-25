@@ -28,6 +28,10 @@ export const RIDER_DELIVERIES_TABLE_COLUMNS = [
     key: "recipientPhone",
     label: "Recipient Phone",
   },
+  {
+    key: "status",
+    label: "Status",
+  },
 
   {
     key: "",

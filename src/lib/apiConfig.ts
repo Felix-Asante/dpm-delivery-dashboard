@@ -16,6 +16,7 @@ export const apiConfig = {
     delete: (userId: string) => `users/${userId}`,
     count: () => `users/count`,
     get: (userId: string) => `users/${userId}`,
+    wallet: () => `users/wallet`,
   },
   places: {
     create: () => `places`,
@@ -102,5 +103,6 @@ export const apiConfig = {
       `shipping/${shipmentId}/assign-rider/${riderId}`,
     get_by_rider: (riderId: string, query: Query) =>
       `shipping/riders/${riderId}${toQuery(query)}`,
+    set_cost: (shipmentId: string) => `shipping/${shipmentId}/set-cost`,
   },
 };
