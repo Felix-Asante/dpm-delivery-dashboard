@@ -17,6 +17,8 @@ export const apiConfig = {
     count: () => `users/count`,
     get: (userId: string) => `users/${userId}`,
     wallet: () => `users/wallet`,
+    transactions: (query: Query) =>
+      `users/wallet/transactions${toQuery(query)}`,
   },
   places: {
     create: () => `places`,

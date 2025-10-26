@@ -75,3 +75,10 @@ export const DAYS_OF_WEEK = [
   "Saturday",
   "Sunday",
 ];
+
+export enum WalletTransactionTypes {
+  PAYMENT_RECEIVED = "payment_received",
+  WITHDRAWAL = "withdrawal",
+  DEBIT = "debit",
+  ADJUSTMENT = "adjustment",
+}

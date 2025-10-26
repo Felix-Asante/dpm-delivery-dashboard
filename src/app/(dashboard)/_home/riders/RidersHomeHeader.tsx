@@ -1,11 +1,12 @@
 "use client";
 import { DEFAULT_CURRENCY } from "@/config/constants";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import React from "react";
 import { useSession } from "next-auth/react";
 import HStack from "@/components/shared/layout/HStack";
 import { formatCurrency } from "@/utils/helpers";
 import { Wallet } from "@/types/wallet";
+import Link from "next/link";
 
 export function RidersHomeHeader({ wallet }: { wallet?: Wallet }) {
   const totalBalance = wallet ? +wallet.balance : 0;
@@ -19,9 +20,14 @@ export function RidersHomeHeader({ wallet }: { wallet?: Wallet }) {
       </h3>
       <HStack>
         <Button className="rounded-full">Request withdraw</Button>
-        <Button className="bg-muted hover:bg-muted text-black rounded-full">
+        <Link
+          href="/transactions"
+          className={buttonVariants({
+            className: "!bg-muted !hover:bg-muted !text-black !rounded-full",
+          })}
+        >
           View transactions
-        </Button>
+        </Link>
       </HStack>
     </section>
   );
