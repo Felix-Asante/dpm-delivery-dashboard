@@ -11,4 +11,5 @@ export enum Tags {
   riders = "riders",
   rider = "rider",
   shipments = "shipments",
+  riderStats = "riderStats",
 }

@@ -79,6 +79,7 @@ export async function getRiderStats(id: string) {
     const stats = await apiHandler<RiderStats>({
       endpoint,
       method: "GET",
+      next: { tags: [Tags.riderStats] },
     });
     return { results: stats };
   } catch (error) {

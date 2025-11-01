@@ -21,7 +21,7 @@ import { useQueryClient } from "@tanstack/react-query";
 
 interface Props {
   shipment: Shipment;
-  onSuccess: () => void;
+  onSuccess?: () => void;
 }
 
 const OrderStatus = [
@@ -150,7 +150,7 @@ export default function UpdateDeliveryStatus({ shipment, onSuccess }: Props) {
       }
       toast.success("Shipment history updated");
       router.refresh();
-      onSuccess();
+      onSuccess?.();
     } catch (error) {
       toast.error(getErrorMessage(error));
     }
