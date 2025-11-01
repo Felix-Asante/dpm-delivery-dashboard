@@ -14,6 +14,7 @@ import { Button } from "@nextui-org/react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import UpdateDeliveryStatus from "./UpdateDeliveryStatus";
+import { ShipmentStatus } from "@/config/constants";
 
 interface Props {
   shipment: Shipment;
@@ -42,6 +43,10 @@ export function EditOrder({ shipment }: Props) {
       toast.error(getErrorMessage(error));
     }
   };
+
+  if (shipment.status === ShipmentStatus.DELIVERED) {
+    return <OrderDeliveredView shipment={shipment} />;
+  }
 
   return (
     <div className="mt-5">
@@ -82,6 +87,15 @@ export function EditOrder({ shipment }: Props) {
       </div>
       <p className="mt-5">Update Order Status</p>
       <UpdateDeliveryStatus shipment={shipment} />
+    </div>
+  );
+}
+
+function OrderDeliveredView({ shipment }: { shipment: Shipment }) {
+  return (
+    <div>
+      <p className="text-sm font-semibold">Assigned Rider</p>
+      <p className="text-sm text-gray-500">{shipment?.rider?.fullName}</p>
     </div>
   );
 }

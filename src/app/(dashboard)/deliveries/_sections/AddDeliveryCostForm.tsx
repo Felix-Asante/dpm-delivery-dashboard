@@ -14,6 +14,7 @@ import { toast } from "sonner";
 import { getErrorMessage } from "@/utils/helpers";
 import { useServerAction } from "@/hooks/useServerAction";
 import { setShipmentCost } from "@/actions/shipment";
+import { ShipmentStatus } from "@/config/constants";
 
 interface Props {
   shipment: Shipment;
@@ -39,6 +40,11 @@ export default function AddDeliveryCostForm({ shipment, onSuccess }: Props) {
 
   const includeRepackagingFee = form.watch("includeRepackagingFee");
   const paid = form.watch("paid");
+
+  const isReadOnly =
+    shipment?.status === ShipmentStatus.DELIVERED ||
+    shipment?.shipmentCost?.paid ||
+    shipment?.status === ShipmentStatus.OUT_FOR_DELIVERY;
 
   const onSubmit = async (data: AddDeliveryCostInput) => {
     try {
@@ -81,6 +87,7 @@ export default function AddDeliveryCostForm({ shipment, onSuccess }: Props) {
           placeholder="Cost of collecting the package from the sender"
           variant="bordered"
           labelPlacement="outside"
+          disabled={isReadOnly}
         />
         <TextField
           name="deliveryCost"
@@ -92,6 +99,7 @@ export default function AddDeliveryCostForm({ shipment, onSuccess }: Props) {
           min={0}
           variant="bordered"
           labelPlacement="outside"
+          disabled={isReadOnly}
         />
         <TextField
           name="riderCommission"
@@ -104,6 +112,7 @@ export default function AddDeliveryCostForm({ shipment, onSuccess }: Props) {
           min={0}
           variant="bordered"
           labelPlacement="outside"
+          disabled={isReadOnly}
         />
         <HStack>
           <Controller
@@ -114,12 +123,15 @@ export default function AddDeliveryCostForm({ shipment, onSuccess }: Props) {
                 id="includeRepackagingFee"
                 isSelected={field.value}
                 onValueChange={(state) => {
+                  if (isReadOnly) return;
                   field.onChange(state);
                   if (!state) {
                     form.setValue("repackagingFee", undefined);
                   }
                 }}
                 onBlur={field.onBlur}
+                disabled={isReadOnly}
+                readOnly={isReadOnly}
               >
                 Include repackaging fee?
               </Checkbox>
@@ -133,12 +145,15 @@ export default function AddDeliveryCostForm({ shipment, onSuccess }: Props) {
                 id="paid"
                 isSelected={field.value}
                 onValueChange={(state) => {
+                  if (isReadOnly) return;
                   field.onChange(state);
                   if (!state) {
                     form.setValue("paidAt", undefined);
                   }
                 }}
                 onBlur={field.onBlur}
+                disabled={isReadOnly}
+                readOnly={isReadOnly}
               >
                 Paid?
               </Checkbox>
@@ -156,6 +171,7 @@ export default function AddDeliveryCostForm({ shipment, onSuccess }: Props) {
             min={0}
             variant="bordered"
             labelPlacement="outside"
+            disabled={isReadOnly}
           />
         )}
         {paid && (
@@ -164,17 +180,20 @@ export default function AddDeliveryCostForm({ shipment, onSuccess }: Props) {
             control={form.control}
             label="Paid At"
             maxDate={new Date()}
+            disabled={isReadOnly}
           />
         )}
       </div>
-      <Button
-        isLoading={addingCost}
-        color="primary"
-        type="submit"
-        className="mt-5"
-      >
-        Save cost details
-      </Button>
+      {!isReadOnly ? (
+        <Button
+          isLoading={addingCost}
+          color="primary"
+          type="submit"
+          className="mt-5"
+        >
+          Save cost details
+        </Button>
+      ) : null}
     </form>
   );
 }

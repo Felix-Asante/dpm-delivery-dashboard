@@ -8,6 +8,7 @@ import { Tab, Tabs } from "@nextui-org/react";
 import { HistoryIcon, TruckIcon } from "lucide-react";
 import Image from "next/image";
 import { EditOrder } from "./EditOrder";
+import AddDeliveryCostForm from "./AddDeliveryCostForm";
 
 interface Props {
   shipment: Shipment;
@@ -28,6 +29,17 @@ export default function OrderExtraDetails({ shipment }: Props) {
         color="primary"
         variant="underlined"
       >
+        <Tab
+          key="delivery_fees"
+          title={
+            <div className="flex items-center space-x-2">
+              <HistoryIcon size={20} />
+              <span>Delivery Fees</span>
+            </div>
+          }
+        >
+          <AddDeliveryCostForm shipment={shipment} />
+        </Tab>
         <Tab
           key="information"
           title={

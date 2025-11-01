@@ -23,6 +23,7 @@ interface DatePickerProps {
   name: string;
   minDate?: Date;
   maxDate?: Date;
+  disabled?: boolean;
 }
 export function DatePicker(props: DatePickerProps) {
   const {
@@ -33,6 +34,7 @@ export function DatePicker(props: DatePickerProps) {
     name,
     minDate,
     maxDate,
+    disabled,
   } = props;
   const [date, setDate] = useState<Date>();
 
@@ -46,7 +48,7 @@ export function DatePicker(props: DatePickerProps) {
     <div>
       <FormControl.Label className="mb-1">{label}</FormControl.Label>
       <Popover>
-        <PopoverTrigger asChild>
+        <PopoverTrigger disabled={disabled} asChild>
           <Button
             variant={"outline"}
             className={cn(
@@ -70,6 +72,7 @@ export function DatePicker(props: DatePickerProps) {
             initialFocus
             fromDate={minDate}
             toDate={maxDate}
+            disabled={disabled}
           />
         </PopoverContent>
       </Popover>
