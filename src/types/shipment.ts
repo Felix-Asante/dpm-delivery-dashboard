@@ -35,6 +35,7 @@ export type ShipmentCost = {
   paid: boolean;
   includeRepackagingFee: boolean;
   paidAt: string;
+  totalCost: number;
 };
 
 export type ShipmentHistory = {

@@ -9,6 +9,8 @@ import { HistoryIcon, TruckIcon } from "lucide-react";
 import Image from "next/image";
 import { EditOrder } from "./EditOrder";
 import AddDeliveryCostForm from "./AddDeliveryCostForm";
+import { useSession } from "next-auth/react";
+import { UserRoles } from "@/config/constants";
 
 interface Props {
   shipment: Shipment;
@@ -68,6 +70,11 @@ export default function OrderExtraDetails({ shipment }: Props) {
 }
 
 function OrderHistory({ history }: { history: ShipmentHistory[] }) {
+  const { data: session } = useSession();
+  const role = session?.user?.role.name as UserRoles;
+
+  const isAdmin = role === UserRoles.ADMIN;
+
   return (
     <ol className="relative border-l border-gray-200 mt-3">
       {history.map((item, index) => {
@@ -85,7 +92,7 @@ function OrderHistory({ history }: { history: ShipmentHistory[] }) {
             <div className="px-4">
               <div className="mb-2">
                 <h3 className="font-medium text-primary">
-                  {getShipmentStatusDisplay(item.status)}
+                  {getShipmentStatusDisplay(item.status, isAdmin)}
                 </h3>
                 <time className="text-sm font-normal text-gray-500">
                   {item.createdAt

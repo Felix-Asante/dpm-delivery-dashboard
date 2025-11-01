@@ -45,6 +45,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { useSession } from "next-auth/react";
+import { UserRoles } from "@/config/constants";
 
 interface Props {
   shipments: GetShipmentsResponse;
@@ -66,6 +68,11 @@ export function ShipmentLists({ shipments }: Props) {
   useEffect(() => {
     setQuery(debouncedSearch);
   }, [debouncedSearch]);
+
+  const { data: session } = useSession();
+  const role = session?.user?.role.name as UserRoles;
+
+  const isAdmin = role === UserRoles.ADMIN;
 
   return (
     <div className="p-4">
@@ -137,7 +144,7 @@ export function ShipmentLists({ shipments }: Props) {
                       className={cn("capitalize")}
                       classNames={getStyleByStatus(shipment?.status as Status)}
                     >
-                      {getShipmentStatusDisplay(shipment?.status)}
+                      {getShipmentStatusDisplay(shipment?.status, isAdmin)}
                     </Chip>
                   </TableCell>
                   <TableCell>{shipment?.senderPhone}</TableCell>

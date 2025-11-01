@@ -7,6 +7,8 @@ import {
 import { Chip } from "@nextui-org/react";
 import OrderExtraDetails from "../_sections/OrderExtraDetails";
 import { OrderItem } from "../_sections/OrderItem";
+import { UserRoles } from "@/config/constants";
+import { checkUserRole } from "@/lib/auth";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -16,6 +18,8 @@ export default async function DeliveryDetails({ params }: PageProps) {
   const { results, error } = await getShipmentById(id);
 
   const shipment = results!;
+
+  const isAdmin = await checkUserRole(UserRoles.ADMIN);
 
   return (
     <WithServerError error={error}>
@@ -75,7 +79,7 @@ export default async function DeliveryDetails({ params }: PageProps) {
                   Status
                 </p>
                 <Chip color="primary">
-                  {getShipmentStatusDisplay(shipment.status)}
+                  {getShipmentStatusDisplay(shipment.status, isAdmin)}
                 </Chip>
               </div>
             </div>

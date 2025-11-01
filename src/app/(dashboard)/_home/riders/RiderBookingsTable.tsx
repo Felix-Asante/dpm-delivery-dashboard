@@ -9,7 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { RiderBookingStatus } from "@/config/constants";
+import { UserRoles } from "@/config/constants";
 import { ShipmentStatusOptions } from "@/config/constants/data";
 import { RIDER_DELIVERIES_TABLE_COLUMNS } from "@/config/constants/tables";
 import type { Shipment } from "@/types/shipment";
@@ -26,11 +26,16 @@ import {
   TableHeader,
   TableRow,
 } from "@nextui-org/react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { parseAsString, useQueryStates } from "nuqs";
 import { useState } from "react";
 import { RiderShipmentSheetContent } from "./RiderShipmentSheetContent";
-import { cn, getStyleByStatus } from "@/utils/helpers";
+import {
+  cn,
+  getShipmentStatusDisplay,
+  getStyleByStatus,
+} from "@/utils/helpers";
+import { useSession } from "next-auth/react";
 
 export function RiderBookingsTable() {
   const [filters, setFilters] = useQueryStates(
@@ -52,9 +57,16 @@ export function RiderBookingsTable() {
       getShipments({ status: filters.status ?? "", page: filters.page }),
   });
 
+  const queryClient = useQueryClient();
+
   const shipments = data?.results?.items || [];
 
   const filteredStatus = ShipmentStatusOptions.filter((s) => !s?.isAdmin);
+
+  const { data: session } = useSession();
+  const role = session?.user?.role.name as UserRoles;
+
+  const isAdmin = role === UserRoles.ADMIN;
 
   return (
     <div>
@@ -118,7 +130,7 @@ export function RiderBookingsTable() {
                       className={cn("capitalize")}
                       classNames={getStyleByStatus(shipment?.status)}
                     >
-                      {shipment?.status}
+                      {getShipmentStatusDisplay(shipment?.status, isAdmin)}
                     </Chip>
                   </TableCell>
 
@@ -145,7 +157,15 @@ export function RiderBookingsTable() {
               Order: #{selectedOrder?.reference}
             </DrawerHeader>
             <DrawerBody className="pt-0">
-              <RiderShipmentSheetContent order={selectedOrder} />
+              <RiderShipmentSheetContent
+                order={selectedOrder}
+                onClose={() => {
+                  setSelectedShipmentOrder(null);
+                  queryClient.invalidateQueries({
+                    queryKey: [filters.status, filters.page],
+                  });
+                }}
+              />
             </DrawerBody>
           </DrawerContent>
         </Drawer>

@@ -7,19 +7,21 @@ import {
 } from "@/rules/validations/shipment";
 import React from "react";
 import { toast } from "sonner";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { updateShipmentHistory } from "@/actions/shipment";
-import { getErrorMessage } from "@/utils/helpers";
+import { getErrorMessage, getShipmentStatusDisplay } from "@/utils/helpers";
 import { useRouter } from "next/navigation";
 import type { Shipment } from "@/types/shipment";
 import { useServerAction } from "@/hooks/useServerAction";
 import FileUpload from "@/components/shared/input/FileUpload";
-import { Button } from "@nextui-org/react";
+import { Button, Checkbox } from "@nextui-org/react";
 import { useSession } from "next-auth/react";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface Props {
   shipment: Shipment;
+  onSuccess: () => void;
 }
 
 const OrderStatus = [
@@ -119,7 +121,7 @@ const canAddReasons = [
   ShipmentStatus.ON_HOLD,
 ];
 
-export default function UpdateDeliveryStatus({ shipment }: Props) {
+export default function UpdateDeliveryStatus({ shipment, onSuccess }: Props) {
   const router = useRouter();
   const { control, handleSubmit, watch, register } =
     useForm<UpdateShipmentHistoryField>({
@@ -139,6 +141,7 @@ export default function UpdateDeliveryStatus({ shipment }: Props) {
       formData.append("description", data.reason || "");
       formData.append("photo", data.photo ? data.photo?.[0] : "");
       formData.append("confirmationCode", data.confirmationCode || "");
+      formData.append("isPaid", data.paid === true ? "true" : "false");
 
       const response = await updateHistory(shipment.id, formData);
       if (response?.error) {
@@ -147,6 +150,7 @@ export default function UpdateDeliveryStatus({ shipment }: Props) {
       }
       toast.success("Shipment history updated");
       router.refresh();
+      onSuccess();
     } catch (error) {
       toast.error(getErrorMessage(error));
     }
@@ -157,11 +161,57 @@ export default function UpdateDeliveryStatus({ shipment }: Props) {
 
   const filteredStatus = OrderStatus.filter((order) => order.show(role));
 
+  const currentStatusLabel = getShipmentStatusDisplay(
+    shipment?.status,
+    role === UserRoles.ADMIN
+  );
+
+  const getStatusColor = (status: string) => {
+    const colorMap: Record<string, string> = {
+      [ShipmentStatus.DELIVERED]: "bg-green-50 text-green-700 border-green-200",
+      [ShipmentStatus.OUT_FOR_DELIVERY]:
+        "bg-blue-50 text-blue-700 border-blue-200",
+      [ShipmentStatus.IN_TRANSIT]: "bg-blue-50 text-blue-700 border-blue-200",
+      [ShipmentStatus.PENDING]:
+        "bg-yellow-50 text-yellow-700 border-yellow-200",
+      [ShipmentStatus.FAILED_DELIVERY_ATTEMPT]:
+        "bg-red-50 text-red-700 border-red-200",
+      [ShipmentStatus.RETURNED]:
+        "bg-orange-50 text-orange-700 border-orange-200",
+      [ShipmentStatus.ON_HOLD]:
+        "bg-orange-50 text-orange-700 border-orange-200",
+      [ShipmentStatus.PAYMENT_RECEIVED]:
+        "bg-green-50 text-green-700 border-green-200",
+      [ShipmentStatus.REFUNDED]: "bg-gray-50 text-gray-700 border-gray-200",
+      [ShipmentStatus.PICKUP_CONFIRMED]:
+        "bg-teal-50 text-teal-700 border-teal-200",
+      [ShipmentStatus.READY_FOR_PICKUP]:
+        "bg-purple-50 text-purple-700 border-purple-200",
+      [ShipmentStatus.REPACKAGED]:
+        "bg-indigo-50 text-indigo-700 border-indigo-200",
+      [ShipmentStatus.ARRIVED]: "bg-cyan-50 text-cyan-700 border-cyan-200",
+    };
+    return colorMap[status] || "bg-gray-50 text-gray-700 border-gray-200";
+  };
+
   return (
     <form
       onSubmit={handleSubmit(updateHistoryHandler)}
       className="mt-4 flex flex-col gap-4"
     >
+      <div className="rounded-lg border-2 bg-gradient-to-br from-gray-50 to-gray-100/50 p-4">
+        <div className="mb-2 text-sm font-medium text-gray-600">
+          Current Status
+        </div>
+        <div
+          className={`inline-flex items-center rounded-md border-2 px-4 py-2 text-sm font-semibold shadow-sm ${getStatusColor(
+            shipment?.status
+          )}`}
+        >
+          {currentStatusLabel}
+        </div>
+      </div>
+
       <SelectInput
         options={filteredStatus}
         control={control}
@@ -183,15 +233,34 @@ export default function UpdateDeliveryStatus({ shipment }: Props) {
         />
       )}
       {status === ShipmentStatus.DELIVERED && (
-        <TextField
-          name="confirmationCode"
-          control={control}
-          label="Confirmation Code"
-          placeholder="Confirmation Code"
-          variant="bordered"
-          labelPlacement="outside"
-          radius="sm"
-        />
+        <>
+          <TextField
+            name="confirmationCode"
+            control={control}
+            label="Confirmation Code"
+            placeholder="Confirmation Code"
+            variant="bordered"
+            labelPlacement="outside"
+            radius="sm"
+          />
+
+          <Controller
+            name="paid"
+            control={control}
+            render={({ field }) => (
+              <Checkbox
+                id="paid"
+                isSelected={field.value}
+                onValueChange={(state) => {
+                  field.onChange(state);
+                }}
+                onBlur={field.onBlur}
+              >
+                Has the order been paid?
+              </Checkbox>
+            )}
+          />
+        </>
       )}
       {status === ShipmentStatus.PICKUP_CONFIRMED && (
         <FileUpload label="Attach Photo" {...register("photo")} />

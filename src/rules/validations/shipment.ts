@@ -7,6 +7,7 @@ export const updateShipmentHistorySchema = z
     reason: z.string().optional(),
     confirmationCode: z.string().min(4).max(4).optional(),
     photo: z.any().optional(),
+    paid: z.boolean().optional(),
   })
   .superRefine((data, ctx) => {
     if (

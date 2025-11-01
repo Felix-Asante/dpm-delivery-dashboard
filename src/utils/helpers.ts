@@ -186,7 +186,7 @@ export function formatCurrency(
   return formatter.format(amount);
 }
 
-export function getShipmentStatusDisplay(status: string) {
+export function getShipmentStatusDisplay(status: string, isAdmin?: boolean) {
   if (status === ShipmentStatus.OUT_FOR_DELIVERY) {
     return "Out for Delivery";
   } else if (status === ShipmentStatus.FAILED_DELIVERY_ATTEMPT) {
@@ -194,13 +194,13 @@ export function getShipmentStatusDisplay(status: string) {
   } else if (status === ShipmentStatus.DELIVERED) {
     return "Delivered";
   } else if (status === ShipmentStatus.RIDER_REASSIGNED) {
-    return "Rider Reassigned";
+    return isAdmin ? "Rider Reassigned" : "Assigned";
   } else if (status === ShipmentStatus.PICKUP_CONFIRMED) {
     return "Pickup Confirmed";
   } else if (status === ShipmentStatus.PENDING) {
     return "Pending";
   } else if (status === ShipmentStatus.RIDER_ASSIGNED) {
-    return "Rider Assigned";
+    return isAdmin ? "Rider Assigned" : "Assigned";
   }
   return status;
 }
