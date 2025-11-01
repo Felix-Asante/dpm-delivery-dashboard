@@ -11,12 +11,12 @@ import { getUserWallet } from "@/actions/users";
 export async function RidersHomeView() {
   const user = await getCurrentUser();
 
-  if (!user?.rider?.id) {
+  if (!user?.id) {
     return;
   }
 
   const [stats, walletResponse] = await Promise.all([
-    getRiderStats(user?.rider?.id),
+    getRiderStats(user?.id),
     getUserWallet(),
   ]);
 

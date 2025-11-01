@@ -2,8 +2,9 @@ import { Shipment } from "@/types/shipment";
 import { getShipmentOptionDisplay } from "@/utils/helpers";
 import { Tab, Tabs, Card, CardBody } from "@nextui-org/react";
 import UpdateDeliveryStatus from "../../deliveries/_sections/UpdateDeliveryStatus";
-import { ShipmentStatus } from "@/config/constants";
+import { DEFAULT_CURRENCY, ShipmentStatus } from "@/config/constants";
 import { OrderItem } from "../../deliveries/_sections/OrderItem";
+import Image from "next/image";
 
 interface Props {
   order: Shipment | null;
@@ -25,6 +26,8 @@ export function RiderShipmentSheetContent({ order, onClose }: Props) {
 
   const isPaid = order.shipmentCost?.paid ?? false;
 
+  const isDelivered = order.status === ShipmentStatus.DELIVERED;
+
   return (
     <div>
       {/* Rider Payment Card */}
@@ -42,9 +45,10 @@ export function RiderShipmentSheetContent({ order, onClose }: Props) {
               </p>
               <div className="flex items-baseline gap-2">
                 <span className="text-4xl font-bold text-primary">
-                  ₵{riderAmount.toFixed(2)}
+                  {DEFAULT_CURRENCY.symbol}
+                  {parseFloat(riderAmount.toFixed(2))}
                 </span>
-                <span className="text-sm text-default-400">GHS</span>
+                {/* <span className="text-sm text-default-400">GHS</span> */}
               </div>
             </div>
             <div className="flex flex-col items-end gap-2">
@@ -67,6 +71,17 @@ export function RiderShipmentSheetContent({ order, onClose }: Props) {
           </div>
         </CardBody>
       </Card>
+
+      {isDelivered && (
+        <div className="flex  my-5">
+          <Image
+            src="/images/delivered-logo.jpeg"
+            alt="delivered"
+            width={100}
+            height={100}
+          />
+        </div>
+      )}
       <Tabs
         classNames={{
           base: "w-full mb-5",

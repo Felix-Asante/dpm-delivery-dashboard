@@ -14,7 +14,7 @@ import { toast } from "sonner";
 import { getErrorMessage } from "@/utils/helpers";
 import { useServerAction } from "@/hooks/useServerAction";
 import { setShipmentCost } from "@/actions/shipment";
-import { ShipmentStatus } from "@/config/constants";
+import { DEFAULT_CURRENCY, ShipmentStatus } from "@/config/constants";
 
 interface Props {
   shipment: Shipment;
@@ -41,10 +41,22 @@ export default function AddDeliveryCostForm({ shipment, onSuccess }: Props) {
   const includeRepackagingFee = form.watch("includeRepackagingFee");
   const paid = form.watch("paid");
 
+  const pickupCost = Number(form.watch("pickupCost") || 0);
+  const deliveryCost = Number(form.watch("deliveryCost") || 0);
+  const riderCommission = Math.min(
+    Number(form.watch("riderCommission") || 0),
+    100
+  );
+  const repackagingFee = Number(form.watch("repackagingFee") || 0);
+
+  const totalCost = pickupCost + deliveryCost + repackagingFee;
+  const ridersCommission = totalCost * (riderCommission / 100);
+
   const isReadOnly =
     shipment?.status === ShipmentStatus.DELIVERED ||
-    shipment?.shipmentCost?.paid ||
-    shipment?.status === ShipmentStatus.OUT_FOR_DELIVERY;
+    shipment?.shipmentCost?.paid;
+  // ||
+  // shipment?.status === ShipmentStatus.OUT_FOR_DELIVERY;
 
   const onSubmit = async (data: AddDeliveryCostInput) => {
     try {
@@ -80,7 +92,7 @@ export default function AddDeliveryCostForm({ shipment, onSuccess }: Props) {
         <TextField
           name="pickupCost"
           control={form.control}
-          label="Pickup Cost"
+          label={`Pickup Cost (In ${DEFAULT_CURRENCY.label})`}
           type="number"
           radius="sm"
           min={0}
@@ -92,7 +104,7 @@ export default function AddDeliveryCostForm({ shipment, onSuccess }: Props) {
         <TextField
           name="deliveryCost"
           control={form.control}
-          label="Delivery Cost"
+          label={`Delivery Cost (In ${DEFAULT_CURRENCY.label})`}
           type="number"
           radius="sm"
           placeholder="Cost of delivering the package to its destination"
@@ -104,7 +116,7 @@ export default function AddDeliveryCostForm({ shipment, onSuccess }: Props) {
         <TextField
           name="riderCommission"
           control={form.control}
-          label="Rider Commission"
+          label={`Rider Commission (%)`}
           type="number"
           radius="sm"
           placeholder="Commission paid to the rider"
@@ -164,7 +176,7 @@ export default function AddDeliveryCostForm({ shipment, onSuccess }: Props) {
           <TextField
             name="repackagingFee"
             control={form.control}
-            label="Repackaging Fee"
+            label={`Repackaging Fee (In ${DEFAULT_CURRENCY.label})`}
             type="number"
             radius="sm"
             placeholder="Cost of repackaging the package"
@@ -183,6 +195,20 @@ export default function AddDeliveryCostForm({ shipment, onSuccess }: Props) {
             disabled={isReadOnly}
           />
         )}
+      </div>
+      <div className="mt-5 pt-3 border-t">
+        <HStack className="items-center justify-between">
+          <p className="font-semibold text-lg">Total Cost: </p>
+          <p className="font-semibold text-lg">
+            {DEFAULT_CURRENCY.symbol} {totalCost}
+          </p>
+        </HStack>
+        <HStack className="items-center justify-between">
+          <p className="font-semibold text-lg">Rider&apos;s Commission:</p>
+          <p className="font-semibold text-lg">
+            {DEFAULT_CURRENCY.symbol} {parseFloat(ridersCommission.toFixed(2))}
+          </p>
+        </HStack>
       </div>
       {!isReadOnly ? (
         <Button
