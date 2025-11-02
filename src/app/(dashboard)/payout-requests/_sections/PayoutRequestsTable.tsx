@@ -47,7 +47,7 @@ const statusOptions = [
   { label: "All Status", value: "all" },
   { label: "Pending", value: PayoutRequestStatus.PENDING },
   { label: "Approved", value: PayoutRequestStatus.APPROVED },
-  { label: "Processing", value: PayoutRequestStatus.PROCESSING },
+  // { label: "Processing", value: PayoutRequestStatus.PROCESSING },
   { label: "Completed", value: PayoutRequestStatus.COMPLETED },
   { label: "Rejected", value: PayoutRequestStatus.REJECTED },
   { label: "Failed", value: PayoutRequestStatus.FAILED },
@@ -82,11 +82,11 @@ export default function PayoutRequestsTable({ payoutResponse }: Props) {
           dot: "bg-green-500",
           base: "border-green-200 bg-green-50 text-green-700",
         };
-      case PayoutRequestStatus.PROCESSING:
-        return {
-          dot: "bg-blue-500",
-          base: "border-blue-200 bg-blue-50 text-blue-700",
-        };
+      // case PayoutRequestStatus.PROCESSING:
+      //   return {
+      //     dot: "bg-blue-500",
+      //     base: "border-blue-200 bg-blue-50 text-blue-700",
+      //   };
       case PayoutRequestStatus.COMPLETED:
         return {
           dot: "bg-green-600",

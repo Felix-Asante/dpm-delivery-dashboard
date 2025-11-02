@@ -5,7 +5,7 @@ export enum PayoutMethod {
 
 export enum PayoutRequestStatus {
   PENDING = "pending",
-  PROCESSING = "processing",
+  // PROCESSING = "processing",
   APPROVED = "approved",
   COMPLETED = "completed",
   REJECTED = "rejected",

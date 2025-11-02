@@ -28,6 +28,7 @@ import {
 import { DEFAULT_CURRENCY } from "@/config/constants";
 import { formatCurrency } from "@/utils/helpers";
 import { Wallet, Loader2, CheckCircle2 } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 interface RequestWithdrawModalProps {
   open: boolean;
@@ -66,6 +67,8 @@ export function RequestWithdrawModal({
     },
   });
 
+  const router = useRouter();
+
   const payoutMethod = watch("payoutMethod");
   const amount = watch("amount");
 
@@ -80,12 +83,13 @@ export function RequestWithdrawModal({
         setError(result.error);
       } else {
         setSuccess(true);
-        setTimeout(() => {
-          reset();
-          setSuccess(false);
-          onOpenChange(false);
-          window.location.reload(); // Refresh to update balance
-        }, 2000);
+        // setTimeout(() => {
+        reset();
+        // setSuccess(false);
+        onOpenChange(false);
+        router.refresh();
+        // window.location.reload(); // Refresh to update balance
+        // }, 4000);
       }
     });
   };
@@ -188,14 +192,22 @@ export function RequestWithdrawModal({
                   </label>
                   <Select
                     value={watch("mobileMoneyProvider") || ""}
-                    onValueChange={(value) => setValue("mobileMoneyProvider", value)}
+                    onValueChange={(value) =>
+                      setValue("mobileMoneyProvider", value)
+                    }
                   >
-                    <SelectTrigger className={errors.mobileMoneyProvider ? "border-red-500" : ""}>
+                    <SelectTrigger
+                      className={
+                        errors.mobileMoneyProvider ? "border-red-500" : ""
+                      }
+                    >
                       <SelectValue placeholder="Select provider" />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="MOMO">MTN Mobile Money</SelectItem>
-                      <SelectItem value="AIRTELTIGO">AirtelTigo Money</SelectItem>
+                      <SelectItem value="AIRTELTIGO">
+                        AirtelTigo Money
+                      </SelectItem>
                       <SelectItem value="TELECEL">Telecel Cash</SelectItem>
                     </SelectContent>
                   </Select>

@@ -2,6 +2,7 @@
 
 import React, { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Dialog,
   DialogContent,
@@ -19,11 +20,11 @@ import {
 } from "@/components/ui/select";
 import TextField from "@/components/shared/input/TextField";
 import { updatePayoutRequestStatus } from "@/actions/wallet";
+import { PayoutRequest, PayoutRequestStatus } from "@/types/payout";
 import {
-  PayoutRequest,
-  PayoutRequestStatus,
-  UpdatePayoutRequestStatusDto,
-} from "@/types/payout";
+  updatePayoutStatusSchema,
+  UpdatePayoutStatusFormData,
+} from "@/rules/validations/update-payout-status";
 import { Loader2, CheckCircle2, AlertCircle } from "lucide-react";
 
 interface UpdateStatusModalProps {
@@ -43,16 +44,23 @@ export function UpdateStatusModal({
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const { control, handleSubmit, watch, setValue, reset } =
-    useForm<UpdatePayoutRequestStatusDto>({
-      defaultValues: {
-        status: PayoutRequestStatus.APPROVED,
-      },
-    });
+  const {
+    control,
+    handleSubmit,
+    watch,
+    setValue,
+    reset,
+    formState: { errors },
+  } = useForm<UpdatePayoutStatusFormData>({
+    resolver: zodResolver(updatePayoutStatusSchema),
+    defaultValues: {
+      status: payoutRequest?.status,
+    },
+  });
 
   const selectedStatus = watch("status");
 
-  const onSubmit = async (data: UpdatePayoutRequestStatusDto) => {
+  const onSubmit = async (data: UpdatePayoutStatusFormData) => {
     if (!payoutRequest) return;
 
     setError(null);
@@ -65,12 +73,12 @@ export function UpdateStatusModal({
         setError(result.error);
       } else {
         setSuccess(true);
-        setTimeout(() => {
-          reset();
-          setSuccess(false);
-          onOpenChange(false);
-          onSuccess?.();
-        }, 2000);
+        // setTimeout(() => {
+        reset();
+        // setSuccess(false);
+        onOpenChange(false);
+        onSuccess?.();
+        // }, 4000);
       }
     });
   };
@@ -92,8 +100,8 @@ export function UpdateStatusModal({
         return "text-green-600";
       case PayoutRequestStatus.REJECTED:
         return "text-red-600";
-      case PayoutRequestStatus.PROCESSING:
-        return "text-blue-600";
+      // case PayoutRequestStatus.PROCESSING:
+      //   return "text-blue-600";
       case PayoutRequestStatus.COMPLETED:
         return "text-green-700";
       case PayoutRequestStatus.FAILED:
@@ -105,7 +113,7 @@ export function UpdateStatusModal({
 
   return (
     <Dialog open={open} onOpenChange={handleClose}>
-      <DialogContent className="sm:max-w-[500px]">
+      <DialogContent className="z-[105] sm:max-w-[500px]">
         <DialogHeader>
           <DialogTitle>Update Payout Request Status</DialogTitle>
           <DialogDescription>
@@ -132,11 +140,87 @@ export function UpdateStatusModal({
                 </span>
               </div>
               <div className="flex justify-between">
+                <span className="text-sm text-gray-500">Phone:</span>
+                <span className="text-sm font-medium">
+                  {payoutRequest.rider.phone}
+                </span>
+              </div>
+              <div className="flex justify-between">
                 <span className="text-sm text-gray-500">Amount:</span>
                 <span className="text-sm font-semibold">
                   GH₵ {parseFloat(payoutRequest.amount).toFixed(2)}
                 </span>
               </div>
+              <div className="flex justify-between">
+                <span className="text-sm text-gray-500">Net Amount:</span>
+                <span className="text-sm font-medium">
+                  GH₵ {parseFloat(payoutRequest.netAmount).toFixed(2)}
+                </span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-sm text-gray-500">Payment Method:</span>
+                <span className="text-sm font-medium capitalize">
+                  {payoutRequest.payoutMethod === "mobile_money"
+                    ? "Mobile Money"
+                    : "Bank Transfer"}
+                </span>
+              </div>
+
+              {/* Mobile Money Details */}
+              {payoutRequest.payoutMethod === "mobile_money" && (
+                <>
+                  <div className="border-t border-gray-200 my-2 pt-2" />
+                  <div className="flex justify-between">
+                    <span className="text-sm text-gray-500">Provider:</span>
+                    <span className="text-sm font-medium">
+                      {payoutRequest.mobileMoneyProvider}
+                    </span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-sm text-gray-500">Number:</span>
+                    <span className="text-sm font-medium font-mono">
+                      {payoutRequest.mobileMoneyNumber}
+                    </span>
+                  </div>
+                </>
+              )}
+
+              {/* Bank Transfer Details */}
+              {payoutRequest.payoutMethod === "bank_transfer" && (
+                <>
+                  <div className="border-t border-gray-200 my-2 pt-2" />
+                  <div className="flex justify-between">
+                    <span className="text-sm text-gray-500">Bank Name:</span>
+                    <span className="text-sm font-medium">
+                      {payoutRequest.bankName}
+                    </span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-sm text-gray-500">Account Name:</span>
+                    <span className="text-sm font-medium">
+                      {payoutRequest.accountName}
+                    </span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-sm text-gray-500">
+                      Account Number:
+                    </span>
+                    <span className="text-sm font-medium font-mono">
+                      {payoutRequest.accountNumber}
+                    </span>
+                  </div>
+                  {payoutRequest.bankCode && (
+                    <div className="flex justify-between">
+                      <span className="text-sm text-gray-500">Bank Code:</span>
+                      <span className="text-sm font-medium font-mono">
+                        {payoutRequest.bankCode}
+                      </span>
+                    </div>
+                  )}
+                </>
+              )}
+
+              <div className="border-t border-gray-200 my-2 pt-2" />
               <div className="flex justify-between">
                 <span className="text-sm text-gray-500">Current Status:</span>
                 <span
@@ -161,13 +245,13 @@ export function UpdateStatusModal({
                 <SelectTrigger>
                   <SelectValue placeholder="Select new status" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="z-[105]">
                   <SelectItem value={PayoutRequestStatus.APPROVED}>
                     Approved
                   </SelectItem>
-                  <SelectItem value={PayoutRequestStatus.PROCESSING}>
+                  {/* <SelectItem value={PayoutRequestStatus.PROCESSING}>
                     Processing
-                  </SelectItem>
+                  </SelectItem> */}
                   <SelectItem value={PayoutRequestStatus.COMPLETED}>
                     Completed
                   </SelectItem>
@@ -192,6 +276,11 @@ export function UpdateStatusModal({
                   name="rejectionReason"
                   control={control}
                 />
+                {errors.rejectionReason && (
+                  <p className="text-xs text-red-500">
+                    {errors.rejectionReason.message}
+                  </p>
+                )}
               </div>
             )}
 
@@ -203,15 +292,19 @@ export function UpdateStatusModal({
                   name="failureReason"
                   control={control}
                 />
+                {errors.failureReason && (
+                  <p className="text-xs text-red-500">
+                    {errors.failureReason.message}
+                  </p>
+                )}
               </div>
             )}
 
-            {(selectedStatus === PayoutRequestStatus.COMPLETED ||
-              selectedStatus === PayoutRequestStatus.PROCESSING) && (
+            {selectedStatus === PayoutRequestStatus.COMPLETED && (
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <label className="text-sm font-medium">
-                    Transaction ID (Optional)
+                    Transaction ID *
                   </label>
                   <TextField
                     placeholder="e.g., TXN123456"
