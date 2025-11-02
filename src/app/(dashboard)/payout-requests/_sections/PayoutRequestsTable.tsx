@@ -296,7 +296,7 @@ export default function PayoutRequestsTable({ payoutResponse }: Props) {
                   </Chip>
                 </TableCell>
                 <TableCell>
-                  {request.status !== PayoutRequestStatus.APPROVED ? (
+                  {request.status !== PayoutRequestStatus.COMPLETED ? (
                     <Button
                       variant="ghost"
                       size="sm"
