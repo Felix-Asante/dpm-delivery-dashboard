@@ -182,6 +182,12 @@ export function UpdateStatusModal({
                       {payoutRequest.mobileMoneyNumber}
                     </span>
                   </div>
+                  <div className="flex justify-between">
+                    <span className="text-sm text-gray-500">Account Name:</span>
+                    <span className="text-sm font-medium">
+                      {payoutRequest.mobileMoneyAccountName}
+                    </span>
+                  </div>
                 </>
               )}
 

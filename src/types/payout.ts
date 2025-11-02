@@ -66,6 +66,7 @@ export interface PayoutRequest {
   bankCode?: string | null;
   mobileMoneyProvider?: string | null;
   mobileMoneyNumber?: string | null;
+  mobileMoneyAccountName?: string | null;
   reference: string;
   externalReference?: string | null;
   transactionId?: string | null;

@@ -1,6 +1,7 @@
 "use server";
 import { apiConfig } from "@/lib/apiConfig";
 import { apiHandler } from "@/lib/apiHandler";
+import { verifyMobileMoneyAccount } from "@/lib/paystack";
 import type { ResponseMeta, SeverActionResponse } from "@/types";
 import type { Transaction } from "@/types/wallet";
 import type {
@@ -84,6 +85,23 @@ export async function updatePayoutRequestStatus(
       body: data,
     });
     return { results: result };
+  } catch (error) {
+    return { error: getErrorMessage(error) };
+  }
+}
+
+export async function verifyMobileMoneyNumber(
+  accountNumber: string,
+  provider: string
+): Promise<SeverActionResponse<{ accountName: string }>> {
+  try {
+    const result = await verifyMobileMoneyAccount(accountNumber, provider);
+
+    if (result.success && result.accountName) {
+      return { results: { accountName: result.accountName } };
+    } else {
+      return { error: result.error || "Failed to verify mobile money number" };
+    }
   } catch (error) {
     return { error: getErrorMessage(error) };
   }

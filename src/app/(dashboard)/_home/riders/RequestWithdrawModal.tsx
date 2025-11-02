@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useTransition } from "react";
+import React, { useState, useTransition, useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -19,7 +19,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import TextField from "@/components/shared/input/TextField";
-import { createPayoutRequest } from "@/actions/wallet";
+import { createPayoutRequest, verifyMobileMoneyNumber } from "@/actions/wallet";
 import { PayoutMethod } from "@/types/payout";
 import {
   payoutRequestSchema,
@@ -27,7 +27,13 @@ import {
 } from "@/rules/validations/payout";
 import { DEFAULT_CURRENCY } from "@/config/constants";
 import { formatCurrency } from "@/utils/helpers";
-import { Wallet, Loader2, CheckCircle2 } from "lucide-react";
+import {
+  Wallet,
+  Loader2,
+  CheckCircle2,
+  CheckCircle,
+  AlertCircle,
+} from "lucide-react";
 import { useRouter } from "next/navigation";
 
 interface RequestWithdrawModalProps {
@@ -44,6 +50,13 @@ export function RequestWithdrawModal({
   const [isPending, startTransition] = useTransition();
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isVerifying, setIsVerifying] = useState(false);
+  const [verifiedAccountName, setVerifiedAccountName] = useState<string | null>(
+    null
+  );
+  const [verificationError, setVerificationError] = useState<string | null>(
+    null
+  );
 
   const {
     control,
@@ -71,10 +84,21 @@ export function RequestWithdrawModal({
 
   const payoutMethod = watch("payoutMethod");
   const amount = watch("amount");
+  const mobileMoneyProvider = watch("mobileMoneyProvider");
+  const mobileMoneyNumber = watch("mobileMoneyNumber");
 
   const onSubmit = async (data: PayoutRequestFormData) => {
     setError(null);
     setSuccess(false);
+
+    // Check if mobile money is verified
+    if (
+      data.payoutMethod === PayoutMethod.MOBILE_MONEY &&
+      !verifiedAccountName
+    ) {
+      setError("Please verify your mobile money number before submitting");
+      return;
+    }
 
     startTransition(async () => {
       const result = await createPayoutRequest(data);
@@ -83,13 +107,14 @@ export function RequestWithdrawModal({
         setError(result.error);
       } else {
         setSuccess(true);
-        // setTimeout(() => {
-        reset();
-        // setSuccess(false);
-        onOpenChange(false);
-        router.refresh();
-        // window.location.reload(); // Refresh to update balance
-        // }, 4000);
+        setTimeout(() => {
+          reset();
+          setSuccess(false);
+          setVerifiedAccountName(null);
+          setVerificationError(null);
+          onOpenChange(false);
+          window.location.reload(); // Refresh to update balance
+        }, 5000);
       }
     });
   };
@@ -98,11 +123,61 @@ export function RequestWithdrawModal({
     setValue("amount", balance);
   };
 
+  const handleVerifyMobileNumber = async () => {
+    const provider = mobileMoneyProvider;
+    const number = mobileMoneyNumber;
+
+    if (!provider || !number) {
+      setVerificationError("Please provide both provider and phone number");
+      return;
+    }
+
+    setIsVerifying(true);
+    setVerificationError(null);
+    setVerifiedAccountName(null);
+
+    const result = await verifyMobileMoneyNumber(number, provider);
+
+    setIsVerifying(false);
+
+    if (result.error) {
+      setVerificationError(result.error);
+      setVerifiedAccountName(null);
+    } else if (result.results) {
+      setVerifiedAccountName(result.results.accountName);
+      setValue("mobileMoneyAccountName", result.results.accountName);
+      setVerificationError(null);
+    }
+  };
+
+  // Auto-verify mobile money number when both provider and number are available
+  useEffect(() => {
+    if (
+      payoutMethod === PayoutMethod.MOBILE_MONEY &&
+      mobileMoneyProvider &&
+      mobileMoneyNumber &&
+      mobileMoneyNumber.length >= 10 // Ensure it's a complete phone number
+    ) {
+      // Debounce the verification
+      const timeoutId = setTimeout(() => {
+        handleVerifyMobileNumber();
+      }, 1000); // Wait 1 second after user stops typing
+
+      return () => clearTimeout(timeoutId);
+    } else {
+      // Reset verification if fields are incomplete
+      setVerifiedAccountName(null);
+      setVerificationError(null);
+    }
+  }, [payoutMethod, mobileMoneyProvider, mobileMoneyNumber]);
+
   const handleClose = () => {
     if (!isPending) {
       reset();
       setError(null);
       setSuccess(false);
+      setVerifiedAccountName(null);
+      setVerificationError(null);
       onOpenChange(false);
     }
   };
@@ -185,51 +260,116 @@ export function RequestWithdrawModal({
             </div>
 
             {payoutMethod === PayoutMethod.MOBILE_MONEY && (
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">
-                    Mobile Money Provider *
-                  </label>
-                  <Select
-                    value={watch("mobileMoneyProvider") || ""}
-                    onValueChange={(value) =>
-                      setValue("mobileMoneyProvider", value)
-                    }
-                  >
-                    <SelectTrigger
-                      className={
-                        errors.mobileMoneyProvider ? "border-red-500" : ""
-                      }
+              <>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">
+                      Mobile Money Provider *
+                    </label>
+                    <Select
+                      value={watch("mobileMoneyProvider") || ""}
+                      onValueChange={(value) => {
+                        setValue("mobileMoneyProvider", value);
+                        setVerifiedAccountName(null);
+                        setVerificationError(null);
+                      }}
                     >
-                      <SelectValue placeholder="Select provider" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="MOMO">MTN Mobile Money</SelectItem>
-                      <SelectItem value="AIRTELTIGO">
-                        AirtelTigo Money
-                      </SelectItem>
-                      <SelectItem value="TELECEL">Telecel Cash</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  {errors.mobileMoneyProvider && (
-                    <p className="text-xs text-red-500">
-                      {errors.mobileMoneyProvider.message}
-                    </p>
-                  )}
+                      <SelectTrigger
+                        className={
+                          errors.mobileMoneyProvider ? "border-red-500" : ""
+                        }
+                      >
+                        <SelectValue placeholder="Select provider" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="MOMO">MTN Mobile Money</SelectItem>
+                        <SelectItem value="AIRTELTIGO">
+                          AirtelTigo Money
+                        </SelectItem>
+                        <SelectItem value="TELECEL">Telecel Cash</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    {errors.mobileMoneyProvider && (
+                      <p className="text-xs text-red-500">
+                        {errors.mobileMoneyProvider.message}
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">
+                      Mobile Money Number *
+                    </label>
+                    <div className="relative">
+                      <TextField
+                        placeholder="e.g., 0241234567"
+                        name="mobileMoneyNumber"
+                        control={control}
+                        onChange={(e: any) => {
+                          setVerifiedAccountName(null);
+                          setVerificationError(null);
+                        }}
+                      />
+                      {isVerifying && (
+                        <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                          <Loader2 className="h-4 w-4 animate-spin text-blue-500" />
+                        </div>
+                      )}
+                    </div>
+                    {isVerifying && (
+                      <p className="text-xs text-blue-600 mt-1">
+                        Verifying account...
+                      </p>
+                    )}
+                  </div>
                 </div>
 
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">
-                    Mobile Money Number *
-                  </label>
-                  <TextField
+                {/* Verification Success */}
+                {verifiedAccountName && (
+                  <div className="bg-green-50 border border-green-200 rounded-md p-4">
+                    <div className="flex items-start gap-3">
+                      <CheckCircle className="h-5 w-5 text-green-600 mt-0.5" />
+                      <div className="flex-1">
+                        <p className="text-sm font-medium text-green-900">
+                          Account Verified Successfully!
+                        </p>
+                        <p className="text-sm text-green-700 mt-1">
+                          Account Name:{" "}
+                          <span className="font-semibold">
+                            {verifiedAccountName}
+                          </span>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Verification Error */}
+                {verificationError && (
+                  <div className="bg-red-50 border border-red-200 rounded-md p-4">
+                    <div className="flex items-start gap-3">
+                      <AlertCircle className="h-5 w-5 text-red-600 mt-0.5" />
+                      <div className="flex-1">
+                        <p className="text-sm font-medium text-red-900">
+                          Verification Failed
+                        </p>
+                        <p className="text-sm text-red-700 mt-1">
+                          {verificationError}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </>
+            )}
+            {/* <TextField
                     placeholder="e.g., 0241234567"
                     name="mobileMoneyNumber"
                     control={control}
                   />
                 </div>
               </div>
-            )}
+            )} */}
 
             {payoutMethod === PayoutMethod.BANK_TRANSFER && (
               <div className="grid grid-cols-2 gap-4">
@@ -302,7 +442,13 @@ export function RequestWithdrawModal({
               </Button>
               <Button
                 type="submit"
-                disabled={isPending || amount <= 0 || amount > balance}
+                disabled={
+                  isPending ||
+                  amount <= 0 ||
+                  amount > balance ||
+                  (payoutMethod === PayoutMethod.MOBILE_MONEY &&
+                    !verifiedAccountName)
+                }
                 className="flex-1"
               >
                 {isPending ? (

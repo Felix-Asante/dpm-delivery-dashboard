@@ -16,7 +16,6 @@ export default function TextField(props: Readonly<TextFieldProps>) {
   const {
     type = "text",
     className = "",
-
     name,
     control,
     defaultValue,
@@ -24,6 +23,7 @@ export default function TextField(props: Readonly<TextFieldProps>) {
     rules,
     isReadOnly,
     disabled,
+    onChange: customOnChange,
   } = props;
 
   const { field, fieldState } = useController({
@@ -32,6 +32,13 @@ export default function TextField(props: Readonly<TextFieldProps>) {
     defaultValue,
     rules,
   });
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    field.onChange(e);
+    if (customOnChange) {
+      customOnChange(e as any);
+    }
+  };
 
   return (
     <div className="relative mt-1 ">
@@ -42,7 +49,7 @@ export default function TextField(props: Readonly<TextFieldProps>) {
         className={cn(className)}
         placeholder={placeholder}
         defaultValue={defaultValue}
-        onChange={field.onChange}
+        onChange={handleChange}
         value={field.value}
         disabled={disabled}
         readOnly={isReadOnly}

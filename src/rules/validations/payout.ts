@@ -15,6 +15,7 @@ export const payoutRequestSchema = z
     // Mobile Money fields
     mobileMoneyProvider: z.string().optional(),
     mobileMoneyNumber: z.string().optional(),
+    mobileMoneyAccountName: z.string().optional(),
     // Bank Transfer fields
     accountNumber: z.string().optional(),
     accountName: z.string().optional(),
@@ -49,6 +50,16 @@ export const payoutRequestSchema = z
             path: ["mobileMoneyNumber"],
           });
         }
+      }
+      if (
+        !data.mobileMoneyAccountName ||
+        data.mobileMoneyAccountName.trim() === ""
+      ) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Mobile money account name is required",
+          path: ["mobileMoneyAccountName"],
+        });
       }
     }
 
