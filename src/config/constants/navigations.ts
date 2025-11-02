@@ -5,6 +5,7 @@ import {
   BookMarkedIcon,
   BoxesIcon,
   Building2Icon,
+  CoinsIcon,
   PackageIcon,
   ShieldUserIcon,
   UsersIcon,
@@ -56,5 +57,10 @@ export const SIDEBAR_NAVIGATION = [
     label: "Deliveries",
     icon: PackageIcon,
     href: DASHBOARD_PATHS.deliveries.root,
+  },
+  {
+    label: "Payouts",
+    icon: CoinsIcon,
+    href: DASHBOARD_PATHS.payoutRequests.root,
   },
 ];

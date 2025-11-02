@@ -68,6 +68,10 @@ export default function TransactionList(props: Props) {
         return "Debit";
       case WalletTransactionTypes.ADJUSTMENT:
         return "Adjustment";
+      case WalletTransactionTypes.PAYOUT_PENDING:
+        return "Payout Pending";
+      case WalletTransactionTypes.PAYOUT_REJECTED:
+        return "Payout Rejected";
       default:
         return type;
     }
@@ -91,6 +95,16 @@ export default function TransactionList(props: Props) {
           base: "border-red-200 bg-red-50 text-red-700",
         };
       case WalletTransactionTypes.ADJUSTMENT:
+        return {
+          dot: "bg-yellow-500",
+          base: "border-yellow-200 bg-yellow-50 text-yellow-700",
+        };
+      case WalletTransactionTypes.PAYOUT_PENDING:
+        return {
+          dot: "bg-yellow-500",
+          base: "border-yellow-200 bg-yellow-50 text-yellow-700",
+        };
+      case WalletTransactionTypes.PAYOUT_REJECTED:
         return {
           dot: "bg-yellow-500",
           base: "border-yellow-200 bg-yellow-50 text-yellow-700",

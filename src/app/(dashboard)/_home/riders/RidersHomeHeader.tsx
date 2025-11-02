@@ -1,15 +1,17 @@
 "use client";
 import { DEFAULT_CURRENCY } from "@/config/constants";
 import { Button, buttonVariants } from "@/components/ui/button";
-import React from "react";
+import React, { useState } from "react";
 import { useSession } from "next-auth/react";
 import HStack from "@/components/shared/layout/HStack";
 import { formatCurrency } from "@/utils/helpers";
 import { Wallet } from "@/types/wallet";
 import Link from "next/link";
+import { RequestWithdrawModal } from "./RequestWithdrawModal";
 
 export function RidersHomeHeader({ wallet }: { wallet?: Wallet }) {
   const totalBalance = wallet ? +wallet.balance : 0;
+  const [isWithdrawModalOpen, setIsWithdrawModalOpen] = useState(false);
 
   return (
     <section>
@@ -19,7 +21,12 @@ export function RidersHomeHeader({ wallet }: { wallet?: Wallet }) {
         {DEFAULT_CURRENCY.symbol} {formatCurrency(totalBalance)}
       </h3>
       <HStack>
-        <Button className="rounded-full">Request withdraw</Button>
+        <Button
+          className="rounded-full"
+          onClick={() => setIsWithdrawModalOpen(true)}
+        >
+          Request withdraw
+        </Button>
         <Link
           href="/transactions"
           className={buttonVariants({
@@ -29,6 +36,12 @@ export function RidersHomeHeader({ wallet }: { wallet?: Wallet }) {
           View transactions
         </Link>
       </HStack>
+
+      <RequestWithdrawModal
+        open={isWithdrawModalOpen}
+        onOpenChange={setIsWithdrawModalOpen}
+        balance={totalBalance}
+      />
     </section>
   );
 }

@@ -53,4 +53,7 @@ export const DASHBOARD_PATHS = {
   deliveries: {
     root: path(DASHBOARD_ROOT, "deliveries"),
   },
+  payoutRequests: {
+    root: path(DASHBOARD_ROOT, "payout-requests"),
+  },
 };

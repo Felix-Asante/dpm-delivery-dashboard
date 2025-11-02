@@ -19,6 +19,11 @@ export const apiConfig = {
     wallet: () => `users/wallet`,
     transactions: (query: Query) =>
       `users/wallet/transactions${toQuery(query)}`,
+    payout_request: () => `wallets/payout-request`,
+  },
+  payouts: {
+    list: (query: Query) => `wallets/payout-requests${toQuery(query)}`,
+    update_status: (id: string) => `wallets/payout-request/${id}/update-status`,
   },
   places: {
     create: () => `places`,
