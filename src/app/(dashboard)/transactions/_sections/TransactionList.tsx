@@ -74,6 +74,8 @@ export default function TransactionList(props: Props) {
         return "Payout Rejected";
       case WalletTransactionTypes.PAYOUT_FAILED:
         return "Payout Failed";
+      case WalletTransactionTypes.PAYOUT_APPROVED:
+        return "Payout Approved";
       default:
         return type;
     }
@@ -115,6 +117,11 @@ export default function TransactionList(props: Props) {
         return {
           dot: "bg-red-500",
           base: "border-red-200 bg-red-50 text-red-700",
+        };
+      case WalletTransactionTypes.PAYOUT_APPROVED:
+        return {
+          dot: "bg-green-500",
+          base: "border-green-200 bg-green-50 text-green-700",
         };
       default:
         return {
