@@ -4,7 +4,7 @@ const nextConfig = {
     remotePatterns: [{ hostname: process.env.NEXT_PUBLIC_REMOTE_IMAGE_HOST }],
   },
   compiler: {
-    removeConsole: process.env.NODE_ENV === "production",
+    // removeConsole: process.env.NODE_ENV === "production",
   },
   eslint: {
     ignoreDuringBuilds: true,
