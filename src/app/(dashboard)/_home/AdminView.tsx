@@ -14,34 +14,49 @@ import Link from "next/link";
 import SalesChart from "./chart/SalesChart";
 import StatisticsSection from "./StatisticsSection";
 
+import { getAnalyticsDashboard } from "@/actions/analytics";
+import AnalyticsStats from "./AnalyticsStats";
+
 export async function HomeAdminView() {
-  const [users, bookings, places, offers, popularPlaces] = await Promise.all([
-    getUsersCount(),
-    getBookingsCount(),
-    getPlacesCount(),
-    getSpecialsCount(),
-    getPopularPlaces(),
-  ]);
+  const [users, bookings, places, offers, popularPlaces, analytics] =
+    await Promise.all([
+      getUsersCount(),
+      getBookingsCount(),
+      getPlacesCount(),
+      getSpecialsCount(),
+      getPopularPlaces(),
+      getAnalyticsDashboard(),
+    ]);
 
   const error =
     users.error ||
     bookings?.error ||
     places?.error ||
     offers?.error ||
-    popularPlaces?.error;
+    popularPlaces?.error ||
+    analytics?.error;
 
   return (
     <WithServerError error={error}>
       <main className="bg-white h-screen w-full">
-        <div className="px-3 sm:px-8 pt-5">
-          <h3 className="text-xl">Overview</h3>
-          <StatisticsSection
-            totalBookings={bookings?.results!}
-            totalOffers={offers.results!}
-            totalPlaces={places.results!}
-            totalUsers={users.results!}
-          />
-          <div className="grid lg:grid-cols-[75%,25%] gap-5 my-6">
+        <div className="px-3 sm:px-8 pt-8">
+          <div className="mb-5">
+            <h3 className="text-xl font-bold mb-4">
+              Deliveries Financial Overview
+            </h3>
+            {analytics?.results && <AnalyticsStats data={analytics.results} />}
+          </div>
+
+          <div>
+            <h3 className="text-xl font-bold mb-4">Platform Statistics</h3>
+            <StatisticsSection
+              totalBookings={bookings?.results!}
+              totalOffers={offers.results!}
+              totalPlaces={places.results!}
+              totalUsers={users.results!}
+            />
+          </div>
+          <div className="grid lg:grid-cols-[75%,25%] gap-5 my-8">
             <SalesChart />
             <div className="border p-3 rounded-md max-h-fit">
               <HStack className="items-center justify-between mb-4">
