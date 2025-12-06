@@ -7,15 +7,24 @@ import { ERRORS } from "@/config/constants/errors";
 import regexPattern from "@/rules";
 import { Status } from "@/types";
 import { Query, paths } from "@/types/url";
-import { type ClassValue, clsx } from "clsx";
+import { clsx, type ClassValue } from "clsx";
 import {
   BanIcon,
+  BanknoteIcon,
+  BoxIcon,
   CheckIcon,
+  CreditCardIcon,
   LoaderIcon,
+  MapIcon,
+  MapPinIcon,
   PackageCheckIcon,
+  PauseCircleIcon,
+  StoreIcon,
   TruckIcon,
+  Undo2Icon,
   UserCheckIcon,
   UserPlusIcon,
+  type LucideIcon,
 } from "lucide-react";
 import { twMerge } from "tailwind-merge";
 export function parsePathname(pathname: string): paths[] {
@@ -187,22 +196,27 @@ export function formatCurrency(
 }
 
 export function getShipmentStatusDisplay(status: string, isAdmin?: boolean) {
-  if (status === ShipmentStatus.OUT_FOR_DELIVERY) {
-    return "Out for Delivery";
-  } else if (status === ShipmentStatus.FAILED_DELIVERY_ATTEMPT) {
-    return "Failed Delivery Attempt";
-  } else if (status === ShipmentStatus.DELIVERED) {
-    return "Delivered";
-  } else if (status === ShipmentStatus.RIDER_REASSIGNED) {
-    return isAdmin ? "Rider Reassigned" : "Assigned";
-  } else if (status === ShipmentStatus.PICKUP_CONFIRMED) {
-    return "Pickup Confirmed";
-  } else if (status === ShipmentStatus.PENDING) {
-    return "Pending";
-  } else if (status === ShipmentStatus.RIDER_ASSIGNED) {
-    return isAdmin ? "Rider Assigned" : "Assigned";
-  }
-  return status;
+  const statusDisplay: Record<string, string> = {
+    [ShipmentStatus.OUT_FOR_DELIVERY]: "Out for Delivery",
+    [ShipmentStatus.FAILED_DELIVERY_ATTEMPT]: "Failed Delivery Attempt",
+    [ShipmentStatus.DELIVERED]: "Delivered",
+    [ShipmentStatus.RIDER_REASSIGNED]: isAdmin
+      ? "Rider Reassigned"
+      : "Assigned",
+    [ShipmentStatus.PICKUP_CONFIRMED]: "Pickup Confirmed",
+    [ShipmentStatus.PENDING]: "Pending",
+    [ShipmentStatus.RIDER_ASSIGNED]: isAdmin ? "Rider Assigned" : "Assigned",
+    [ShipmentStatus.PAYMENT_RECEIVED]: "Payment Received",
+    [ShipmentStatus.RETURNED]: "Returned",
+    [ShipmentStatus.ON_HOLD]: "On Hold",
+    [ShipmentStatus.REPACKAGED]: "Repackaged",
+    [ShipmentStatus.IN_TRANSIT]: "In Transit",
+    [ShipmentStatus.ARRIVED]: "Arrived",
+    [ShipmentStatus.READY_FOR_PICKUP]: "Ready for Pickup",
+    [ShipmentStatus.REFUNDED]: "Refunded",
+  };
+
+  return statusDisplay[status] ?? status;
 }
 
 export function getShipmentOptionDisplay(option: string) {
@@ -219,20 +233,23 @@ export function getShipmentOptionDisplay(option: string) {
 }
 
 export function getIconByShipmentStatus(status: string) {
-  if (status === ShipmentStatus.OUT_FOR_DELIVERY) {
-    return TruckIcon;
-  } else if (status === ShipmentStatus.FAILED_DELIVERY_ATTEMPT) {
-    return BanIcon;
-  } else if (status === ShipmentStatus.DELIVERED) {
-    return CheckIcon;
-  } else if (status === ShipmentStatus.RIDER_REASSIGNED) {
-    return UserPlusIcon;
-  } else if (status === ShipmentStatus.PICKUP_CONFIRMED) {
-    return PackageCheckIcon;
-  } else if (status === ShipmentStatus.PENDING) {
-    return LoaderIcon;
-  } else if (status === ShipmentStatus.RIDER_ASSIGNED) {
-    return UserCheckIcon;
-  }
-  return CheckIcon;
+  const iconDisplay: Record<string, LucideIcon> = {
+    [ShipmentStatus.OUT_FOR_DELIVERY]: TruckIcon,
+    [ShipmentStatus.FAILED_DELIVERY_ATTEMPT]: BanIcon,
+    [ShipmentStatus.DELIVERED]: CheckIcon,
+    [ShipmentStatus.RIDER_REASSIGNED]: UserPlusIcon,
+    [ShipmentStatus.PICKUP_CONFIRMED]: PackageCheckIcon,
+    [ShipmentStatus.PENDING]: LoaderIcon,
+    [ShipmentStatus.RIDER_ASSIGNED]: UserCheckIcon,
+    [ShipmentStatus.PAYMENT_RECEIVED]: CreditCardIcon,
+    [ShipmentStatus.RETURNED]: Undo2Icon,
+    [ShipmentStatus.ON_HOLD]: PauseCircleIcon,
+    [ShipmentStatus.REPACKAGED]: BoxIcon,
+    [ShipmentStatus.IN_TRANSIT]: MapIcon,
+    [ShipmentStatus.ARRIVED]: MapPinIcon,
+    [ShipmentStatus.READY_FOR_PICKUP]: StoreIcon,
+    [ShipmentStatus.REFUNDED]: BanknoteIcon,
+  };
+
+  return iconDisplay[status] ?? CheckIcon;
 }
