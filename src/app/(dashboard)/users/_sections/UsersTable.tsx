@@ -11,15 +11,15 @@ import { useServerAction } from "@/hooks/useServerAction";
 import { User } from "@/types/auth";
 import { getErrorMessage } from "@/utils/helpers";
 import {
-  Button,
-  Chip,
   Table,
   TableBody,
   TableCell,
   TableColumn,
   TableHeader,
   TableRow,
-} from "@nextui-org/react";
+} from "@heroui/table";
+import { Button } from "@heroui/button";
+import { Chip } from "@heroui/chip";
 import { Trash2Icon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";

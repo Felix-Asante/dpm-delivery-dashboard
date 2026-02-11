@@ -2,7 +2,7 @@ import { getRiderStats } from "@/actions/riders";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { DEFAULT_CURRENCY } from "@/config/constants";
 import { getCurrentUser } from "@/lib/auth";
-import { Alert } from "@nextui-org/react";
+import { Alert } from "@heroui/alert";
 import { Suspense } from "react";
 import { RiderBookingsTable } from "./riders/RiderBookingsTable";
 import { RidersHomeHeader } from "./riders/RidersHomeHeader";

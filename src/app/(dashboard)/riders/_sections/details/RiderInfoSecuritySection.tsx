@@ -1,7 +1,7 @@
 import React from "react";
 import type { User } from "@/types/auth";
 import { useReactHookForm } from "@/hooks/useReactHookForm";
-import { Button } from "@nextui-org/react";
+import { Button } from "@heroui/button";
 import TextField from "@/components/shared/input/TextField";
 import {
   ChangePasswordFields,

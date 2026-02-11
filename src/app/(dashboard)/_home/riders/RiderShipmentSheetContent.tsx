@@ -1,6 +1,8 @@
 import { Shipment } from "@/types/shipment";
 import { getShipmentOptionDisplay } from "@/utils/helpers";
-import { Tab, Tabs, Card, CardBody } from "@nextui-org/react";
+import { Card, CardBody } from "@heroui/card";
+import { Tab, Tabs } from "@heroui/tabs";
+
 import UpdateDeliveryStatus from "../../deliveries/_sections/UpdateDeliveryStatus";
 import { DEFAULT_CURRENCY, ShipmentStatus } from "@/config/constants";
 import { OrderItem } from "../../deliveries/_sections/OrderItem";

@@ -4,7 +4,7 @@ import {
   getIconByShipmentStatus,
   getShipmentStatusDisplay,
 } from "@/utils/helpers";
-import { Tab, Tabs } from "@nextui-org/react";
+import { Tab, Tabs } from "@heroui/tabs";
 import { HistoryIcon, TruckIcon } from "lucide-react";
 import Image from "next/image";
 import { EditOrder } from "./EditOrder";

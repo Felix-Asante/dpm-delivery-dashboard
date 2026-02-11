@@ -8,7 +8,7 @@ import HStack from "@/components/shared/layout/HStack";
 import VStack from "@/components/shared/layout/VStack";
 import { DASHBOARD_PATHS } from "@/config/routes";
 import { getInitials } from "@/utils/helpers";
-import { Avatar } from "@nextui-org/react";
+import { Avatar } from "@heroui/avatar";
 import { BanknoteIcon, TrendingUpIcon } from "lucide-react";
 import Link from "next/link";
 import SalesChart from "./chart/SalesChart";
@@ -58,7 +58,7 @@ export async function HomeAdminView() {
           </div>
           <div className="grid lg:grid-cols-[75%,25%] gap-5 my-8">
             <SalesChart />
-            <div className="border p-3 rounded-md max-h-fit">
+            <div className="border border-border p-3 rounded-md max-h-fit">
               <HStack className="items-center justify-between mb-4">
                 <h3 className="text-base font-semibold">Popular places</h3>
                 <Link

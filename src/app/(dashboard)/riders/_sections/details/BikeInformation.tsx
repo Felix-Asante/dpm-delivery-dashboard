@@ -1,6 +1,6 @@
 import React from "react";
 import TextField from "@/components/shared/input/TextField";
-import { Button } from "@nextui-org/react";
+import { Button } from "@heroui/button";
 import { useForm } from "react-hook-form";
 import { Rider } from "@/types/auth";
 import FileUpload from "@/components/shared/input/FileUpload";

@@ -1,12 +1,10 @@
-import VStack from "../layout/VStack";
+import { Button } from "@heroui/button";
 import { FileIcon } from "lucide-react";
-import FormControl from "./FormControl";
-import { ChangeHandler, Controller, useController } from "react-hook-form";
-import { forwardRef, useState } from "react";
-import { isValidUrl } from "@/utils/helpers";
 import Image from "next/image";
-import HStack from "../layout/HStack";
-import { Button } from "@nextui-org/react";
+import { forwardRef, useState } from "react";
+import { ChangeHandler } from "react-hook-form";
+import VStack from "../layout/VStack";
+import FormControl from "./FormControl";
 
 interface FileUploadProp {
   label?: string;

@@ -1,6 +1,6 @@
 "use client";
 import { ShipmentStatusOptions } from "@/config/constants/data";
-import { Tab, Tabs } from "@nextui-org/react";
+import { Tab, Tabs } from "@heroui/tabs";
 import { useQueryState } from "nuqs";
 
 export function Filters() {

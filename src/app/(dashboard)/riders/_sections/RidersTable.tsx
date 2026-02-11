@@ -8,14 +8,14 @@ import { DASHBOARD_PATHS } from "@/config/routes";
 import useQueryParams from "@/hooks/useQueryParam";
 import { pluralize } from "@/utils/helpers";
 import {
-  Chip,
   Table,
   TableBody,
   TableCell,
   TableColumn,
   TableHeader,
   TableRow,
-} from "@nextui-org/react";
+} from "@heroui/table";
+import { Chip } from "@heroui/chip";
 import { EyeIcon } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";

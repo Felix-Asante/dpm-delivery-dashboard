@@ -10,7 +10,7 @@ import { Rider } from "@/types/auth";
 import { Shipment } from "@/types/shipment";
 import { getErrorMessage } from "@/utils/helpers";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button } from "@nextui-org/react";
+import { Button } from "@heroui/button";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import UpdateDeliveryStatus from "./UpdateDeliveryStatus";

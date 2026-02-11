@@ -3,7 +3,8 @@ import HStack from "@/components/shared/layout/HStack";
 import useDebounce from "@/hooks/useDebounce";
 import useQueryParams from "@/hooks/useQueryParam";
 import { Category } from "@/types/category";
-import { Button, Select, SelectItem } from "@nextui-org/react";
+import { Select, SelectItem } from "@heroui/select";
+import { Button } from "@heroui/button";
 import { SearchIcon } from "lucide-react";
 import React, { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -57,7 +58,7 @@ export default function PlaceTableFilters({
                 {categories?.map((category) => (
                   <SelectItem
                     key={category?.id}
-                    value={category?.id}
+                    // value={category?.id}
                     className="capitalize"
                   >
                     {category?.name}

@@ -7,7 +7,7 @@ import {
   changeDefaultPasswordSchema,
 } from "@/rules/validations/auth";
 import PasswordAdornment from "./adornments/PasswordAdornment";
-import { Button } from "@nextui-org/react";
+import { Button } from "@heroui/button";
 import { useRouter } from "next13-progressbar";
 import { signOut } from "next-auth/react";
 import { toast } from "sonner";

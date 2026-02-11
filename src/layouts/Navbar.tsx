@@ -3,14 +3,14 @@ import Container from "@/components/shared/layout/Container";
 import HStack from "@/components/shared/layout/HStack";
 import { DASHBOARD_PATHS } from "@/config/routes";
 import {
-  Badge,
-  Button,
   Dropdown,
   DropdownItem,
   DropdownMenu,
   DropdownTrigger,
-  User,
-} from "@nextui-org/react";
+} from "@heroui/dropdown";
+import { Button } from "@heroui/button";
+import { Badge } from "@heroui/badge";
+import User from "@heroui/user";
 import { BellDotIcon, PlusIcon } from "lucide-react";
 import { signOut } from "next-auth/react";
 import Link from "next/link";
@@ -18,7 +18,7 @@ import { useRouter } from "next13-progressbar";
 
 export default function MainNavbar() {
   return (
-    <div className="bg-secondary py-3 px-8 md:px-16 w-full sticky top-0 z-[100]">
+    <div className="bg-secondary py-3 px-8 md:px-16 w-full sticky top-0 z-100">
       <Container>
         <HStack className="items-center justify-between">
           <Link
@@ -37,7 +37,7 @@ export default function MainNavbar() {
                   aria-label="more than 99 notifications"
                   variant="light"
                   size="sm"
-                  className="hover:!bg-transparent"
+                  className="hover:bg-transparent!"
                 >
                   <BellDotIcon className="text-warning" size={24} />
                 </Button>
@@ -62,7 +62,7 @@ function ProfileNavigation() {
   return (
     <Dropdown placement="bottom-end">
       <DropdownTrigger>
-        <User
+        {/* <User
           as="button"
           avatarProps={{
             isBordered: true,
@@ -72,7 +72,8 @@ function ProfileNavigation() {
           className="transition-transform text-white gap-4"
           description={"@tonyreichert"}
           name="Super Admin"
-        />
+        /> */}
+        <p>Super Admin</p>
       </DropdownTrigger>
       <DropdownMenu aria-label="User Actions" variant="flat">
         <DropdownItem key="settings" href={DASHBOARD_PATHS.account.settings}>

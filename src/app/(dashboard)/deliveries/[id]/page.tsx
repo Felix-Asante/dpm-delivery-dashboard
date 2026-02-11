@@ -4,7 +4,7 @@ import {
   getShipmentOptionDisplay,
   getShipmentStatusDisplay,
 } from "@/utils/helpers";
-import { Chip } from "@nextui-org/react";
+import { Chip } from "@heroui/chip";
 import OrderExtraDetails from "../_sections/OrderExtraDetails";
 import { OrderItem } from "../_sections/OrderItem";
 import { UserRoles } from "@/config/constants";

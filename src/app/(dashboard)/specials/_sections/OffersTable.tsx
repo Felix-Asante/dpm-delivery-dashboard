@@ -10,19 +10,19 @@ import useQueryParams from "@/hooks/useQueryParam";
 import { useServerAction } from "@/hooks/useServerAction";
 import { Special } from "@/types/specials";
 import { getErrorMessage } from "@/utils/helpers";
+import { Button } from "@heroui/button";
+import { Chip } from "@heroui/chip";
 import {
-  Button,
-  Chip,
   Table,
   TableBody,
   TableCell,
   TableColumn,
   TableHeader,
   TableRow,
-} from "@nextui-org/react";
+} from "@heroui/table";
 import { PencilIcon, Trash2Icon } from "lucide-react";
 import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 

@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import Link from "next/link";
 import { DASHBOARD_PATHS } from "@/config/routes";
 import { buttonVariants } from "@/components/ui/button";
-import { Button } from "@nextui-org/react";
+import { Button } from "@heroui/button";
 import { RiderDto, riderValidations } from "@/rules/validations/rider";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useServerAction } from "@/hooks/useServerAction";

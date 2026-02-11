@@ -7,14 +7,14 @@ import { Tags } from "@/utils/tags";
 import { revalidateTag } from "next/cache";
 
 export async function deleteRating(ratingId: string) {
-	try {
-		const endpoint = apiConfig.ratings.get(ratingId);
-		await apiHandler({
-			endpoint,
-			method: "DELETE",
-		});
-		revalidateTag(Tags.reviews);
-	} catch (error) {
-		return { error: getErrorMessage(error) };
-	}
+  try {
+    const endpoint = apiConfig.ratings.get(ratingId);
+    await apiHandler({
+      endpoint,
+      method: "DELETE",
+    });
+    revalidateTag(Tags.reviews, "max");
+  } catch (error) {
+    return { error: getErrorMessage(error) };
+  }
 }

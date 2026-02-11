@@ -1,6 +1,5 @@
-import { Avatar, Select, SelectItem } from "@nextui-org/react";
-import { LucideIcon } from "lucide-react";
-import React from "react";
+import { Select, SelectItem } from "@heroui/select";
+import { Avatar } from "@heroui/avatar";
 import { useController } from "react-hook-form";
 
 interface Options {
@@ -59,7 +58,7 @@ export default function SelectInput(props: SelectInputProps) {
             {option?.image && (
               <Avatar
                 alt={option.label}
-                className="flex-shrink-0"
+                className="shrink-0"
                 size="sm"
                 src={option.image}
               />

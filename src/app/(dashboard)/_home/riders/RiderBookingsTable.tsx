@@ -14,18 +14,20 @@ import { ShipmentStatusOptions } from "@/config/constants/data";
 import { RIDER_DELIVERIES_TABLE_COLUMNS } from "@/config/constants/tables";
 import type { Shipment } from "@/types/shipment";
 import {
-  Chip,
-  Drawer,
-  DrawerBody,
-  DrawerContent,
-  DrawerHeader,
   Table,
   TableBody,
   TableCell,
   TableColumn,
   TableHeader,
   TableRow,
-} from "@nextui-org/react";
+} from "@heroui/table";
+import {
+  Drawer,
+  DrawerBody,
+  DrawerContent,
+  DrawerHeader,
+} from "@heroui/drawer";
+import { Chip } from "@heroui/chip";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { parseAsString, useQueryStates } from "nuqs";
 import { useState } from "react";

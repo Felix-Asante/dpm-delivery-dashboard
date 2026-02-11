@@ -1,18 +1,17 @@
+import { updateUser } from "@/actions/users";
+import FileUpload from "@/components/shared/input/FileUpload";
 import TextField from "@/components/shared/input/TextField";
-import { User } from "@/types/auth";
-import { Button } from "@nextui-org/react";
-import React from "react";
-import { useForm } from "react-hook-form";
+import { useServerAction } from "@/hooks/useServerAction";
 import {
   updateUserValidationSchema,
   type UpdateUserFields,
 } from "@/rules/validations/auth";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useServerAction } from "@/hooks/useServerAction";
-import { updateUser } from "@/actions/users";
-import { toast } from "sonner";
+import { User } from "@/types/auth";
 import { getErrorMessage } from "@/utils/helpers";
-import FileUpload from "@/components/shared/input/FileUpload";
+import { Button } from "@heroui/button";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { RiderInfoSecuritySection } from "./RiderInfoSecuritySection";
 
 export default function RiderGeneralInformation({ user }: { user: User }) {

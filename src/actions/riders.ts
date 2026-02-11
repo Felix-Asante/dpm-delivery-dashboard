@@ -68,7 +68,7 @@ export async function updateRider(id: string, data: FormData) {
       json: false,
       body: data,
     });
-    revalidateTag(Tags.rider);
+    revalidateTag(Tags.rider, "max");
   } catch (error) {
     return { error: getErrorMessage(error) };
   }

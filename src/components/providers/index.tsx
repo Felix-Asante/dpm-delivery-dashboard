@@ -1,7 +1,7 @@
 "use client";
 
 import { theme } from "@/config/constants/theme";
-import { NextUIProvider } from "@nextui-org/react";
+import { HeroUIProvider } from "@heroui/react";
 import { SessionProvider } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { Next13ProgressBar } from "next13-progressbar";
@@ -15,9 +15,9 @@ export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <QueryClientProvider client={queryClient}>
       <SessionProvider>
-        <NextUIProvider navigate={router.push}>
+        <HeroUIProvider navigate={router.push}>
           <NuqsAdapter>{children}</NuqsAdapter>
-        </NextUIProvider>
+        </HeroUIProvider>
         <Next13ProgressBar
           height="4px"
           color={theme.colors.primary.DEFAULT}

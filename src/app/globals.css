@@ -1,6 +1,10 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss"; /* Required for Tailwind v4 */
+
+@plugin "../lib/hero.ts";
+
+@source '../../node_modules/@heroui/theme/dist*.{js,ts,jsx,tsx}';
+@config "../../tailwind.config.ts";
+@custom-variant dark (&:is(.dark *));
 
 html,
 body {
@@ -53,6 +57,7 @@ body {
     --ring: 240 4.9% 83.9%;
   }
 }
+
 .recharts-rectangle.recharts-tooltip-cursor {
   fill: white;
 }

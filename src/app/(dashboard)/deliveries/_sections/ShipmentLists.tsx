@@ -3,8 +3,14 @@ import { GetShipmentsResponse } from "@/actions/shipment";
 import EmptyContent from "@/components/shared/EmptyContent";
 import TextField from "@/components/shared/input/TextField";
 import HStack from "@/components/shared/layout/HStack";
-import Modal from "@/components/shared/modal";
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import {
   Select,
   SelectContent,
@@ -12,6 +18,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { UserRoles } from "@/config/constants";
 import { ShipmentStatusOptions } from "@/config/constants/data";
 import { DELIVIRIES_TABLE_COLUMNS } from "@/config/constants/tables";
 import useDebounce from "@/hooks/useDebounce";
@@ -23,30 +30,22 @@ import {
   getStyleByStatus,
   pluralize,
 } from "@/utils/helpers";
+import { Chip } from "@heroui/chip";
+import { Pagination } from "@heroui/pagination";
 import {
-  Chip,
-  Pagination,
   Table,
   TableBody,
   TableCell,
   TableColumn,
   TableHeader,
   TableRow,
-} from "@nextui-org/react";
+} from "@heroui/table";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useQueryState } from "nuqs";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import AddDeliveryCostForm from "./AddDeliveryCostForm";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import { useSession } from "next-auth/react";
-import { UserRoles } from "@/config/constants";
 
 interface Props {
   shipments: GetShipmentsResponse;

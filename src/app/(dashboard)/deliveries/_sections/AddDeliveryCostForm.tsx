@@ -3,7 +3,8 @@ import React from "react";
 import { Controller, useForm } from "react-hook-form";
 import TextField from "@/components/shared/input/TextField";
 import HStack from "@/components/shared/layout/HStack";
-import { Checkbox, Button } from "@nextui-org/react";
+import { Checkbox } from "@heroui/checkbox";
+import { Button } from "@heroui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   AddDeliveryCostSchema,

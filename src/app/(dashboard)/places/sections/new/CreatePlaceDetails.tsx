@@ -1,7 +1,6 @@
 import TextField from "@/components/shared/input/TextField";
 import { Category } from "@/types/category";
-import { Select, SelectItem } from "@nextui-org/react";
-import React from "react";
+import { Select, SelectItem } from "@heroui/select";
 import { Controller } from "react-hook-form";
 
 interface Props {
@@ -40,7 +39,7 @@ export default function CreatePlaceDetails({
             {categories?.map((category) => (
               <SelectItem
                 key={category?.id}
-                value={category?.id}
+                // value={category?.id}
                 className="capitalize"
               >
                 {category?.name}

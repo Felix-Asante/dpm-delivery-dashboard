@@ -1,6 +1,6 @@
 "use client";
 import { Rider } from "@/types/auth";
-import { Tab, Tabs } from "@nextui-org/react";
+import { Tab, Tabs } from "@heroui/tabs";
 import { CarTaxiFrontIcon, ContactRoundIcon, FileTextIcon } from "lucide-react";
 import { useQueryState } from "nuqs";
 import BikeInformation from "./BikeInformation";

@@ -13,18 +13,16 @@ import { DEFAULT_CURRENCY, WalletTransactionTypes } from "@/config/constants";
 import type { Wallet } from "@/types/wallet";
 import { cn } from "@/utils/helpers";
 import {
-  Chip,
-  Pagination,
   Table,
   TableBody,
   TableCell,
   TableColumn,
   TableHeader,
   TableRow,
-} from "@nextui-org/react";
+} from "@heroui/table";
+import { Chip } from "@heroui/chip";
+import { Pagination } from "@heroui/pagination";
 import { parseAsString, useQueryStates } from "nuqs";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
 
 interface Props {
   transactionResponse?: GetWalletTransactionsResponse;

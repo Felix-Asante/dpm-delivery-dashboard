@@ -40,7 +40,7 @@ export async function confirmBooking(bookingId: string) {
   try {
     const endpoint = apiConfig.bookings.confirm(bookingId);
     await apiHandler({ endpoint, method: "PUT" });
-    revalidateTag(Tags.bookings);
+    revalidateTag(Tags.bookings, "max");
   } catch (error) {
     throw new Error(getErrorMessage(error));
   }
@@ -49,7 +49,7 @@ export async function cancelBooking(bookingId: string) {
   try {
     const endpoint = apiConfig.bookings.cancel(bookingId);
     await apiHandler({ endpoint, method: "PUT" });
-    revalidateTag(Tags.bookings);
+    revalidateTag(Tags.bookings, "max");
   } catch (error) {
     throw new Error(getErrorMessage(error));
   }
@@ -58,7 +58,7 @@ export async function deliverBooking(bookingId: string) {
   try {
     const endpoint = apiConfig.bookings.delivered(bookingId);
     await apiHandler({ endpoint, method: "PUT" });
-    revalidateTag(Tags.bookings);
+    revalidateTag(Tags.bookings, "max");
   } catch (error) {
     throw new Error(getErrorMessage(error));
   }

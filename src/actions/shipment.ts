@@ -67,7 +67,7 @@ export async function updateShipmentHistory(id: string, data: FormData) {
       json: false,
       body: data,
     });
-    revalidateTag(Tags.riderStats);
+    revalidateTag(Tags.riderStats, "max");
   } catch (error) {
     return { error: getErrorMessage(error) };
   }
@@ -81,7 +81,7 @@ export async function assignRider(shipmentId: string, riderId: string) {
       method: "PATCH",
       body: {},
     });
-    revalidateTag(Tags.riderStats);
+    revalidateTag(Tags.riderStats, "max");
   } catch (error) {
     return { error: getErrorMessage(error) };
   }
@@ -98,7 +98,7 @@ export async function setShipmentCost(
       method: "PATCH",
       body: data,
     });
-    revalidateTag(Tags.shipments);
+    revalidateTag(Tags.shipments, "max");
   } catch (error) {
     return { error: getErrorMessage(error) };
   }

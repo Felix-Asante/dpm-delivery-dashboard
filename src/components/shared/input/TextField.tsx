@@ -2,7 +2,7 @@
 import React from "react";
 import { useController } from "react-hook-form";
 import { cn } from "@/utils/helpers";
-import { Input, InputProps } from "@nextui-org/react";
+import { Input, InputProps } from "@heroui/input";
 
 interface TextFieldProps extends InputProps {
   type?: string;

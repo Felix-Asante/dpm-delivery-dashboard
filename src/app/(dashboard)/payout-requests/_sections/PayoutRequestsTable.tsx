@@ -15,15 +15,15 @@ import { DEFAULT_CURRENCY } from "@/config/constants";
 import { PayoutRequest, PayoutRequestStatus } from "@/types/payout";
 import { parseAsString, useQueryStates } from "nuqs";
 import {
-  Chip,
-  Pagination,
   Table,
   TableBody,
   TableCell,
   TableColumn,
   TableHeader,
   TableRow,
-} from "@nextui-org/react";
+} from "@heroui/table";
+import { Chip } from "@heroui/chip";
+import { Pagination } from "@heroui/pagination";
 import { Button } from "@/components/ui/button";
 import { Eye, RefreshCw } from "lucide-react";
 import { UpdateStatusModal } from "./UpdateStatusModal";

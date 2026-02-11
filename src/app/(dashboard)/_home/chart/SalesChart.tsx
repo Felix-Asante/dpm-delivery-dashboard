@@ -9,14 +9,9 @@ import { SeverActionResponse } from "@/types";
 import { Sales } from "@/types/booking";
 import { getAllYearsFrom } from "@/utils/formatTime";
 import { cn, formatCurrency } from "@/utils/helpers";
-import {
-  Button,
-  Popover,
-  PopoverContent,
-  Select,
-  SelectItem,
-  Spinner,
-} from "@nextui-org/react";
+import { Select, SelectItem } from "@heroui/select";
+import { Spinner } from "@heroui/spinner";
+
 import { format } from "date-fns";
 import React, { useEffect, useMemo, useState } from "react";
 import {
@@ -106,8 +101,11 @@ export default function SalesChart() {
               onChange={(e) => setSelectedYear(e.target.value)}
             >
               {getAllYearsFrom(2024).map((year) => (
-                <SelectItem key={year} value={year.toString()}>
-                  {year.toString()}
+                <SelectItem
+                  key={year?.toString()}
+                  // value={year?.toString()}
+                >
+                  {year?.toString()}
                 </SelectItem>
               ))}
             </Select>

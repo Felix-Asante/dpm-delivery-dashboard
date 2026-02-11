@@ -20,7 +20,7 @@ export async function createUser(body: CreateUserDto) {
   try {
     const endpoint = apiConfig.auth.signup();
     await apiHandler({ endpoint, method: "POST", body });
-    revalidateTag(Tags.users);
+    revalidateTag(Tags.users, "max");
   } catch (error) {
     throw new Error(getErrorMessage(error));
   }
@@ -29,7 +29,7 @@ export async function deleteUser(userId: string) {
   try {
     const endpoint = apiConfig.users.delete(userId);
     await apiHandler({ endpoint, method: "DELETE" });
-    revalidateTag(Tags.users);
+    revalidateTag(Tags.users, "max");
   } catch (error) {
     throw new Error(getErrorMessage(error));
   }
@@ -74,7 +74,7 @@ export async function updateUser(userId: string, data: FormData) {
       json: false,
       body: data,
     });
-    revalidateTag(Tags.users);
+    revalidateTag(Tags.users, "max");
   } catch (error) {
     return { error: getErrorMessage(error) };
   }
