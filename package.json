@@ -23,7 +23,7 @@
     "date-fns": "^4.1.0",
     "framer-motion": "^12.6.5",
     "lucide-react": "^0.487.0",
-    "next": "15.5.2",
+    "next": "15.5.9",
     "next-auth": "^4.24.11",
     "next13-progressbar": "^1.2.2",
     "nuqs": "^2.6.0",
