@@ -16,7 +16,7 @@ export interface GetRidersResponse {
 }
 
 export async function getRiders(
-  query: Query
+  query: Query,
 ): Promise<SeverActionResponse<GetRidersResponse>> {
   try {
     const endpoint = apiConfig.riders.list(query);
@@ -80,6 +80,7 @@ export async function getRiderStats(id: string) {
       endpoint,
       method: "GET",
       next: { tags: [Tags.riderStats] },
+      cache: "no-cache",
     });
     return { results: stats };
   } catch (error) {
