@@ -101,6 +101,9 @@ export const apiConfig = {
     get: (riderId: string) => `rider/${riderId}`,
     stats: (riderId: string) => `rider/${riderId}/stats`,
   },
+  complaints: {
+    admin_list: (query: Query) => `complaints/admin${toQuery(query)}`,
+  },
   shipments: {
     list: (query: Query) => `shipping${toQuery(query)}`,
     get: (shipmentId: string) => `shipping/${shipmentId}`,

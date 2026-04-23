@@ -56,4 +56,7 @@ export const DASHBOARD_PATHS = {
   payoutRequests: {
     root: path(DASHBOARD_ROOT, "payout-requests"),
   },
+  complaints: {
+    root: path(DASHBOARD_ROOT, "complaints"),
+  },
 };

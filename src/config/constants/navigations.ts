@@ -1,3 +1,4 @@
+import { UserRoles } from "@/config/constants";
 import {
   ArrowLeftRightIcon,
   BadgePercentIcon,
@@ -6,13 +7,23 @@ import {
   BoxesIcon,
   Building2Icon,
   CoinsIcon,
+  MessageSquareWarningIcon,
   PackageIcon,
   ShieldUserIcon,
   UsersIcon,
 } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import { DASHBOARD_PATHS } from "../routes";
 
-export const SIDEBAR_NAVIGATION = [
+export type SidebarNavItem = {
+  label: string;
+  icon: LucideIcon;
+  href: string;
+  /** If set, the link is only shown for these roles. */
+  allowedRoles?: UserRoles[];
+};
+
+export const SIDEBAR_NAVIGATION: SidebarNavItem[] = [
   {
     label: "Overview",
     icon: BarChartBigIcon,
@@ -62,5 +73,11 @@ export const SIDEBAR_NAVIGATION = [
     label: "Payouts",
     icon: CoinsIcon,
     href: DASHBOARD_PATHS.payoutRequests.root,
+  },
+  {
+    label: "Complaints",
+    icon: MessageSquareWarningIcon,
+    href: DASHBOARD_PATHS.complaints.root,
+    allowedRoles: [UserRoles.ADMIN],
   },
 ];
