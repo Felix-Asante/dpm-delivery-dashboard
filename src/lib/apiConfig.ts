@@ -103,6 +103,9 @@ export const apiConfig = {
   },
   complaints: {
     admin_list: (query: Query) => `complaints/admin${toQuery(query)}`,
+    admin_get: (complaintId: string) => `complaints/${complaintId}`,
+    update_status: (complaintId: string) =>
+      `complaints/${complaintId}/update-status`,
   },
   shipments: {
     list: (query: Query) => `shipping${toQuery(query)}`,

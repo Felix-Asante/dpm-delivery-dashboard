@@ -13,11 +13,14 @@ export interface GetComplaintsForAdminResponse {
   meta: ResponseMeta;
 }
 
+export interface GetComplaintDetailResponse extends Complaint {}
+
 export type ComplaintsAdminQuery = {
   page?: string;
   limit?: string;
   query?: string;
   category?: string;
+  status?: string;
   from?: string;
   to?: string;
 };
@@ -36,13 +39,45 @@ function buildComplaintsQuery(q: ComplaintsAdminQuery): Query {
 }
 
 export async function getComplaintsForAdmin(
-  q: ComplaintsAdminQuery
+  q: ComplaintsAdminQuery,
 ): Promise<SeverActionResponse<GetComplaintsForAdminResponse>> {
   try {
     const endpoint = apiConfig.complaints.admin_list(buildComplaintsQuery(q));
     const result = await apiHandler<GetComplaintsForAdminResponse>({
       endpoint,
       method: "GET",
+    });
+    return { results: result };
+  } catch (error) {
+    return { error: getErrorMessage(error) };
+  }
+}
+
+export async function getComplaintDetail(
+  id: string,
+): Promise<SeverActionResponse<GetComplaintDetailResponse>> {
+  try {
+    const endpoint = apiConfig.complaints.admin_get(id);
+    const result = await apiHandler<GetComplaintDetailResponse>({
+      endpoint,
+      method: "GET",
+    });
+    return { results: result };
+  } catch (error) {
+    return { error: getErrorMessage(error) };
+  }
+}
+
+export async function updateComplaintStatus(
+  id: string,
+  data: { status: string; comment?: string },
+): Promise<SeverActionResponse<Complaint>> {
+  try {
+    const endpoint = apiConfig.complaints.update_status(id);
+    const result = await apiHandler<Complaint>({
+      endpoint,
+      method: "PATCH",
+      body: data,
     });
     return { results: result };
   } catch (error) {
