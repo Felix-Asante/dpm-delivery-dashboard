@@ -7,21 +7,26 @@ interface Props {
   searchParams: Promise<{ status?: string; page?: string; search?: string }>;
 }
 
-export default async function PayoutRequestsPage({ searchParams }: Props) {
+export default async function PayoutRequestsPage({
+  searchParams,
+}: Readonly<Props>) {
   const params = await searchParams;
   const payoutResponse = await getPayoutRequests(params);
 
   return (
     <WithServerError error={payoutResponse?.error}>
-      <div className="p-4 md:p-6">
-        <div className="mb-6">
-          <h1 className="text-2xl font-bold text-gray-900">Payout Requests</h1>
-          <p className="text-gray-500 mt-1">
-            View and manage all payout requests from riders
+      <main className="mx-auto w-full max-w-[1600px] px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
+        <header className="mb-6">
+          <p className="text-sm font-medium text-primary">Finance operations</p>
+          <h1 className="mt-1 text-2xl font-bold tracking-tight text-secondary sm:text-3xl">
+            Payout requests
+          </h1>
+          <p className="mt-1 text-sm text-gray-500">
+            Review rider withdrawal requests and record payment outcomes.
           </p>
-        </div>
+        </header>
         <PayoutRequestsTable payoutResponse={payoutResponse?.results} />
-      </div>
+      </main>
     </WithServerError>
   );
 }

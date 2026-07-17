@@ -31,20 +31,20 @@ import {
   TableHeader,
   TableRow,
 } from "@heroui/table";
-import { Filter, Eye } from "lucide-react";
+import { ArrowRight, Filter, MapPin, Search } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { parseAsString, useQueryStates } from "nuqs";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 const columns = [
   { key: "date", label: "Submitted" },
   { key: "reporter", label: "Reporter" },
-  { key: "tracking", label: "Tracking" },
-  { key: "category", label: "Category" },
-  { key: "issue", label: "Issue" },
-  { key: "order", label: "Order" },
+  { key: "complaint", label: "Complaint" },
+  { key: "delivery", label: "Delivery" },
   { key: "status", label: "Status" },
-  { key: "action", label: "Action" },
+  { key: "action", label: "" },
 ];
 
 const categoryOptions: { value: string; label: string }[] = [
@@ -73,6 +73,7 @@ function statusClass(status: ComplaintStatus) {
 }
 
 export default function ComplaintsTable({ data }: Readonly<Props>) {
+  const router = useRouter();
   const { items: complaints = [], meta } = data || {};
 
   const [filters, setFilters] = useQueryStates(
@@ -137,6 +138,10 @@ export default function ComplaintsTable({ data }: Readonly<Props>) {
     e?.preventDefault();
     if ((fromDraft && !toDraft) || (toDraft && !fromDraft)) {
       setDateHint("Select both a start and end date to filter by period.");
+      return;
+    }
+    if (fromDraft && toDraft && new Date(fromDraft) > new Date(toDraft)) {
+      setDateHint("The end date must be on or after the start date.");
       return;
     }
     setDateHint(null);
@@ -231,6 +236,8 @@ export default function ComplaintsTable({ data }: Readonly<Props>) {
       }));
       setSelectedStatus(updatedComplaint.status);
       setStatusComment("");
+      toast.success("Complaint status updated");
+      router.refresh();
     } catch (error) {
       setStatusUpdateError(
         error instanceof Error ? error.message : "Unable to update status.",
@@ -241,24 +248,13 @@ export default function ComplaintsTable({ data }: Readonly<Props>) {
   };
 
   return (
-    <div className="bg-white border border-gray-200 rounded-xl p-4">
-      {meta && (
-        <div className="mb-6 grid gap-3 rounded-2xl border border-gray-100 bg-slate-50 p-4 sm:grid-cols-[1fr_auto]">
-          <div>
-            <p className="text-sm text-slate-500">Total complaints</p>
-            <p className="text-2xl font-semibold text-slate-900 mt-1">
-              {meta.totalItems}
-            </p>
-          </div>
-        </div>
-      )}
-
+    <div className="rounded-xl border bg-white">
       <form
-        className="flex flex-col gap-4 mb-4"
+        className="flex flex-col gap-4 border-b p-4 sm:p-5"
         onSubmit={onApplyFilters}
         noValidate
       >
-        <div className="grid gap-3 md:grid-cols-[minmax(180px,1fr)_minmax(180px,1fr)_minmax(220px,1fr)_minmax(180px,1fr)]">
+        <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-[minmax(170px,0.8fr)_minmax(170px,0.8fr)_minmax(260px,1.4fr)_minmax(280px,1fr)]">
           <div>
             <label
               htmlFor="complaints-category"
@@ -308,12 +304,17 @@ export default function ComplaintsTable({ data }: Readonly<Props>) {
             </label>
             <Input
               id="complaints-search"
-              size="sm"
+              size="md"
               radius="sm"
+              variant="bordered"
               placeholder="Name, phone, tracking, issue…"
               value={searchDraft}
               onValueChange={setSearchDraft}
               className="w-full"
+              startContent={<Search size={17} className="text-gray-400" />}
+              classNames={{
+                inputWrapper: "h-10 min-h-10 border-gray-200 bg-white",
+              }}
             />
           </div>
           <div className="grid gap-3 sm:grid-cols-2">
@@ -350,7 +351,7 @@ export default function ComplaintsTable({ data }: Readonly<Props>) {
           </div>
         </div>
 
-        <HStack className="flex-wrap gap-2 items-center">
+        <HStack className="flex-wrap items-center gap-2">
           <Button type="submit" className="gap-2">
             <Filter className="h-4 w-4" />
             Apply filters
@@ -362,117 +363,203 @@ export default function ComplaintsTable({ data }: Readonly<Props>) {
         {dateHint ? <p className="text-sm text-amber-700">{dateHint}</p> : null}
       </form>
 
-      {complaints.length > 0 ? (
-        <p className="text-sm text-slate-600 mb-3">
-          Showing {complaints.length} of {meta?.totalItems ?? 0} complaints
+      <div className="flex items-center justify-between border-b px-4 py-3 sm:px-5">
+        <p className="text-sm text-gray-600">
+          <span className="font-semibold text-secondary">
+            {meta?.totalItems ?? 0}
+          </span>{" "}
+          complaints
         </p>
-      ) : null}
+        <p className="hidden text-xs text-gray-400 sm:block">
+          Showing {complaints.length} on this page
+        </p>
+      </div>
 
-      <Table aria-label="Complaints table" shadow="none" radius="sm">
-        <TableHeader columns={columns}>
-          {(column) => (
-            <TableColumn
-              key={column.key}
-              className="bg-gray-50 text-xs font-medium text-slate-500"
-            >
-              {column.label}
-            </TableColumn>
-          )}
-        </TableHeader>
-        <TableBody
-          emptyContent={
-            <EmptyContent
-              title="No complaints"
-              description="Complaints from customers will appear here."
-            />
-          }
-        >
-          {complaints.map((row: Complaint) => {
+      <div className="hidden overflow-x-auto md:block">
+        <Table aria-label="Complaints table" shadow="none" radius="sm">
+          <TableHeader columns={columns}>
+            {(column) => (
+              <TableColumn
+                key={column.key}
+                className="bg-gray-50 text-xs font-medium text-slate-500"
+              >
+                {column.label}
+              </TableColumn>
+            )}
+          </TableHeader>
+          <TableBody
+            emptyContent={
+              <EmptyContent
+                title={
+                  filters.query || filters.category || filters.status
+                    ? "No matching complaints"
+                    : "No complaints"
+                }
+                description={
+                  filters.query || filters.category || filters.status
+                    ? "Try changing or clearing the current filters."
+                    : "New customer complaints will appear here."
+                }
+              />
+            }
+          >
+            {complaints.map((row: Complaint) => {
+              const rowStatus = getStatusForRow(row);
+              return (
+                <TableRow key={row.id}>
+                  <TableCell>
+                    <div>
+                      <p className="font-medium text-slate-900">
+                        {new Date(row.createdAt).toLocaleDateString("en-US", {
+                          year: "numeric",
+                          month: "short",
+                          day: "numeric",
+                        })}
+                      </p>
+                      <p className="text-xs text-slate-500">
+                        {new Date(row.createdAt).toLocaleTimeString("en-US", {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
+                      </p>
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    <div>
+                      <p className="font-medium text-slate-900">
+                        {row.fullName}
+                      </p>
+                      <p className="text-xs text-slate-500">{row.phone}</p>
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    <div className="max-w-80">
+                      <div className="mb-1.5 flex items-center gap-2">
+                        <Chip size="sm" variant="flat" className="text-xs">
+                          {COMPLAINT_CATEGORY_LABEL[row.category] ??
+                            row.category}
+                        </Chip>
+                        <span className="font-mono text-[11px] text-gray-400">
+                          {row.trackingNumber}
+                        </span>
+                      </div>
+                      <p
+                        className="line-clamp-2 text-sm text-gray-700"
+                        title={row.issue}
+                      >
+                        {truncate(row.issue, 110)}
+                      </p>
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    {row.order?.id ? (
+                      <div>
+                        <Link
+                          href={`/deliveries/${row.order.id}`}
+                          className="font-mono text-xs font-semibold text-primary hover:underline"
+                        >
+                          {row.order.reference}
+                        </Link>
+                        <p className="mt-1 text-xs text-gray-500">
+                          {row.order.pickupCity || "—"} to{" "}
+                          {row.order.dropOffCity || "—"}
+                        </p>
+                      </div>
+                    ) : (
+                      <span className="text-slate-400 text-sm">—</span>
+                    )}
+                  </TableCell>
+                  <TableCell>
+                    <span
+                      className={
+                        "inline-flex rounded-full border px-3 py-1 text-xs font-semibold " +
+                        statusClass(rowStatus)
+                      }
+                    >
+                      {statusLabel(rowStatus)}
+                    </span>
+                  </TableCell>
+                  <TableCell>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => openComplaint(row)}
+                      className="gap-1.5"
+                    >
+                      Review
+                      <ArrowRight className="h-4 w-4" />
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              );
+            })}
+          </TableBody>
+        </Table>
+      </div>
+
+      <div className="divide-y md:hidden">
+        {complaints.length ? (
+          complaints.map((row) => {
             const rowStatus = getStatusForRow(row);
             return (
-              <TableRow key={row.id}>
-                <TableCell>
+              <article key={row.id} className="p-4">
+                <div className="flex items-start justify-between gap-3">
                   <div>
-                    <p className="font-medium text-slate-900">
-                      {new Date(row.createdAt).toLocaleDateString("en-US", {
-                        year: "numeric",
-                        month: "short",
-                        day: "numeric",
-                      })}
+                    <p className="text-sm font-semibold text-secondary">
+                      {row.fullName}
                     </p>
-                    <p className="text-xs text-slate-500">
-                      {new Date(row.createdAt).toLocaleTimeString("en-US", {
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })}
+                    <p className="mt-1 font-mono text-xs text-gray-500">
+                      {row.trackingNumber}
                     </p>
                   </div>
-                </TableCell>
-                <TableCell>
-                  <div>
-                    <p className="font-medium text-slate-900">{row.fullName}</p>
-                    <p className="text-xs text-slate-500">{row.phone}</p>
-                  </div>
-                </TableCell>
-                <TableCell>
-                  <span className="text-slate-700 font-mono text-xs">
-                    {row.trackingNumber}
-                  </span>
-                </TableCell>
-                <TableCell>
-                  <Chip size="sm" variant="flat" className="text-xs uppercase">
-                    {COMPLAINT_CATEGORY_LABEL[row.category] ?? row.category}
-                  </Chip>
-                </TableCell>
-                <TableCell>
-                  <p
-                    className="text-sm text-slate-700 line-clamp-2 max-w-[min(100%,260px)]"
-                    title={row.issue}
-                  >
-                    {truncate(row.issue, 90)}
-                  </p>
-                </TableCell>
-                <TableCell>
-                  {row.order?.id ? (
-                    <Link
-                      href={`/deliveries/${row.order.id}`}
-                      className="text-primary text-sm font-medium hover:underline"
-                    >
-                      {row.order.reference}
-                    </Link>
-                  ) : (
-                    <span className="text-slate-400 text-sm">—</span>
-                  )}
-                </TableCell>
-                <TableCell>
                   <span
                     className={
-                      "inline-flex rounded-full px-3 py-1 text-xs font-semibold " +
+                      "inline-flex rounded-full border px-2.5 py-1 text-xs font-semibold " +
                       statusClass(rowStatus)
                     }
                   >
                     {statusLabel(rowStatus)}
                   </span>
-                </TableCell>
-                <TableCell>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => openComplaint(row)}
-                    className="gap-2"
-                  >
-                    <Eye className="h-4 w-4" />
-                    View
-                  </Button>
-                </TableCell>
-              </TableRow>
+                </div>
+                <div className="mt-3">
+                  <p className="text-xs font-medium text-gray-500">
+                    {COMPLAINT_CATEGORY_LABEL[row.category]}
+                  </p>
+                  <p className="mt-1 line-clamp-3 text-sm leading-6 text-gray-700">
+                    {row.issue}
+                  </p>
+                </div>
+                {row.order ? (
+                  <div className="mt-3 flex items-center gap-2 rounded-lg bg-gray-50 p-3">
+                    <MapPin size={16} className="shrink-0 text-primary" />
+                    <p className="text-xs text-gray-600">
+                      {row.order.pickupCity || "—"} to{" "}
+                      {row.order.dropOffCity || "—"}
+                    </p>
+                  </div>
+                ) : null}
+                <Button
+                  variant="outline"
+                  className="mt-4 w-full"
+                  onClick={() => openComplaint(row)}
+                >
+                  Review complaint
+                </Button>
+              </article>
             );
-          })}
-        </TableBody>
-      </Table>
+          })
+        ) : (
+          <div className="px-4 py-12">
+            <EmptyContent
+              title="No matching complaints"
+              description="Try changing or clearing the current filters."
+            />
+          </div>
+        )}
+      </div>
 
       {meta && meta.totalPages > 1 ? (
-        <HStack className="justify-end mt-4">
+        <HStack className="justify-end border-t px-4 py-4 sm:px-5">
           <Pagination
             total={meta.totalPages}
             page={meta.currentPage}

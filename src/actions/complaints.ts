@@ -31,6 +31,7 @@ function buildComplaintsQuery(q: ComplaintsAdminQuery): Query {
   if (q.limit) out.limit = q.limit;
   if (q.query) out.query = q.query;
   if (q.category && q.category !== "all") out.category = q.category;
+  if (q.status && q.status !== "all") out.status = q.status;
   if (q.from && q.to) {
     out.from = q.from;
     out.to = q.to;

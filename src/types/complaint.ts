@@ -35,15 +35,18 @@ export const COMPLAINT_STATUS_LABEL: Record<ComplaintStatus, string> = {
 };
 
 export const COMPLAINT_STATUS_VARIANTS: Record<ComplaintStatus, string> = {
-  [ComplaintStatus.OPEN]: "bg-emerald-100 text-emerald-700",
-  [ComplaintStatus.IN_REVIEW]: "bg-sky-100 text-sky-700",
-  [ComplaintStatus.ASSIGNED]: "bg-blue-100 text-blue-700",
-  [ComplaintStatus.AWAITING_CUSTOMER_RESPONSE]: "bg-amber-100 text-amber-700",
-  [ComplaintStatus.INVESTIGATING]: "bg-violet-100 text-violet-700",
-  [ComplaintStatus.PENDING_REFUND]: "bg-orange-100 text-orange-700",
-  [ComplaintStatus.RESOLVED]: "bg-green-100 text-green-700",
-  [ComplaintStatus.CLOSED]: "bg-slate-100 text-slate-700",
-  [ComplaintStatus.INVALID_SPAM]: "bg-rose-100 text-rose-700",
+  [ComplaintStatus.OPEN]: "bg-amber-50 text-amber-700 border-amber-200",
+  [ComplaintStatus.IN_REVIEW]: "bg-blue-50 text-blue-700 border-blue-200",
+  [ComplaintStatus.ASSIGNED]: "bg-blue-50 text-blue-700 border-blue-200",
+  [ComplaintStatus.AWAITING_CUSTOMER_RESPONSE]:
+    "bg-amber-50 text-amber-700 border-amber-200",
+  [ComplaintStatus.INVESTIGATING]: "bg-blue-50 text-blue-700 border-blue-200",
+  [ComplaintStatus.PENDING_REFUND]:
+    "bg-orange-50 text-orange-700 border-orange-200",
+  [ComplaintStatus.RESOLVED]:
+    "bg-emerald-50 text-emerald-700 border-emerald-200",
+  [ComplaintStatus.CLOSED]: "bg-gray-50 text-gray-700 border-gray-200",
+  [ComplaintStatus.INVALID_SPAM]: "bg-red-50 text-red-700 border-red-200",
 };
 
 export const COMPLAINT_STATUS_OPTIONS = [

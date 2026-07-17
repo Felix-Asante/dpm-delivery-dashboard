@@ -5,7 +5,6 @@ import {
 } from "@/config/constants";
 import { ERRORS } from "@/config/constants/errors";
 import regexPattern from "@/rules";
-import { Status } from "@/types";
 import { Query, paths } from "@/types/url";
 import { clsx, type ClassValue } from "clsx";
 import {
@@ -133,26 +132,50 @@ export function getInitials(name?: string) {
   return "";
 }
 
-export function getStyleByStatus(status: Status) {
+export function getStyleByStatus(status: string) {
   switch (status) {
     case BookingStatus.CANCELLED:
     case BookingStatus.REJECTED:
     case ShipmentStatus.FAILED_DELIVERY_ATTEMPT:
-      return { base: "border border-2 border-red-600", dot: "bg-red-600" };
+    case ShipmentStatus.RETURNED:
+      return {
+        base: "border border-red-200 bg-red-50 text-red-700",
+        dot: "bg-red-500",
+      };
 
     case BookingStatus.PENDING:
-      return { base: "border border-2 border-warning", dot: "bg-warning" };
+    case ShipmentStatus.ON_HOLD:
+      return {
+        base: "border border-amber-200 bg-amber-50 text-amber-700",
+        dot: "bg-amber-500",
+      };
 
     case BookingStatus.CONFIRMED:
     case ShipmentStatus.PICKUP_CONFIRMED:
-      return { base: "border border-2 border-secondary", dot: "bg-secondary" };
+    case ShipmentStatus.RIDER_ASSIGNED:
+    case ShipmentStatus.RIDER_REASSIGNED:
+    case ShipmentStatus.READY_FOR_PICKUP:
+    case ShipmentStatus.OUT_FOR_DELIVERY:
+    case ShipmentStatus.IN_TRANSIT:
+    case ShipmentStatus.ARRIVED:
+      return {
+        base: "border border-blue-200 bg-blue-50 text-blue-700",
+        dot: "bg-blue-500",
+      };
 
     case BookingStatus.DELIVERED:
     case ShipmentStatus.DELIVERED:
-      return { base: "border border-2 border-success", dot: "bg-success" };
+    case ShipmentStatus.PAYMENT_RECEIVED:
+      return {
+        base: "border border-emerald-200 bg-emerald-50 text-emerald-700",
+        dot: "bg-emerald-500",
+      };
 
     default:
-      return { base: "border border-2 border-default", dot: "bg-default" };
+      return {
+        base: "border border-gray-200 bg-gray-50 text-gray-700",
+        dot: "bg-gray-500",
+      };
   }
 }
 
@@ -188,7 +211,7 @@ export function generateRandomPassword(length: number) {
 
 export function formatCurrency(
   amount: number,
-  currencyCode: string = "USD"
+  currencyCode: string = "USD",
 ): string {
   const formatter = new Intl.NumberFormat("en-US");
 

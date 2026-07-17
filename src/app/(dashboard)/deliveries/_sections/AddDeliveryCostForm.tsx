@@ -21,7 +21,10 @@ interface Props {
   shipment: Shipment;
   onSuccess?: () => void;
 }
-export default function AddDeliveryCostForm({ shipment, onSuccess }: Props) {
+export default function AddDeliveryCostForm({
+  shipment,
+  onSuccess,
+}: Readonly<Props>) {
   const form = useForm<AddDeliveryCostInput>({
     resolver: zodResolver(AddDeliveryCostSchema),
     defaultValues: {
@@ -46,7 +49,7 @@ export default function AddDeliveryCostForm({ shipment, onSuccess }: Props) {
   const deliveryCost = Number(form.watch("deliveryCost") || 0);
   const riderCommission = Math.min(
     Number(form.watch("riderCommission") || 0),
-    100
+    100,
   );
   const repackagingFee = Number(form.watch("repackagingFee") || 0);
 
@@ -89,7 +92,7 @@ export default function AddDeliveryCostForm({ shipment, onSuccess }: Props) {
 
   return (
     <form onSubmit={form.handleSubmit(onSubmit)}>
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid gap-4 sm:grid-cols-2">
         <TextField
           name="pickupCost"
           control={form.control}
@@ -127,7 +130,7 @@ export default function AddDeliveryCostForm({ shipment, onSuccess }: Props) {
           labelPlacement="outside"
           disabled={isReadOnly}
         />
-        <HStack>
+        <HStack className="flex-col items-start sm:flex-row sm:items-center">
           <Controller
             name="includeRepackagingFee"
             control={form.control}
@@ -207,7 +210,8 @@ export default function AddDeliveryCostForm({ shipment, onSuccess }: Props) {
         <HStack className="items-center justify-between">
           <p className="font-semibold text-lg">Rider&apos;s Commission:</p>
           <p className="font-semibold text-lg">
-            {DEFAULT_CURRENCY.symbol} {parseFloat(ridersCommission.toFixed(2))}
+            {DEFAULT_CURRENCY.symbol}{" "}
+            {Number.parseFloat(ridersCommission.toFixed(2))}
           </p>
         </HStack>
       </div>

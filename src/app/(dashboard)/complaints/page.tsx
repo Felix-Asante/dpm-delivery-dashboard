@@ -11,12 +11,15 @@ interface Props {
     limit?: string;
     query?: string;
     category?: string;
+    status?: string;
     from?: string;
     to?: string;
   }>;
 }
 
-export default async function ComplaintsPage({ searchParams }: Props) {
+export default async function ComplaintsPage({
+  searchParams,
+}: Readonly<Props>) {
   const isAdmin = await checkUserRole(UserRoles.ADMIN);
   if (!isAdmin) {
     notFound();
@@ -28,6 +31,7 @@ export default async function ComplaintsPage({ searchParams }: Props) {
     limit: params.limit || "20",
     query: params.query,
     category: params.category,
+    status: params.status,
     from: params.from,
     to: params.to,
   };
@@ -35,15 +39,21 @@ export default async function ComplaintsPage({ searchParams }: Props) {
 
   return (
     <WithServerError error={response?.error}>
-      <div className="p-4 md:p-6">
-        <div className="mb-6">
-          <h1 className="text-2xl font-bold text-gray-900">Complaints</h1>
-          <p className="text-gray-500 mt-1">
-            All customer delivery complaints and linked orders
+      <main className="mx-auto w-full max-w-[1600px] px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
+        <header className="mb-6">
+          <p className="text-sm font-medium text-primary">
+            Customer operations
           </p>
-        </div>
+          <h1 className="mt-1 text-2xl font-bold tracking-tight text-secondary sm:text-3xl">
+            Complaints
+          </h1>
+          <p className="mt-1 text-sm text-gray-500">
+            Investigate delivery issues, keep customers informed, and document
+            resolutions.
+          </p>
+        </header>
         <ComplaintsTable data={response?.results} />
-      </div>
+      </main>
     </WithServerError>
   );
 }

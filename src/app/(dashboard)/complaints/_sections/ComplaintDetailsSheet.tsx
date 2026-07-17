@@ -1,7 +1,14 @@
 "use client";
 
 import HStack from "@/components/shared/layout/HStack";
-import { Sheet, SheetContent, SheetHeader } from "@/components/ui/sheet";
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import {
   COMPLAINT_CATEGORY_LABEL,
@@ -10,8 +17,16 @@ import {
   Complaint,
   ComplaintStatus,
 } from "@/types/complaint";
-import { Chip } from "@heroui/chip";
-import { ExternalLink, Info, MessageCircle, Package, User } from "lucide-react";
+import {
+  ArrowUpRight,
+  ExternalLink,
+  Info,
+  MessageCircle,
+  Package,
+  User,
+  X,
+} from "lucide-react";
+import Link from "next/link";
 import React from "react";
 
 interface Props {
@@ -44,7 +59,7 @@ export default function ComplaintDetailsSheet({
   onUpdateStatus,
   isUpdating,
   updateError,
-}: Props) {
+}: Readonly<Props>) {
   const formattedDate = complaint
     ? new Date(complaint.createdAt).toLocaleDateString("en-US", {
         year: "numeric",
@@ -52,44 +67,60 @@ export default function ComplaintDetailsSheet({
         day: "numeric",
       })
     : "";
+  const currentStatusClass = complaint
+    ? COMPLAINT_STATUS_VARIANTS[complaint.status]
+    : "bg-gray-50 text-gray-700 border-gray-200";
+  let currentStatusLabel = "Unavailable";
+  if (isLoading) currentStatusLabel = "Loading";
+  if (complaint) {
+    currentStatusLabel = COMPLAINT_STATUS_LABEL[complaint.status];
+  }
+  const isFinalStatus =
+    complaint?.status === ComplaintStatus.RESOLVED ||
+    complaint?.status === ComplaintStatus.CLOSED;
 
   return (
     <Sheet open={open} onOpenChange={(isOpen) => !isOpen && onClose()}>
       <SheetContent
         size="lg"
-        className="shadow-none border-l border-gray-200 sm:w-[45%] flex h-full flex-col"
+        className="flex h-full w-full flex-col border-l border-gray-200 p-0 shadow-none sm:w-[600px] sm:max-w-[600px]"
       >
-        <SheetHeader className="px-6 pb-4 border-b border-gray-200">
+        <SheetHeader className="relative border-b border-gray-200 px-5 py-5 pr-14 sm:px-6">
+          <SheetClose asChild>
+            <button
+              type="button"
+              aria-label="Close complaint details"
+              className="absolute right-4 top-4 rounded-md p-2 text-gray-500 hover:bg-gray-100"
+            >
+              <X size={19} />
+            </button>
+          </SheetClose>
           <div className="space-y-2">
             <p className="text-xs uppercase tracking-[0.25em] text-slate-500">
               Complaint detail
             </p>
             <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
               <div>
-                <h2 className="text-xl font-semibold text-slate-900">
+                <SheetTitle className="text-xl font-semibold text-slate-900">
                   {complaint?.trackingNumber ?? "—"}
-                </h2>
-                <p className="text-sm text-slate-500">
+                </SheetTitle>
+                <SheetDescription className="text-sm text-slate-500">
                   Submitted {formattedDate}
-                </p>
+                </SheetDescription>
               </div>
               <div
                 className={
                   "inline-flex items-center rounded-full border px-3 py-1 text-sm font-medium " +
-                  (complaint
-                    ? COMPLAINT_STATUS_VARIANTS[complaint.status]
-                    : "bg-slate-100 text-slate-700")
+                  currentStatusClass
                 }
               >
-                {complaint
-                  ? COMPLAINT_STATUS_LABEL[complaint.status]
-                  : "Loading"}
+                {currentStatusLabel}
               </div>
             </div>
           </div>
         </SheetHeader>
 
-        <div className="flex-1 space-y-6 px-6 py-5 overflow-y-auto">
+        <div className="flex-1 space-y-6 overflow-y-auto px-5 py-5 sm:px-6">
           {error ? (
             <div className="rounded-lg border border-rose-200 bg-rose-50 p-4 text-sm text-rose-700">
               {error}
@@ -97,15 +128,19 @@ export default function ComplaintDetailsSheet({
           ) : null}
 
           {isLoading ? (
-            <div className="space-y-3">
+            <output
+              className="block space-y-3"
+              aria-label="Loading complaint details"
+            >
               <div className="h-5 w-2/5 rounded-md bg-gray-100" />
               <div className="h-80 rounded-md bg-gray-100" />
               <div className="h-5 w-3/4 rounded-md bg-gray-100" />
-            </div>
-          ) : complaint ? (
+            </output>
+          ) : null}
+          {!isLoading && complaint ? (
             <div className="space-y-6">
               <section className="grid gap-4 sm:grid-cols-2">
-                <div className="rounded-2xl border border-gray-200 bg-slate-50 p-4">
+                <div className="rounded-lg border border-gray-200 bg-gray-50 p-4">
                   <HStack className="items-center gap-3">
                     <User className="h-4 w-4 text-slate-500" />
                     <span className="text-sm font-medium text-slate-700">
@@ -119,7 +154,7 @@ export default function ComplaintDetailsSheet({
                     {complaint.phone}
                   </p>
                 </div>
-                <div className="rounded-2xl border border-gray-200 bg-slate-50 p-4">
+                <div className="rounded-lg border border-gray-200 bg-gray-50 p-4">
                   <HStack className="items-center gap-3">
                     <Package className="h-4 w-4 text-slate-500" />
                     <span className="text-sm font-medium text-slate-700">
@@ -136,70 +171,44 @@ export default function ComplaintDetailsSheet({
                       : ""}
                     {complaint.order?.dropOffCity ?? ""}
                   </p>
-                </div>
-              </section>
-
-              <section className="grid gap-4 sm:grid-cols-2">
-                <div className="rounded-2xl border border-gray-200 p-4">
-                  <div className="flex items-center justify-between gap-3">
-                    <div>
-                      <p className="text-sm font-medium text-slate-700">
-                        Category
-                      </p>
-                      <p className="mt-2 text-sm text-slate-900 font-semibold">
-                        {COMPLAINT_CATEGORY_LABEL[complaint.category]}
-                      </p>
-                    </div>
-                    <Chip
-                      size="sm"
-                      variant="flat"
-                      className="text-xs uppercase"
+                  {complaint.order?.id ? (
+                    <Link
+                      href={`/deliveries/${complaint.order.id}`}
+                      className="mt-3 inline-flex items-center gap-1 text-xs font-semibold text-primary hover:underline"
                     >
-                      {COMPLAINT_CATEGORY_LABEL[complaint.category]}
-                    </Chip>
-                  </div>
-                </div>
-                <div className="rounded-2xl border border-gray-200 p-4">
-                  <div className="flex items-center justify-between gap-3">
-                    <div>
-                      <p className="text-sm font-medium text-slate-700">
-                        Current status
-                      </p>
-                      <p className="mt-2 text-sm text-slate-900 font-semibold">
-                        {COMPLAINT_STATUS_LABEL[complaint.status]}
-                      </p>
-                    </div>
-                    <div
-                      className={
-                        "rounded-full px-3 py-1 text-xs font-semibold " +
-                        COMPLAINT_STATUS_VARIANTS[complaint.status]
-                      }
-                    >
-                      {COMPLAINT_STATUS_LABEL[complaint.status]}
-                    </div>
-                  </div>
+                      Open delivery
+                      <ArrowUpRight size={14} />
+                    </Link>
+                  ) : null}
                 </div>
               </section>
 
               <section className="space-y-4">
-                <div className="rounded-2xl border border-gray-200 p-4">
-                  <HStack className="items-center gap-3">
-                    <Info className="h-4 w-4 text-slate-500" />
-                    <p className="text-sm font-medium text-slate-700">Issue</p>
-                  </HStack>
+                <div className="rounded-lg border border-gray-200 p-4">
+                  <div className="flex items-center justify-between gap-3">
+                    <HStack className="items-center gap-3">
+                      <Info className="h-4 w-4 text-slate-500" />
+                      <p className="text-sm font-medium text-slate-700">
+                        Issue
+                      </p>
+                    </HStack>
+                    <span className="rounded-md bg-gray-100 px-2 py-1 text-xs font-medium text-gray-600">
+                      {COMPLAINT_CATEGORY_LABEL[complaint.category]}
+                    </span>
+                  </div>
                   <p className="mt-3 text-sm leading-6 text-slate-700">
                     {complaint.issue}
                   </p>
                 </div>
-                <div className="rounded-2xl border border-gray-200 overflow-hidden">
+                <div className="overflow-hidden rounded-lg border border-gray-200">
                   {complaint.picture ? (
                     <img
                       src={complaint.picture}
                       alt="Complaint evidence"
-                      className="h-64 w-full object-cover"
+                      className="max-h-[420px] w-full bg-gray-50 object-contain"
                     />
                   ) : (
-                    <div className="flex h-64 items-center justify-center bg-slate-50 p-4 text-sm text-slate-500">
+                    <div className="flex h-40 items-center justify-center bg-gray-50 p-4 text-sm text-slate-500">
                       No photo attached for this complaint.
                     </div>
                   )}
@@ -245,7 +254,7 @@ export default function ComplaintDetailsSheet({
                       .map((entry) => (
                         <div
                           key={entry.id}
-                          className="rounded-2xl border border-gray-200 bg-slate-50 p-4"
+                          className="rounded-lg border border-gray-200 bg-gray-50 p-4"
                         >
                           <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                             <div>
@@ -281,18 +290,24 @@ export default function ComplaintDetailsSheet({
                         </div>
                       ))
                   ) : (
-                    <div className="rounded-2xl border border-dashed border-gray-200 bg-white p-4 text-sm text-slate-500">
+                    <div className="rounded-lg border border-dashed border-gray-200 bg-white p-4 text-sm text-slate-500">
                       No status updates yet.
                     </div>
                   )}
                 </div>
               </section>
 
-              <section className="space-y-4 rounded-2xl border border-gray-200 bg-slate-50 p-4">
+              <section className="space-y-4 rounded-lg border border-gray-200 bg-gray-50 p-4">
                 <div className="flex items-center gap-2 text-sm font-semibold text-slate-700">
                   <MessageCircle className="h-4 w-4 text-slate-500" />
                   Update complaint status
                 </div>
+                {isFinalStatus ? (
+                  <p className="rounded-lg border bg-white p-3 text-sm text-gray-600">
+                    This complaint is in a final state and can no longer be
+                    updated.
+                  </p>
+                ) : null}
                 <div className="grid gap-4">
                   <div className="space-y-2">
                     <label
@@ -304,16 +319,22 @@ export default function ComplaintDetailsSheet({
                     <select
                       id="status-select"
                       value={selectedStatus}
+                      disabled={isFinalStatus}
                       onChange={(event) =>
                         onStatusChange(event.target.value as ComplaintStatus)
                       }
                       className="w-full rounded-md border border-gray-200 bg-white px-3 py-2 text-sm text-slate-900"
                     >
-                      {statusOptions.map((status) => (
-                        <option key={status.value} value={status.value}>
-                          {status.label}
-                        </option>
-                      ))}
+                      <option value={complaint.status} disabled>
+                        Current — {COMPLAINT_STATUS_LABEL[complaint.status]}
+                      </option>
+                      {statusOptions
+                        .filter((status) => status.value !== complaint.status)
+                        .map((status) => (
+                          <option key={status.value} value={status.value}>
+                            {status.label}
+                          </option>
+                        ))}
                     </select>
                   </div>
                   <div className="space-y-2">
@@ -328,13 +349,17 @@ export default function ComplaintDetailsSheet({
                       value={comment}
                       onChange={(event) => onCommentChange(event.target.value)}
                       rows={4}
+                      disabled={isFinalStatus}
                       className="w-full resize-none rounded-md border border-gray-200 bg-white px-3 py-2 text-sm text-slate-900"
                       placeholder="Add context for this update"
                     />
                   </div>
                 </div>
                 {updateError ? (
-                  <div className="rounded-xl border border-rose-200 bg-rose-50 p-3 text-sm text-rose-700">
+                  <div
+                    className="rounded-lg border border-rose-200 bg-rose-50 p-3 text-sm text-rose-700"
+                    role="alert"
+                  >
                     {updateError}
                   </div>
                 ) : null}
@@ -348,7 +373,11 @@ export default function ComplaintDetailsSheet({
                   </Button>
                   <Button
                     onClick={onUpdateStatus}
-                    disabled={isUpdating || selectedStatus === complaint.status}
+                    disabled={
+                      isFinalStatus ||
+                      isUpdating ||
+                      selectedStatus === complaint.status
+                    }
                     className="w-full sm:w-auto"
                   >
                     {isUpdating ? "Saving…" : "Save status"}
@@ -356,11 +385,12 @@ export default function ComplaintDetailsSheet({
                 </div>
               </section>
             </div>
-          ) : (
-            <div className="rounded-2xl border border-gray-200 bg-slate-50 p-6 text-sm text-slate-500">
+          ) : null}
+          {!isLoading && !complaint ? (
+            <div className="rounded-lg border border-gray-200 bg-gray-50 p-6 text-sm text-slate-500">
               Select a complaint to view details.
             </div>
-          )}
+          ) : null}
         </div>
       </SheetContent>
     </Sheet>

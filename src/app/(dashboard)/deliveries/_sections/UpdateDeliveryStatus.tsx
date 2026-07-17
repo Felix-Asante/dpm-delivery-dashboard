@@ -113,14 +113,17 @@ const OrderStatus = [
   },
 ];
 
-const canAddReasons = [
+const canAddReasons = new Set([
   ShipmentStatus.FAILED_DELIVERY_ATTEMPT,
   ShipmentStatus.REFUNDED,
   ShipmentStatus.REPACKAGED,
   ShipmentStatus.ON_HOLD,
-];
+]);
 
-export default function UpdateDeliveryStatus({ shipment, onSuccess }: Props) {
+export default function UpdateDeliveryStatus({
+  shipment,
+  onSuccess,
+}: Readonly<Props>) {
   const router = useRouter();
   const { control, handleSubmit, watch, register } =
     useForm<UpdateShipmentHistoryField>({
@@ -162,7 +165,7 @@ export default function UpdateDeliveryStatus({ shipment, onSuccess }: Props) {
 
   const currentStatusLabel = getShipmentStatusDisplay(
     shipment?.status,
-    role === UserRoles.ADMIN
+    role === UserRoles.ADMIN,
   );
 
   const getStatusColor = (status: string) => {
@@ -198,13 +201,13 @@ export default function UpdateDeliveryStatus({ shipment, onSuccess }: Props) {
       onSubmit={handleSubmit(updateHistoryHandler)}
       className="mt-4 flex flex-col gap-4"
     >
-      <div className="rounded-lg border-2 bg-gradient-to-br from-gray-50 to-gray-100/50 p-4">
+      <div className="rounded-lg border bg-gray-50 p-4">
         <div className="mb-2 text-sm font-medium text-gray-600">
           Current Status
         </div>
         <div
-          className={`inline-flex items-center rounded-md border-2 px-4 py-2 text-sm font-semibold shadow-sm ${getStatusColor(
-            shipment?.status
+          className={`inline-flex items-center rounded-md border px-3 py-1.5 text-sm font-semibold ${getStatusColor(
+            shipment?.status,
           )}`}
         >
           {currentStatusLabel}
@@ -220,7 +223,7 @@ export default function UpdateDeliveryStatus({ shipment, onSuccess }: Props) {
         placeholder="Select status"
       />
 
-      {canAddReasons.includes(status as ShipmentStatus) && (
+      {canAddReasons.has(status as ShipmentStatus) && (
         <TextField
           name="reason"
           control={control}
