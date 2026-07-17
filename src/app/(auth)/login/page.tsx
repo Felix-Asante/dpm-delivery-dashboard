@@ -1,39 +1,37 @@
-import React from "react";
-import LoginForm from "./LoginForm";
-import Image from "next/image";
 import GuestGuards from "@/guards/GuestGuards";
-const delivery_photo = "/images/welcome-banner.png";
+import LoginBrandPanel, { BrandLogo } from "./LoginBrandPanel";
+import LoginForm from "./LoginForm";
+
 export default function LoginPage() {
-	return (
-		<GuestGuards>
-			<div className='flex flex-col md:flex-row items-center justify-center h-screen md:p-10 gap-8'>
-				<div className='md:w-1/2'>
-					<div className='max-w-full w-[230px] h-[230px] md:hidden relative'>
-						<Image
-							src={delivery_photo}
-							alt='welcome-banner-image'
-							fill
-							unoptimized
-							className='object-fit'
-						/>
-					</div>
-					<LoginForm />
-				</div>
-				<section className='hidden md:flex flex-col w-1/2 bg-primary/40 rounded-2xl p-3  items-center justify-center h-full'>
-					<Image
-						src={delivery_photo}
-						alt='welcome-banner-image'
-						width={400}
-						height={400}
-						unoptimized
-					/>
-					<h3 className='font-medium text-lg  text-center w-[70%] mx-auto text-black'>
-						Elevate your delivery game with{" "}
-						<span className='font-semibold'>simplicity and precision. </span>
-						Let&apos;s get started!
-					</h3>
-				</section>
-			</div>
-		</GuestGuards>
-	);
+  return (
+    <GuestGuards>
+      <div className="min-h-screen grid lg:grid-cols-2 bg-white">
+        <LoginBrandPanel />
+
+        <div className="relative flex min-h-screen flex-col justify-center px-6 py-12 sm:px-10 lg:px-16 xl:px-24">
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0 lg:hidden bg-gradient-to-b from-secondary/5 via-white to-white"
+          />
+
+          <div className="relative mx-auto w-full max-w-[420px]">
+            <div className="mb-8 lg:hidden">
+              <BrandLogo />
+            </div>
+            <div className="relative pt-8">
+              <span
+                aria-hidden
+                className="lg:hidden absolute left-0 top-0 h-1 w-12 rounded-full bg-primary"
+              />
+              <LoginForm />
+            </div>
+          </div>
+
+          <p className="relative mt-10 text-center text-xs text-gray-400 lg:hidden">
+            © {new Date().getFullYear()} DPM Delivery
+          </p>
+        </div>
+      </div>
+    </GuestGuards>
+  );
 }
