@@ -1,6 +1,5 @@
 "use client";
 import { getSales } from "@/actions/bookings";
-import HStack from "@/components/shared/layout/HStack";
 import VStack from "@/components/shared/layout/VStack";
 import { DEFAULT_CURRENCY } from "@/config/constants";
 import { theme } from "@/config/constants/theme";
@@ -8,7 +7,7 @@ import { useServerAction } from "@/hooks/useServerAction";
 import { SeverActionResponse } from "@/types";
 import { Sales } from "@/types/booking";
 import { getAllYearsFrom } from "@/utils/formatTime";
-import { cn, formatCurrency } from "@/utils/helpers";
+import { formatCurrency } from "@/utils/helpers";
 import { Select, SelectItem } from "@heroui/select";
 import { Spinner } from "@heroui/spinner";
 
@@ -17,24 +16,17 @@ import React, { useEffect, useMemo, useState } from "react";
 import {
   BarChart,
   Bar,
-  Cell,
   XAxis,
   YAxis,
   CartesianGrid,
   Tooltip,
-  Legend,
   ResponsiveContainer,
 } from "recharts";
 
-interface CellData {
-  month: string;
-  revenue: string;
-}
 export default function SalesChart() {
   const [selectedYear, setSelectedYear] = useState(
     new Date().getFullYear().toString()
   );
-  const [selectedCell, setSelectedCell] = useState(0);
 
   const [runGetSales, { loading, data }] = useServerAction<
     SeverActionResponse<Sales[]>,
@@ -63,17 +55,13 @@ export default function SalesChart() {
     }));
   }, [data]);
 
-  const onCellSelect = (data: CellData, index: number) => {
-    setSelectedCell(index);
-  };
-
   if (loading)
     return (
-      <div className="rounded-md p-3  border h-48">
-        <h3>Booking Sales</h3>
-        <div className="flex flex-col h-full items-center">
+      <div className="h-[480px] rounded-xl border bg-white p-5">
+        <h2 className="font-semibold text-secondary">Booking revenue</h2>
+        <div className="flex h-[390px] items-center justify-center">
           <Spinner
-            label="Retrieving sales"
+            label="Loading revenue"
             color="primary"
             labelColor="primary"
           />
@@ -81,70 +69,89 @@ export default function SalesChart() {
       </div>
     );
   return (
-    <div className="rounded-md p-3  border">
-      <h3>Booking Sales</h3>
+    <div className="rounded-xl border bg-white">
+      <div className="flex flex-col justify-between gap-4 border-b px-5 py-4 sm:flex-row sm:items-center">
+        <div>
+          <h2 className="font-semibold text-secondary">Booking revenue</h2>
+          <p className="mt-0.5 text-xs text-gray-500">
+            Monthly revenue for the selected year
+          </p>
+        </div>
+        <Select
+          aria-label="Revenue year"
+          size="sm"
+          variant="bordered"
+          className="w-full sm:w-28"
+          selectedKeys={[selectedYear]}
+          onChange={(event) => setSelectedYear(event.target.value)}
+        >
+          {getAllYearsFrom(2024).map((year) => (
+            <SelectItem key={year.toString()}>{year.toString()}</SelectItem>
+          ))}
+        </Select>
+      </div>
       {!data?.error ? (
-        <>
-          <HStack className="items-center justify-between mt-3">
-            <div>
-              <p className="text-sm text-gray-400">Total Amount</p>
-              <h3 className="text-2xl font-semibold my-1">
-                {DEFAULT_CURRENCY.symbol}
-                {formatCurrency(totalRevenue)}
-              </h3>
-            </div>
-            <Select
-              size="md"
-              variant="bordered"
-              className="max-w-[15%]"
-              defaultSelectedKeys={[selectedYear]}
-              onChange={(e) => setSelectedYear(e.target.value)}
-            >
-              {getAllYearsFrom(2024).map((year) => (
-                <SelectItem
-                  key={year?.toString()}
-                  // value={year?.toString()}
-                >
-                  {year?.toString()}
-                </SelectItem>
-              ))}
-            </Select>
-          </HStack>
-          <div className="mt-10">
+        <div className="p-5">
+          <div className="mb-6">
+            <p className="text-xs font-medium uppercase tracking-wide text-gray-400">
+              Total revenue
+            </p>
+            <p className="mt-1 text-2xl font-bold tracking-tight text-secondary">
+              {DEFAULT_CURRENCY.symbol}
+              {formatCurrency(totalRevenue)}
+            </p>
+          </div>
+          <div className="min-h-[330px]">
             {chartData.length > 0 ? (
-              <ResponsiveContainer width={"100%"} height={350}>
-                <BarChart width={150} height={80} data={chartData}>
-                  <XAxis dataKey="month" />
-                  <YAxis />
+              <ResponsiveContainer width="100%" height={330}>
+                <BarChart
+                  data={chartData}
+                  margin={{ top: 8, right: 8, left: -12, bottom: 0 }}
+                >
+                  <CartesianGrid
+                    strokeDasharray="3 3"
+                    vertical={false}
+                    stroke="#e5e7eb"
+                  />
+                  <XAxis
+                    dataKey="month"
+                    axisLine={false}
+                    tickLine={false}
+                    tick={{ fill: "#6b7280", fontSize: 12 }}
+                    tickFormatter={(month) => month.slice(0, 3)}
+                  />
+                  <YAxis
+                    axisLine={false}
+                    tickLine={false}
+                    tick={{ fill: "#6b7280", fontSize: 12 }}
+                  />
                   <Tooltip content={<CustomTooltip />} />
                   <Bar
                     dataKey="revenue"
-                    onClick={onCellSelect}
-                    barSize={110}
-                    className="relative before:absolute before:w-[100px] before:h-full before:top-0 before:left-0 before:bg-primary before:px-3 before:pt-2 before:shadow-md"
-                  >
-                    {chartData.map((entry, index) => (
-                      <Cell
-                        cursor="pointer"
-                        fill={theme.colors.success.DEFAULT}
-                        key={`cell-${index}`}
-                        // style={{ backgroundColor: "white", padding: 15 }}
-                      />
-                    ))}
-                  </Bar>
+                    fill={theme.colors.primary.DEFAULT}
+                    barSize={34}
+                    radius={[5, 5, 0, 0]}
+                  />
                 </BarChart>
               </ResponsiveContainer>
             ) : (
-              <p className="text-primary font-semibold text-center">
-                There&apos;s no data to show for this year
-              </p>
+              <div className="flex h-[300px] flex-col items-center justify-center text-center">
+                <p className="text-sm font-medium text-secondary">
+                  No revenue recorded
+                </p>
+                <p className="mt-1 text-xs text-gray-500">
+                  Booking revenue for {selectedYear} will appear here.
+                </p>
+              </div>
             )}
           </div>
-        </>
+        </div>
       ) : (
-        <VStack className="items-center py-4">
-          <h3 className="text-lg">Something went wrong</h3>
-          <p className="text-gray-400">{data?.error}</p>
+        <VStack className="h-[400px] items-center justify-center px-5 text-center">
+          <h3 className="font-semibold text-secondary">
+            Revenue could not be loaded
+          </h3>
+          <p className="mt-1 text-sm text-gray-500">{data?.error}</p>
         </VStack>
       )}
     </div>
@@ -152,19 +159,14 @@ export default function SalesChart() {
 }
 
 const CustomTooltip = ({ active, payload, label }: any) => {
-  if (active) {
-    // Custom tooltip content goes here
+  if (active && payload?.length) {
     return (
-      <div className="bg-white p-2 rounded-md shadow-sm">
-        <p>{`Label: ${label}`}</p>
-        {payload.map(
-          (
-            data: { dataKey: any; value: any },
-            index: React.Key | null | undefined
-          ) => (
-            <p key={index}>{`${data.dataKey}: ${data.value}`}</p>
-          )
-        )}
+      <div className="rounded-lg border bg-white px-3 py-2">
+        <p className="text-xs font-medium text-gray-500">{label}</p>
+        <p className="mt-1 text-sm font-semibold text-secondary">
+          {DEFAULT_CURRENCY.symbol}
+          {formatCurrency(Number(payload[0].value))}
+        </p>
       </div>
     );
   }

@@ -13,19 +13,19 @@ interface Props {
   data: AnalyticsDashboardResponse;
 }
 
-export default function AnalyticsStats({ data }: Props) {
+export default function AnalyticsStats({ data }: Readonly<Props>) {
   const stats = [
     {
       label: "Total Revenue",
       value: `${DEFAULT_CURRENCY.symbol} ${formatCurrency(data.totalRevenue)}`,
       icon: BanknoteIcon,
-      color: "bg-green-100 text-green-600",
+      color: "bg-primary/10 text-primary",
     },
     {
       label: "Total Payouts",
       value: `${DEFAULT_CURRENCY.symbol} ${formatCurrency(data.totalPayouts)}`,
       icon: WalletIcon,
-      color: "bg-blue-100 text-blue-600",
+      color: "bg-success/10 text-success",
     },
     {
       label: "Pending Payouts",
@@ -33,29 +33,33 @@ export default function AnalyticsStats({ data }: Props) {
         data.pendingPayouts
       )}`,
       icon: CreditCardIcon,
-      color: "bg-yellow-100 text-yellow-600",
+      color: "bg-gray-100 text-secondary",
     },
     {
       label: "Total Orders",
       value: data.totalOrders,
       icon: ShoppingBagIcon,
-      color: "bg-purple-100 text-purple-600",
+      color: "bg-gray-100 text-secondary",
     },
   ];
 
   return (
-    <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-4 mb-6">
+    <div className="grid overflow-hidden rounded-xl border bg-white sm:grid-cols-2 xl:grid-cols-4 sm:[&>*:nth-child(even)]:border-l xl:[&>*+*]:border-l">
       {stats.map((stat) => (
         <div
           key={stat.label}
-          className="bg-white p-4 rounded-lg border border-gray-100 shadow-sm flex items-start justify-between"
+          className="flex min-w-0 items-start justify-between gap-4 border-b p-5 last:border-b-0 sm:nth-last-[-n+2]:border-b-0 xl:border-b-0"
         >
-          <div>
-            <p className="text-gray-500 text-sm font-medium">{stat.label}</p>
-            <h3 className="text-2xl font-bold mt-2">{stat.value}</h3>
+          <div className="min-w-0">
+            <p className="text-sm font-medium text-gray-500">{stat.label}</p>
+            <p className="mt-2 truncate text-xl font-bold tracking-tight text-secondary xl:text-2xl">
+              {stat.value}
+            </p>
           </div>
-          <div className={`p-2 rounded-lg ${stat.color}`}>
-            <stat.icon size={20} />
+          <div
+            className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-lg ${stat.color}`}
+          >
+            <stat.icon size={19} strokeWidth={1.8} />
           </div>
         </div>
       ))}

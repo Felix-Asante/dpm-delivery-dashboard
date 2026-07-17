@@ -1,6 +1,7 @@
 import HStack from "@/components/shared/layout/HStack";
 import { buttonVariants } from "@/components/ui/button";
 import { UserIcon } from "lucide-react";
+import { Avatar } from "@heroui/avatar";
 import Link from "next/link";
 import React from "react";
 import { getCurrentUser } from "@/lib/auth";
@@ -19,35 +20,42 @@ export async function RidersAppLayout({
   }
   return (
     <main className="min-h-screen bg-gray-50">
-      <header className="border-b border-boder py-4">
-        <nav className="max-w-5xl mx-auto px-5 lg:px-0">
-          <HStack className="items-center justify-between">
-            <div>
+      <header className="sticky top-0 z-40 h-16 border-b bg-white">
+        <nav className="mx-auto flex h-full max-w-6xl items-center px-4 sm:px-6">
+          <HStack className="w-full items-center justify-between">
+            <div className="flex items-center gap-3">
               <Link
-                href={"/"}
-                className="text-secondary uppercase text-xl sm:text-2xl font-bold"
+                href="/"
+                className="text-xl font-bold uppercase tracking-tight text-secondary"
               >
-                Dpm <span className="text-primary">delivery</span>{" "}
+                Dpm <span className="text-primary">delivery</span>
               </Link>
-              <p className="text-gray-500 text-xs">Riders dashboard</p>
+              <span className="hidden border-l pl-3 text-xs font-medium text-gray-500 sm:block">
+                Rider workspace
+              </span>
             </div>
 
-            <HStack>
-              <Link
-                href="/account/settings"
-                className={buttonVariants({
-                  variant: "outline",
-                  className: "!border-0 !bg-muted !gap-2 !item-center",
-                })}
-              >
-                <UserIcon size={20} />
-                <span>My Profile</span>
-              </Link>
-            </HStack>
+            <Link
+              href="/account/settings"
+              className={buttonVariants({
+                variant: "ghost",
+                className: "gap-2",
+              })}
+            >
+              <Avatar
+                size="sm"
+                src={user?.profilePicture ?? undefined}
+                fallback={<UserIcon size={17} />}
+                className="bg-gray-100 text-secondary"
+              />
+              <span className="hidden max-w-40 truncate text-sm font-semibold sm:inline">
+                {user?.fullName || "My profile"}
+              </span>
+            </Link>
           </HStack>
         </nav>
       </header>
-      <section className="max-w-5xl mx-auto px-5">{children}</section>
+      <section className="mx-auto max-w-6xl px-4 sm:px-6">{children}</section>
     </main>
   );
 }

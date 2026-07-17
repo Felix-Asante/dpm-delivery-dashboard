@@ -13,53 +13,57 @@ interface Props {
   totalPlaces: CountResponse;
   totalOffers: CountResponse;
 }
-export default function StatisticsSection(props: Props) {
+export default function StatisticsSection(props: Readonly<Props>) {
   const { totalBookings, totalOffers, totalPlaces, totalUsers } = props;
   const stats = [
     {
       ...totalUsers,
       label: "Total users",
       icon: UsersIcon,
-      color: "bg-orange-100 text-orange-600",
+      color: "bg-primary/10 text-primary",
     },
     {
       ...totalBookings,
       label: "Total bookings",
       icon: BookMarkedIcon,
-      color: "bg-indigo-100 text-indigo-600",
+      color: "bg-success/10 text-success",
     },
     {
       ...totalPlaces,
       label: "Total businesses",
       icon: Building2Icon,
-      color: "bg-pink-100 text-pink-600",
+      color: "bg-gray-100 text-secondary",
     },
     {
       ...totalOffers,
-      label: "Total Offers",
+      label: "Total offers",
       icon: BadgePercentIcon,
-      color: "bg-teal-100 text-teal-600",
+      color: "bg-gray-100 text-secondary",
     },
   ];
   return (
-    <div className="mt-4 grid gap-4 sm:grid-cols-2 md:grid-cols-4">
+    <div className="grid overflow-hidden rounded-xl border bg-white sm:grid-cols-2 xl:grid-cols-4 sm:[&>*:nth-child(even)]:border-l xl:[&>*+*]:border-l">
       {stats?.map((stat) => (
         <div
           key={stat?.label}
-          className="bg-white p-4 rounded-lg border border-gray-100 shadow-sm flex items-start justify-between"
+          className="flex min-w-0 items-start justify-between gap-4 border-b p-5 last:border-b-0 sm:nth-last-[-n+2]:border-b-0 xl:border-b-0"
         >
-          <div>
-            <p className="text-gray-500 text-sm font-medium">{stat.label}</p>
-            <h3 className="text-2xl font-bold mt-2">{stat.all_time}</h3>
-            <p className="text-gray-400 text-xs mt-1">
-              vs this month:{" "}
-              <span className="font-bold text-gray-600">
+          <div className="min-w-0">
+            <p className="text-sm font-medium text-gray-500">{stat.label}</p>
+            <p className="mt-2 text-2xl font-bold tracking-tight text-secondary">
+              {stat.all_time}
+            </p>
+            <p className="mt-1 text-xs text-gray-500">
+              <span className="font-semibold text-secondary">
                 {stat.currentMonth}
-              </span>
+              </span>{" "}
+              this month
             </p>
           </div>
-          <div className={`p-2 rounded-lg ${stat.color}`}>
-            <stat.icon size={20} />
+          <div
+            className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-lg ${stat.color}`}
+          >
+            <stat.icon size={19} strokeWidth={1.8} />
           </div>
         </div>
       ))}
