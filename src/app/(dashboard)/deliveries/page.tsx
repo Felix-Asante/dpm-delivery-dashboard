@@ -22,6 +22,8 @@ export default async function DeliveriesPage({
   };
   const { results, error } = await getShipments(queries);
 
+  console.log(results?.items?.[0]);
+
   return (
     <WithServerError error={error}>
       <main className="mx-auto w-full max-w-[1600px] px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
